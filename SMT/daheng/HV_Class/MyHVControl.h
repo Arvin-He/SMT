@@ -1,6 +1,4 @@
 // MyHVControl.h: interface for the MyHVControl class.
-//
-//////////////////////////////////////////////////////////////////////
 #pragma once
 #if !defined(AFX_MYHVCONTROL_H__5D718F5B_0E81_4BF6_B0A9_4E3F08250471__INCLUDED_)
 #define AFX_MYHVCONTROL_H__5D718F5B_0E81_4BF6_B0A9_4E3F08250471__INCLUDED_
@@ -16,7 +14,6 @@
 #include "HVDAILT.h"
 #include "Raw2Rgb.h"
 
-
 //自定义消息ID号
 #define WM_SNAP_CHANGE		(WM_USER + 100)
 
@@ -25,7 +22,6 @@
 #define  PI 3.1416
 
 //可调整变量
-
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
@@ -43,7 +39,7 @@ public:
 	virtual ~MyHVControl();
 
 public:
-	HV_RESOLUTION Resolution;
+	HV_RESOLUTION Resolution; //选图像分辨率的
 	HV_SNAP_MODE SnapMode;
 	HV_SNAP_SPEED SnapSpeed;
 	HV_BAYER_LAYOUT Layout;
@@ -63,7 +59,6 @@ public:
 	int ShowHeight;
 
 public:
-
 	/************************************************************************/
 	/*                          数字摄像机相关                              */
 	/************************************************************************/
@@ -103,19 +98,14 @@ public:
 	int Flag_Work;
 
 public:
-
-	void SetExposureTime(int nWindWidth,long lTintUpper,long lTintLower);
-
-	BOOL HVInitial(int SubHVNum,int SubShowStartX,int SubShowStartY,int SubShowWidth,int SubShowHeight);
 	BOOL HVInitial(int SubHVNum,int SubShowWidth,int SubShowHeight);
+	BOOL HVInitial(int SubHVNum,int SubShowStartX,int SubShowStartY,int SubShowWidth,int SubShowHeight);
 	void HVDestory(void);
-
 	BOOL HVStart(HV_SNAP_PROC SubProc, HWND m_SubhWnd);
 	BOOL HVEnd(void);
-
 	void HVFliter(void);
-
 	void SetGain(long lValue);
+	void SetExposureTime(int nWindWidth,long lTintUpper,long lTintLower);
 };
 
 #endif // !defined(AFX_MYHVCONTROL_H__5D718F5B_0E81_4BF6_B0A9_4E3F08250471__INCLUDED_)

@@ -3,6 +3,7 @@
 #include "SMT.h"
 #include "SMTDlg.h"
 #include "afxdialogex.h"
+#include "CvvImage.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,7 +38,6 @@ END_MESSAGE_MAP()
 BOOL CSMTDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-
 	// Set the icon for this dialog.  The framework does this automatically
 	//  when the application's main window is not a dialog
 	SetIcon(m_hIcon, TRUE);			// Set big icon
@@ -134,4 +134,20 @@ void CSMTDlg::OnCamera_SaveVideo()
 void CSMTDlg::OnCamera_StopVideo()
 {
 
+}
+
+void CSMTDlg::ShowImage(Mat img, INT_PTR ID)
+{
+	CDC *pDC = GetDlgItem(ID)->GetDC();
+	HDC hDC = pDC->GetSafeHdc();
+	CRect rect(0,0,0,0);
+	GetDlgItem(ID)->GetClientRect(&rect);
+	int tx = (int)(rect.Width() - img.cols)/2;
+	int ty = (int)(rect.Height() - img.rows)/2;
+	SetRect(rect, tx, ty, tx+img.cols, ty+img.rows);
+	CvvImage cimg;
+	IplImage temp = img;
+	cimg.CopyOf(&temp);
+	cimg.DrawToHDC(hDC, &rect);
+	ReleaseDC(pDC);
 }

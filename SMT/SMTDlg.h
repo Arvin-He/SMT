@@ -1,5 +1,12 @@
 // SMTDlg.h : header file
 #pragma once
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/core.hpp>
+
+using namespace cv;
+
+
 // CSMTDlg dialog
 class CSMTDlg : public CDialogEx
 {
@@ -17,6 +24,9 @@ protected:
 	CMenu		m_menu;
 	CToolBar	m_toolBar;
 	CImageList	m_imageList;
+
+public:
+	void ShowImage(Mat img, INT_PTR ID);
 
 	// Generated message map functions
 	virtual BOOL OnInitDialog();
