@@ -1,0 +1,110 @@
+; HV3151UC.inf
+; DH-HV3151UC device install information file
+; Copyright (c) 2009-2011 China Daheng Group, Inc.
+;                    Beijing Image Vision Technology Branch
+
+[Version]
+Signature=$CHICAGO$
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf
+Class=Image
+ClassGUID={6bdd1fc6-810f-11d0-bec7-08002be2092f}
+Provider=%ProviderName%
+
+DriverVer=09/27/2011,1.1.1109.9271
+
+[Manufacturer]
+%MFGNAME%=DeviceList
+
+[DestinationDirs]
+DefaultDestDir=10,System32\Drivers
+WinSysDir.Files=10,System
+WinSysDir.Files.NTx86=10,System32
+
+[SourceDisksNames]
+1=%INSTDISK%,,0
+
+[SourceDisksFiles]
+HV3151UC.sys=1
+HV3151UC.dll=1
+HVDAILT.dll=1
+HVUtil.dll=1
+Raw2Rgb.dll=1
+ImageLoad.dll=1
+HVExtend.dll=1
+
+[SourceDisksFiles.NTx86]
+HV3151UC.sys=1
+HV3151UC.dll=1
+HVDAILT.dll=1
+HVUtil.dll=1
+Raw2Rgb.dll=1
+ImageLoad.dll=1
+HVExtend.dll=1
+
+[DeviceList]
+%DESCRIPTION%=DriverInstall, USB\VID_4448&PID_5656
+
+
+;------------------------------------------------------------------------------
+;  Windows 98 Sections
+;------------------------------------------------------------------------------
+[DriverInstall]
+AddReg=DriverAddReg
+CopyFiles=DriverCopyFiles, WinSysDir.Files
+
+[DriverCopyFiles]
+HV3151UC.sys
+
+[WinSysDir.Files]
+HV3151UC.dll
+HVDAILT.dll
+HVUtil.dll
+Raw2Rgb.dll
+ImageLoad.dll
+HVExtend.dll
+
+[DriverAddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,HV3151UC.sys
+
+[DriverInstall.HW]
+AddReg=DriverHwAddReg
+
+[DriverHwAddReg]
+
+
+;------------------------------------------------------------------------------
+;  Windows 2000 Sections
+;------------------------------------------------------------------------------
+[DriverInstall.NTx86]
+CopyFiles=DriverCopyFiles, WinSysDir.Files.NTx86
+
+[WinSysDir.Files.NTx86]
+HV3151UC.dll
+HVDAILT.dll
+HVUtil.dll
+Raw2Rgb.dll
+ImageLoad.dll
+HVExtend.dll
+
+[DriverInstall.NTx86.Services]
+AddService=HV3151UC,2,DriverService
+
+[DriverService]
+ServiceType=1
+StartType=0
+ErrorControl=1
+ServiceBinary=%10%\system32\drivers\HV3151UC.sys
+
+[DriverInstall.NTx86.hw]
+AddReg=DriverHwAddReg
+
+
+;------------------------------------------------------------------------------
+;  String Definitions
+;------------------------------------------------------------------------------
+[Strings]
+ProviderName="Daheng Imavision"
+MFGNAME="Daheng Imavision"
+INSTDISK=" DH-HV3151UC Installation Disc"
+DESCRIPTION="Daheng HV3151UC Capture(08/18/2011)"

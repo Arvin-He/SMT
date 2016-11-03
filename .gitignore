@@ -3,5 +3,4 @@
 ipch/
 Debug/
 SMT/Debug/
-SMT/*.vcxproj
 SMT/*.vcxproj.*

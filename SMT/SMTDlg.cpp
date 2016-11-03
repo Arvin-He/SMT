@@ -1,4 +1,4 @@
-// SMTDlg.cpp : implementation file
+ï»¿// SMTDlg.cpp : implementation file
 #include "stdafx.h"
 #include "SMT.h"
 #include "SMTDlg.h"
@@ -18,7 +18,7 @@
 #define MIN(a,b)      (((a) < (b)) ? (a) : (b))
 #endif
 
-//¶¨Òå×Ô¼ºµÄ0
+//å®šä¹‰è‡ªå·±çš„0
 #define  MY_ZERO 0.000000001
 //const
 const HV_RESOLUTION Resolution          = RES_MODE0;
@@ -37,26 +37,43 @@ const HV_SNAP_SPEED SnapSpeed = HIGH_SPEED;
 // CSMTDlg dialog
 CSMTDlg::CSMTDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CSMTDlg::IDD, pParent)
+	, m_editShutter(0)
+	, m_editGain(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_src = Mat(Size(640, 512), CV_8UC3);
 	InitialDHCamera();
+	m_bIsCapture = FALSE;
+	m_editGain = 4;
+	m_editShutter = 80;
 }
 
 void CSMTDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_SLIDER_GAIN, m_sliderGain);
+	DDX_Control(pDX, IDC_SPIN_GAIN, m_spinGain);
+	DDX_Control(pDX, IDC_SLIDER_SHUTTER, m_sliderShutter);
+	DDX_Control(pDX, IDC_SPIN_SHUTTER, m_spinShutter);
+	DDX_Text(pDX, IDC_EDIT_SHUTTER, m_editShutter);
+	DDV_MinMaxInt(pDX, m_editShutter, 0, 100);
+	DDX_Text(pDX, IDC_EDIT_GAIN, m_editGain);
+	DDV_MinMaxInt(pDX, m_editGain, 0, 63);
 }
 
 BEGIN_MESSAGE_MAP(CSMTDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_MESSAGE(WM_SNAP_CHANGE, OnSnapChange)	
+	ON_MESSAGE(WM_SNAP_ERROR, OnSnapError)
+	ON_MESSAGE(WM_SNAP_STOP, OnSnapStop)
 	ON_COMMAND(IDM_OPEN, &CSMTDlg::OnCamera_Open)	
 	ON_COMMAND(IDM_STOP, &CSMTDlg::OnCamera_Stop)
 	ON_COMMAND(IDM_CLOSE, &CSMTDlg::OnCamera_Close)
 	ON_COMMAND(IDM_SAVE_PIC, &CSMTDlg::OnCamera_SavePic)
 	ON_COMMAND(IDM_SAVE_VIDEO, &CSMTDlg::OnCamera_SaveVideo)
 	ON_COMMAND(IDM_STOP_VIDEO, &CSMTDlg::OnCamera_StopVideo)
+	ON_WM_HSCROLL()
 END_MESSAGE_MAP()
 
 
@@ -71,11 +88,11 @@ BOOL CSMTDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 	ShowWindow(SW_MAXIMIZE);
 	// TODO: Add extra initialization here
-	SetWindowText(_T("ÌùÆ¬»úÏµÍ³"));
+	SetWindowText(_T("è´´ç‰‡æœºç³»ç»Ÿ"));
 	//add menu
 	if (!m_menu.LoadMenu(IDR_MENU))
 	{
-		TRACE0("²Ëµ¥¼ÓÔØÊ§°Ü£¡");
+		TRACE0("èœå•åŠ è½½å¤±è´¥ï¼");
 		return -1;
 	}
 	SetMenu(&m_menu);
@@ -83,7 +100,7 @@ BOOL CSMTDlg::OnInitDialog()
 	if (!m_toolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD|WS_VISIBLE|CBRS_ALIGN_TOP, CRect(4,4,0,0))
 		|| !m_toolBar.LoadToolBar(IDR_TOOLBAR))
 	{
-		TRACE0("¹¤¾ßÀ¸¼ÓÔØÊ§°Ü£¡");
+		TRACE0("å·¥å…·æ åŠ è½½å¤±è´¥ï¼");
 		return -1;
 	}
 	//add toolbar icon
@@ -129,8 +146,8 @@ HCURSOR CSMTDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-//////////////////////////CCDº¯Êı///////////////////////////
-//»ñÈ¡bayer¸ñÊ½
+//////////////////////////CCDå‡½æ•°///////////////////////////
+//è·å–bayeræ ¼å¼
 HV_BAYER_LAYOUT CSMTDlg::HVGetBayerType(HHV hhv) 
 {
 	int nSize = 0; 
@@ -151,12 +168,12 @@ HV_BAYER_LAYOUT CSMTDlg::HVGetBayerType(HHV hhv)
 	return Layout;
 }
 
-/*	º¯Êı:SetExposureTime
-	ÊäÈë²ÎÊı:int nWindWidth			µ±Ç°Í¼Ïñ¿í¶È		
-			 int lTintUpper			ÆØ¹âÊ±¼äµÄ·Ö×Ó£¬shutterµÄÈ¡Öµ
-			 int lTintLower			ÆØ¹âÊ±¼äµÄ·ÖÄ¸£¬ÓëshutterµÄµ¥Î»Ïà¹Ø	£¨ms:1000£»s:1£©
-	Êä³ö²ÎÊı:ÎŞ						
-	ËµÃ÷:ÉèÖÃÆØ¹âÊ±¼ä£¨ÆäËûµÄ²ÎÊıÈçÉãÏñ»úÊ±ÖÓÆµÂÊ£¬ÏûÒşÖµ¶¼È¡Ä¬ÈÏÖµ£©*/
+/*	å‡½æ•°:SetExposureTime
+	è¾“å…¥å‚æ•°:int nWindWidth			å½“å‰å›¾åƒå®½åº¦		
+			 int lTintUpper			æ›å…‰æ—¶é—´çš„åˆ†å­ï¼Œshutterçš„å–å€¼
+			 int lTintLower			æ›å…‰æ—¶é—´çš„åˆ†æ¯ï¼Œä¸shutterçš„å•ä½ç›¸å…³	ï¼ˆms:1000ï¼›s:1ï¼‰
+	è¾“å‡ºå‚æ•°:æ— 						
+	è¯´æ˜:è®¾ç½®æ›å…‰æ—¶é—´ï¼ˆå…¶ä»–çš„å‚æ•°å¦‚æ‘„åƒæœºæ—¶é’Ÿé¢‘ç‡ï¼Œæ¶ˆéšå€¼éƒ½å–é»˜è®¤å€¼ï¼‰*/
 HVSTATUS CSMTDlg::SetExposureTime(HHV hhv, int nWindWidth, long lTintUpper, long lTintLower, 
 								  long HBlanking, HV_SNAP_SPEED SnapSpeed, HV_RESOLUTION Resolution)
 {
@@ -186,9 +203,9 @@ HVSTATUS CSMTDlg::SetExposureTime(HHV hhv, int nWindWidth, long lTintUpper, long
 	return HVAECControl(hhv, AEC_EXPOSURE_TIME, (long)dExposure);
 }
 
-/*	º¯Êı:OnSnapError£»
-	ÊäÈë²ÎÊı:WPARAM wParam Ã»ÓĞÊ¹ÓÃ	,LPARAM lParam Òì³£×´Ì¬Âë£»
-    Êä³ö²ÎÊı:LRESULT£»ËµÃ÷:ÉãÏñ»ú²É¼¯Òì³£´íÎó±¨¸æ*/
+/*	å‡½æ•°:OnSnapErrorï¼›
+	è¾“å…¥å‚æ•°:WPARAM wParam æ²¡æœ‰ä½¿ç”¨	,LPARAM lParam å¼‚å¸¸çŠ¶æ€ç ï¼›
+    è¾“å‡ºå‚æ•°:LRESULTï¼›è¯´æ˜:æ‘„åƒæœºé‡‡é›†å¼‚å¸¸é”™è¯¯æŠ¥å‘Š*/
 LRESULT CSMTDlg::OnSnapError(WPARAM wParam, LPARAM lParam)
 {	
 	CErrorBox ErrDlg;
@@ -205,7 +222,7 @@ LRESULT CSMTDlg::OnSnapError(WPARAM wParam, LPARAM lParam)
 LRESULT CSMTDlg::OnSnapStop(WPARAM wParam, LPARAM lParam)
 {
 	HVSTATUS status =STATUS_OK;
-	//	Í£Ö¹²É¼¯Í¼Ïñµ½ÄÚ´æ£¬¿ÉÒÔÔÙ´Îµ÷ÓÃHVStartSnapExÆô¶¯Êı×ÖÉãÏñ»ú²É¼¯
+	//	åœæ­¢é‡‡é›†å›¾åƒåˆ°å†…å­˜ï¼Œå¯ä»¥å†æ¬¡è°ƒç”¨HVStartSnapExå¯åŠ¨æ•°å­—æ‘„åƒæœºé‡‡é›†
 	status = HVStopSnap(m_hhv);
 	HV_VERIFY(status);
 	if (HV_SUCCESS(status)) 
@@ -216,10 +233,10 @@ LRESULT CSMTDlg::OnSnapStop(WPARAM wParam, LPARAM lParam)
 BOOL CSMTDlg::DestroyDHCamera(HHV hDHCamera, BYTE *pRawBuffer, BYTE *pImageBuffer)
 {
 	HVSTATUS status = STATUS_OK;
-	//	¹Ø±ÕÊı×ÖÉãÏñ»ú£¬ÊÍ·ÅÊı×ÖÉãÏñ»úÄÚ²¿×ÊÔ´
+	//	å…³é—­æ•°å­—æ‘„åƒæœºï¼Œé‡Šæ”¾æ•°å­—æ‘„åƒæœºå†…éƒ¨èµ„æº
 	status = EndHVDevice(hDHCamera);
 	HV_VERIFY(status);
-	//	»ØÊÕÍ¼Ïñ»º³åÇø
+	//	å›æ”¶å›¾åƒç¼“å†²åŒº
 	delete []pRawBuffer;
 	delete []pImageBuffer;
 	return TRUE;
@@ -249,54 +266,54 @@ HVSTATUS CSMTDlg::GetLastStatus()
 	return status;
 }
 
-/*	º¯Êı:SnapThreadCallback
-	ÊäÈë²ÎÊı:SNAP_INFO *pInfo£»SNAP_INFO½á¹¹°üÀ¨µ±Ç°Êı×ÖÉãÏñ»úSNAPÖ´ĞĞ×´Ì¬£»Êä³ö²ÎÊı:int						
-	ËµÃ÷:Êı×ÖÉãÏñ»ú²É¼¯µ½ÄÚ´æ»Øµ÷º¯Êı£¬µ«ÓÃ»§Ò»°ã²»ÓÃµ÷ÓÃ£¬ÓÉÓÃ»§Ìá¹©¸øSDKÊ¹ÓÃ£¬
-	ÓÃ»§ÔÚ»Øµ÷º¯ÊıÄÚÊµÏÖ¶Ô²É¼¯Êı¾İµÄ´¦ÀíºÍÏÔÊ¾¼´¿É*/
+/*	å‡½æ•°:SnapThreadCallback
+	è¾“å…¥å‚æ•°:SNAP_INFO *pInfoï¼›SNAP_INFOç»“æ„åŒ…æ‹¬å½“å‰æ•°å­—æ‘„åƒæœºSNAPæ‰§è¡ŒçŠ¶æ€ï¼›è¾“å‡ºå‚æ•°:int						
+	è¯´æ˜:æ•°å­—æ‘„åƒæœºé‡‡é›†åˆ°å†…å­˜å›è°ƒå‡½æ•°ï¼Œä½†ç”¨æˆ·ä¸€èˆ¬ä¸ç”¨è°ƒç”¨ï¼Œç”±ç”¨æˆ·æä¾›ç»™SDKä½¿ç”¨ï¼Œ
+	ç”¨æˆ·åœ¨å›è°ƒå‡½æ•°å†…å®ç°å¯¹é‡‡é›†æ•°æ®çš„å¤„ç†å’Œæ˜¾ç¤ºå³å¯*/
 int CALLBACK CSMTDlg::SnapThreadCallback(HV_SNAP_INFO *pInfo)
 {
 	CSMTDlg *This = (CSMTDlg *)(pInfo->pParam);
 	HWND hwnd = This->m_hWnd;
-	HVSTATUS status = This->GetLastStatus();	// ¶ÁÈ¡ÉãÏñ»úÍ¼Ïñ²É¼¯¹¤×÷×´Ì¬	
-	if(!HV_SUCCESS(status)) //Èç¹ûº¯Êıµ÷ÓÃ²»³É¹¦£¬ÉãÏñ»úÍ£Ö¹Í¼Ïñ²É¼¯¡£
+	HVSTATUS status = This->GetLastStatus();	// è¯»å–æ‘„åƒæœºå›¾åƒé‡‡é›†å·¥ä½œçŠ¶æ€	
+	if(!HV_SUCCESS(status)) //å¦‚æœå‡½æ•°è°ƒç”¨ä¸æˆåŠŸï¼Œæ‘„åƒæœºåœæ­¢å›¾åƒé‡‡é›†ã€‚
 	{	
 		::PostMessage(hwnd, WM_SNAP_STOP, 0, 0);
 		return 1;
 	}
 	TRACE("LastStatus is %X", This->dwLastStatus);
-	if(This->dwLastStatus == 0)	// µ±×´Ì¬ÖµµÈÓÚ0Ê±£¬±íÊ¾ÉãÏñ»úÍ¼Ïñ²É¼¯Õı³££¬Ôòµ÷ÓÃSendMessageÏÔÊ¾Í¼Ïñ£»
+	if(This->dwLastStatus == 0)	// å½“çŠ¶æ€å€¼ç­‰äº0æ—¶ï¼Œè¡¨ç¤ºæ‘„åƒæœºå›¾åƒé‡‡é›†æ­£å¸¸ï¼Œåˆ™è°ƒç”¨SendMessageæ˜¾ç¤ºå›¾åƒï¼›
 	{
-	   /*·¢ËÍ×Ô¶¨ÒåÏûÏ¢WM_SNAP_EX_CHANGEµ½Ö÷´°¿Ú£¬Í¬Ê±´«Èëµ±Ç°¿ÉÒÔ´¦ÀíµÄÍ¼ÏñĞòºÅ
-		*×¢Òâ£ºÓÃSendMessage·¢ËÍÏûÏ¢£¬±ØĞëµÈ´ıÏûÏ¢´¦ÀíÍê±Ïºó£¬²ÅÄÜÍË³öÕû¸öSendMessageº¯Êı*/
+	   /*å‘é€è‡ªå®šä¹‰æ¶ˆæ¯WM_SNAP_EX_CHANGEåˆ°ä¸»çª—å£ï¼ŒåŒæ—¶ä¼ å…¥å½“å‰å¯ä»¥å¤„ç†çš„å›¾åƒåºå·
+		*æ³¨æ„ï¼šç”¨SendMessageå‘é€æ¶ˆæ¯ï¼Œå¿…é¡»ç­‰å¾…æ¶ˆæ¯å¤„ç†å®Œæ¯•åï¼Œæ‰èƒ½é€€å‡ºæ•´ä¸ªSendMessageå‡½æ•°*/
 		::PostMessage(hwnd, WM_SNAP_CHANGE, 0, 0);
 		return 1;	
 	}
-	else if(This->dwLastStatus == STATUS_FILE_INVALID)// µ±×´Ì¬Öµ²»µÈÓÚ-18Ê±£¬±íÊ¾ÉãÏñ»ú·¢Éú1´Î¶ªÖ¡ĞĞÎª,ÔÚÁ¬Ğø¸ßËÙ²É¼¯Ê±£¬1´Î¶ªÖ¡ĞĞÎª¿ÉÄÜ°üÀ¨1Ö¡ÒÔÉÏÍ¼Ïñ¡£
+	else if(This->dwLastStatus == STATUS_FILE_INVALID)// å½“çŠ¶æ€å€¼ä¸ç­‰äº-18æ—¶ï¼Œè¡¨ç¤ºæ‘„åƒæœºå‘ç”Ÿ1æ¬¡ä¸¢å¸§è¡Œä¸º,åœ¨è¿ç»­é«˜é€Ÿé‡‡é›†æ—¶ï¼Œ1æ¬¡ä¸¢å¸§è¡Œä¸ºå¯èƒ½åŒ…æ‹¬1å¸§ä»¥ä¸Šå›¾åƒã€‚
 	{
-		This->m_nLost++;	//¶ªÖ¡¼ÆÊı
+		This->m_nLost++;	//ä¸¢å¸§è®¡æ•°
 	}
 	else if (This->dwLastStatus == 0xc0000012 || This->dwLastStatus == 0xc0000011)
 	{
-		This->m_nError++;	//´íÎó¼ÆÊı
+		This->m_nError++;	//é”™è¯¯è®¡æ•°
 	}
-	else // µ±×´Ì¬ÖµÎªÆäËû·Ç0ÖµÊ±£¬±íÊ¾ÉãÏñ»úÍ¼Ïñ²É¼¯Òì³£
+	else // å½“çŠ¶æ€å€¼ä¸ºå…¶ä»–é0å€¼æ—¶ï¼Œè¡¨ç¤ºæ‘„åƒæœºå›¾åƒé‡‡é›†å¼‚å¸¸
 	{
-	   //·¢ËÍ×Ô¶¨ÒåÏûÏ¢ WM_SNAP_ERROR µ½Ö÷´°¿Ú£¬×¢Òâ£ºÓÃPostMessage·¢ËÍÏûÏ¢£¬²»±ØµÈ´ıÏûÏ¢´¦ÀíÍê£¬¾Í¿ÉÒÔ·µ»Ø¡£
+	   //å‘é€è‡ªå®šä¹‰æ¶ˆæ¯ WM_SNAP_ERROR åˆ°ä¸»çª—å£ï¼Œæ³¨æ„ï¼šç”¨PostMessageå‘é€æ¶ˆæ¯ï¼Œä¸å¿…ç­‰å¾…æ¶ˆæ¯å¤„ç†å®Œï¼Œå°±å¯ä»¥è¿”å›ã€‚
 		::PostMessage(hwnd, WM_SNAP_ERROR, 0, This->dwLastStatus);
 	}	
 	return 1;
 }
 
-/*	º¯Êı:OnSnapChange1
-	ÊäÈë²ÎÊı:WPARAM wParam	×Ö²ÎÊı£¬ÔÚÏûÏ¢ÖĞÎªµ±Ç°¿ÉÒÔ´¦ÀíµÄÍ¼ÏñĞòºÅ; LPARAM lParam	Ã»ÓĞÊ¹ÓÃ£»
-	Êä³ö²ÎÊı:LRESULT£»ËµÃ÷:ÊµÏÖ¶Ô²É¼¯Êı¾İµÄ´¦ÀíºÍÏÔÊ¾*/
+/*	å‡½æ•°:OnSnapChange1
+	è¾“å…¥å‚æ•°:WPARAM wParam	å­—å‚æ•°ï¼Œåœ¨æ¶ˆæ¯ä¸­ä¸ºå½“å‰å¯ä»¥å¤„ç†çš„å›¾åƒåºå·; LPARAM lParam	æ²¡æœ‰ä½¿ç”¨ï¼›
+	è¾“å‡ºå‚æ•°:LRESULTï¼›è¯´æ˜:å®ç°å¯¹é‡‡é›†æ•°æ®çš„å¤„ç†å’Œæ˜¾ç¤º*/
 LRESULT CSMTDlg::OnSnapChange(WPARAM wParam, LPARAM lParam)
 {
 	HVSTATUS status = STATUS_OK;	
-	//	½«Ô­Ê¼Í¼ÏñÊı¾İ½øĞĞBayer×ª»»£¬×ª»»ºóÎª24Î»¡£Í¬Ê±½«Ô­Ê¼Êı¾İ½øĞĞÉÏÏÂ·­×ª
+	//	å°†åŸå§‹å›¾åƒæ•°æ®è¿›è¡ŒBayerè½¬æ¢ï¼Œè½¬æ¢åä¸º24ä½ã€‚åŒæ—¶å°†åŸå§‹æ•°æ®è¿›è¡Œä¸Šä¸‹ç¿»è½¬
 	ConvertBayer2Rgb(m_pImageBuffer, m_pRawBuffer, Width, Height, ConvertType, m_pLutR, m_pLutG, m_pLutB, false, m_Layout);	
 	m_src.data = (uchar*)m_pImageBuffer;
-//	flip(m_src1, m_src1, -1);
+	flip(m_src, m_src, -1);
 // 	if (m_bDrawCross1)
 // 		DrawCross(g_src1);
 // 	if (m_bCalibrateRectH && m_bDrawCalibrateRectH)
@@ -310,11 +327,11 @@ LRESULT CSMTDlg::OnSnapChange(WPARAM wParam, LPARAM lParam)
 	return 1;
 }
 
-/*	³õÊ¼»¯Êı×ÖÉãÏñ»úÓ²¼ş×´Ì¬£¬ÓÃ»§Ò²¿ÉÒÔÔÚÆäËûÎ»ÖÃ³õÊ¼»¯Êı×ÖÉãÏñ»ú£¬µ«Ó¦±£Ö¤Êı×ÖÉãÏñ»úÒÑ¾­´ò¿ª£¬
-	½¨ÒéÓÃ»§ÔÚÓ¦ÓÃ³ÌĞò³õÊ¼»¯Ê±£¬Í¬Ê±³õÊ¼»¯Êı×ÖÉãÏñ»úÓ²¼ş¡£ */
+/*	åˆå§‹åŒ–æ•°å­—æ‘„åƒæœºç¡¬ä»¶çŠ¶æ€ï¼Œç”¨æˆ·ä¹Ÿå¯ä»¥åœ¨å…¶ä»–ä½ç½®åˆå§‹åŒ–æ•°å­—æ‘„åƒæœºï¼Œä½†åº”ä¿è¯æ•°å­—æ‘„åƒæœºå·²ç»æ‰“å¼€ï¼Œ
+	å»ºè®®ç”¨æˆ·åœ¨åº”ç”¨ç¨‹åºåˆå§‹åŒ–æ—¶ï¼ŒåŒæ—¶åˆå§‹åŒ–æ•°å­—æ‘„åƒæœºç¡¬ä»¶ã€‚ */
 BOOL CSMTDlg::InitialDHCamera()
 {
-	//	³õÊ¼»¯ËùÓĞ³ÉÔ±±äÁ¿£¬Í¬Ê±´ò¿ªÊı×ÖÉãÏñ»ú
+	//	åˆå§‹åŒ–æ‰€æœ‰æˆå‘˜å˜é‡ï¼ŒåŒæ—¶æ‰“å¼€æ•°å­—æ‘„åƒæœº
 	HVSTATUS status = STATUS_OK;	
 	m_bOpen		    = FALSE;
 	m_bStart		= FALSE;
@@ -331,44 +348,44 @@ BOOL CSMTDlg::InitialDHCamera()
 		m_pLutG[i] = i;
 		m_pLutB[i] = i;
 	}
-	//	´ò¿ªÊı×ÖÉãÏñ»ú 1
+	//	æ‰“å¼€æ•°å­—æ‘„åƒæœº 1
 	status = BeginHVDevice(1, &m_hhv);
-	//	¼ìÑéº¯ÊıÖ´ĞĞ×´Ì¬£¬Èç¹ûÊ§°Ü£¬Ôò·µ»Ø´íÎó×´Ì¬ÏûÏ¢¿ò
+	//	æ£€éªŒå‡½æ•°æ‰§è¡ŒçŠ¶æ€ï¼Œå¦‚æœå¤±è´¥ï¼Œåˆ™è¿”å›é”™è¯¯çŠ¶æ€æ¶ˆæ¯æ¡†
 	HV_VERIFY(status);
 	m_Layout = HVGetBayerType(m_hhv);
-	//	ÉèÖÃÊı×ÖÉãÏñ»ú·Ö±æÂÊ
+	//	è®¾ç½®æ•°å­—æ‘„åƒæœºåˆ†è¾¨ç‡
 	HVSetResolution(m_hhv, Resolution);		
-	//	²É¼¯Ä£Ê½£¬°üÀ¨ CONTINUATION(Á¬Ğø)¡¢TRIGGER(Íâ´¥·¢)
+	//	é‡‡é›†æ¨¡å¼ï¼ŒåŒ…æ‹¬ CONTINUATION(è¿ç»­)ã€TRIGGER(å¤–è§¦å‘)
 	HVSetSnapMode(m_hhv, SnapMode);	
-	//  ÉèÖÃ¸÷¸ö·ÖÁ¿µÄÔöÒæ
+	//  è®¾ç½®å„ä¸ªåˆ†é‡çš„å¢ç›Š
 	for (int i = 0; i < 4; i++)
 	{
 		HVAGCControl(m_hhv, RED_CHANNEL + i, Gain);
 	}
-	//  ÉèÖÃADCµÄ¼¶±ğ
+	//  è®¾ç½®ADCçš„çº§åˆ«
 	HVADCControl(m_hhv, ADC_BITS, ADCLevel);
-	//  »ñÈ¡Éè±¸ÀàĞÍ
+	//  è·å–è®¾å¤‡ç±»å‹
 	HVTYPE type = UNKNOWN_TYPE;
 	int size    = sizeof(HVTYPE);
 	HVGetDeviceInfo(m_hhv, DESC_DEVICE_TYPE, &type, &size);	
-	//ÉèÖÃÏûÒş¡£
+	//è®¾ç½®æ¶ˆéšã€‚
 	HVSetBlanking(m_hhv, m_lHBlanking, m_lVBlanking);
-	/*ÊÓÆµÊä³ö´°¿Ú£¬¼´ÊÓÆµÊä³ö·¶Î§£¬Êä³ö´°¿ÚÈ¡Öµ·¶Î§±ØĞëÔÚÊäÈë´°¿Ú·¶Î§ÒÔÄÚ£¬ÊÓÆµ´°¿Ú×óÉÏ½ÇX×ø±êºÍ´°¿Ú¿í¶ÈÓ¦Îª4µÄ±¶Êı£¬
-	×óÉÏ½ÇY×ø±êºÍ´°¿Ú¸ß¶ÈÓ¦Îª2µÄ±¶Êı£¬Êä³ö´°¿ÚµÄÆğÊ¼Î»ÖÃÒ»°ãÉèÖÃÎª(0, 0)¼´¿É¡£*/
+	/*è§†é¢‘è¾“å‡ºçª—å£ï¼Œå³è§†é¢‘è¾“å‡ºèŒƒå›´ï¼Œè¾“å‡ºçª—å£å–å€¼èŒƒå›´å¿…é¡»åœ¨è¾“å…¥çª—å£èŒƒå›´ä»¥å†…ï¼Œè§†é¢‘çª—å£å·¦ä¸Šè§’Xåæ ‡å’Œçª—å£å®½åº¦åº”ä¸º4çš„å€æ•°ï¼Œ
+	å·¦ä¸Šè§’Yåæ ‡å’Œçª—å£é«˜åº¦åº”ä¸º2çš„å€æ•°ï¼Œè¾“å‡ºçª—å£çš„èµ·å§‹ä½ç½®ä¸€èˆ¬è®¾ç½®ä¸º(0, 0)å³å¯ã€‚*/
 	HVSetOutputWindow(m_hhv, XStart, YStart, Width, Height);	
-	//ÉèÖÃ²É¼¯ËÙ¶È
+	//è®¾ç½®é‡‡é›†é€Ÿåº¦
 	HVSetSnapSpeed(m_hhv, SnapSpeed);
-	//ÉèÖÃÆØ¹âÊ±¼ä
+	//è®¾ç½®æ›å…‰æ—¶é—´
 	SetExposureTime(m_hhv, Width, ExposureTint_Upper, ExposureTint_Lower, m_lHBlanking, SnapSpeed, Resolution);	
-	//	m_pBmpInfo¼´Ö¸Ïòm_chBmpBuf»º³åÇø£¬ÓÃ»§¿ÉÒÔ×Ô¼º·ÖÅäBTIMAPINFO»º³åÇø	
+	//	m_pBmpInfoå³æŒ‡å‘m_chBmpBufç¼“å†²åŒºï¼Œç”¨æˆ·å¯ä»¥è‡ªå·±åˆ†é…BTIMAPINFOç¼“å†²åŒº	
 	m_pBmpInfo					= (BITMAPINFO *)m_chBmpBuf;
-	//	³õÊ¼»¯BITMAPINFO ½á¹¹£¬´Ë½á¹¹ÔÚ±£´æbmpÎÄ¼ş¡¢ÏÔÊ¾²É¼¯Í¼ÏñÊ±Ê¹ÓÃ
+	//	åˆå§‹åŒ–BITMAPINFO ç»“æ„ï¼Œæ­¤ç»“æ„åœ¨ä¿å­˜bmpæ–‡ä»¶ã€æ˜¾ç¤ºé‡‡é›†å›¾åƒæ—¶ä½¿ç”¨
 	m_pBmpInfo->bmiHeader.biSize	= sizeof(BITMAPINFOHEADER);
-	//	Í¼Ïñ¿í¶È£¬Ò»°ãÎªÊä³ö´°¿Ú¿í¶È
+	//	å›¾åƒå®½åº¦ï¼Œä¸€èˆ¬ä¸ºè¾“å‡ºçª—å£å®½åº¦
 	m_pBmpInfo->bmiHeader.biWidth	= Width;
-	//	Í¼Ïñ¿í¶È£¬Ò»°ãÎªÊä³ö´°¿Ú¸ß¶È
+	//	å›¾åƒå®½åº¦ï¼Œä¸€èˆ¬ä¸ºè¾“å‡ºçª—å£é«˜åº¦
 	m_pBmpInfo->bmiHeader.biHeight	= Height;	
-	/*	ÒÔÏÂÉèÖÃÒ»°ãÏàÍ¬£¬¶ÔÓÚµÍÓÚ8Î»µÄÎ»Í¼£¬»¹Ó¦ÉèÖÃÏàÓ¦µÄÎ»Í¼µ÷É«°å*/
+	/*	ä»¥ä¸‹è®¾ç½®ä¸€èˆ¬ç›¸åŒï¼Œå¯¹äºä½äº8ä½çš„ä½å›¾ï¼Œè¿˜åº”è®¾ç½®ç›¸åº”çš„ä½å›¾è°ƒè‰²æ¿*/
 	m_pBmpInfo->bmiHeader.biPlanes			= 1;
 	m_pBmpInfo->bmiHeader.biBitCount		= 24;
 	m_pBmpInfo->bmiHeader.biCompression	    = BI_RGB;
@@ -377,26 +394,26 @@ BOOL CSMTDlg::InitialDHCamera()
 	m_pBmpInfo->bmiHeader.biYPelsPerMeter	= 0;
 	m_pBmpInfo->bmiHeader.biClrUsed		    = 0;
 	m_pBmpInfo->bmiHeader.biClrImportant	= 0;	
-	/*	·ÖÅäÔ­Ê¼Í¼Ïñ»º³åÇø£¬Ò»°ãÓÃÀ´´æ´¢²É¼¯Í¼ÏñÔ­Ê¼Êı¾İ
-	*  Ò»°ãÍ¼Ïñ»º³åÇø´óĞ¡ÓÉÊä³ö´°¿Ú´óĞ¡ºÍÊÓÆµ¸ñÊ½È·¶¨¡£*/
+	/*	åˆ†é…åŸå§‹å›¾åƒç¼“å†²åŒºï¼Œä¸€èˆ¬ç”¨æ¥å­˜å‚¨é‡‡é›†å›¾åƒåŸå§‹æ•°æ®
+	*  ä¸€èˆ¬å›¾åƒç¼“å†²åŒºå¤§å°ç”±è¾“å‡ºçª—å£å¤§å°å’Œè§†é¢‘æ ¼å¼ç¡®å®šã€‚*/
 	m_pRawBuffer = new BYTE[Width * Height];
 	ASSERT(m_pRawBuffer);
-	//·ÖÅäBayer×ª»»ºóÍ¼ÏñÊı¾İ»º³å
+	//åˆ†é…Bayerè½¬æ¢åå›¾åƒæ•°æ®ç¼“å†²
 	m_pImageBuffer = new BYTE[Width * Height * 3];
 	ASSERT(m_pImageBuffer);
 	return TRUE;
 }
-////////////////////////////CCDµÄº¯Êı//////////////////////////////////////////////
+////////////////////////////CCDçš„å‡½æ•°//////////////////////////////////////////////
 
 void CSMTDlg::OnCamera_Open()
 {
 	HVSTATUS status = STATUS_OK;
-	//³õÊ¼»¯Êı×ÖÉãÏñ»ú²É¼¯Í¼Ïñµ½ÄÚ´æµÄ¿ØÖÆ£¬Ö¸¶¨»Øµ÷º¯ÊıSnapThreadCallbackºÍthisÖ¸Õë
+	//åˆå§‹åŒ–æ•°å­—æ‘„åƒæœºé‡‡é›†å›¾åƒåˆ°å†…å­˜çš„æ§åˆ¶ï¼ŒæŒ‡å®šå›è°ƒå‡½æ•°SnapThreadCallbackå’ŒthisæŒ‡é’ˆ
 	status = HVOpenSnap(m_hhv, SnapThreadCallback, this);					
 	HV_VERIFY(status);
 	if (HV_SUCCESS(status)) 
-		m_bOpen = TRUE;		//±êÖ¾ÒÑ¾­´ò¿ªSnap»·¾³
-	//Æô¶¯Êı×ÖÉãÏñ»ú²É¼¯Í¼Ïñµ½ÄÚ´æ
+		m_bOpen = TRUE;		//æ ‡å¿—å·²ç»æ‰“å¼€Snapç¯å¢ƒ
+	//å¯åŠ¨æ•°å­—æ‘„åƒæœºé‡‡é›†å›¾åƒåˆ°å†…å­˜
 	BYTE *ppBuf[1];
 	ppBuf[0] = m_pRawBuffer;
 	status = HVStartSnap(m_hhv, ppBuf,1);
@@ -408,7 +425,7 @@ void CSMTDlg::OnCamera_Open()
 void CSMTDlg::OnCamera_Stop()
 {
 	HVSTATUS status =STATUS_OK;
-	//	Í£Ö¹²É¼¯Í¼Ïñµ½ÄÚ´æ£¬¿ÉÒÔÔÙ´Îµ÷ÓÃHVStartSnapExÆô¶¯Êı×ÖÉãÏñ»ú²É¼¯
+	//	åœæ­¢é‡‡é›†å›¾åƒåˆ°å†…å­˜ï¼Œå¯ä»¥å†æ¬¡è°ƒç”¨HVStartSnapExå¯åŠ¨æ•°å­—æ‘„åƒæœºé‡‡é›†
 	status = HVStopSnap(m_hhv);
 	HV_VERIFY(status);
 	if (HV_SUCCESS(status))
@@ -418,7 +435,7 @@ void CSMTDlg::OnCamera_Stop()
 void CSMTDlg::OnCamera_Close()
 {
 	HVSTATUS status =STATUS_OK;
-	//	Í£Ö¹²É¼¯Í¼Ïñµ½ÄÚ´æ£¬¿ÉÒÔÔÙ´Îµ÷ÓÃHVStartSnapExÆô¶¯Êı×ÖÉãÏñ»ú²É¼¯
+	//	åœæ­¢é‡‡é›†å›¾åƒåˆ°å†…å­˜ï¼Œå¯ä»¥å†æ¬¡è°ƒç”¨HVStartSnapExå¯åŠ¨æ•°å­—æ‘„åƒæœºé‡‡é›†
 	status = HVStopSnap(m_hhv);
 	HV_VERIFY(status);
 	if (HV_SUCCESS(status))
@@ -436,9 +453,9 @@ void CSMTDlg::OnCamera_Close()
 
 void CSMTDlg::OnCamera_SavePic()
 {
-	//	ÒÔÏÂ±£´æBMPÎÄ¼şÉèÖÃ»ù±¾ÏàÍ¬
+	//	ä»¥ä¸‹ä¿å­˜BMPæ–‡ä»¶è®¾ç½®åŸºæœ¬ç›¸åŒ
 	Mat saveImg = m_src.clone();
-	CString defaultDir = _T("E:\\image_avi_save");   //Ä¬ÈÏ´ò¿ªµÄÎÄ¼şÂ·¾¶
+	CString defaultDir = _T("E:\\image_avi_save");   //é»˜è®¤æ‰“å¼€çš„æ–‡ä»¶è·¯å¾„
 	CString filter = _T("Bitmap Files(*.bmp)|*.bmp");
 	CFileDialog dlg(FALSE, defaultDir, _T("img") ,OFN_OVERWRITEPROMPT|OFN_HIDEREADONLY, filter, this);
 	if (dlg.DoModal() == IDOK) 
@@ -452,7 +469,7 @@ void CSMTDlg::OnCamera_SavePic()
 		}
 		else
 		{
-			MessageBox(_T("ÎÄ¼şÂ·¾¶Îª¿Õ£¡\n"));
+			MessageBox(_T("æ–‡ä»¶è·¯å¾„ä¸ºç©ºï¼\n"));
 			return;
 		}	
 	}
@@ -477,9 +494,9 @@ UINT CSMTDlg::StoreVideoThreadFunc(LPVOID lpParam)
 void CSMTDlg::StoreVideo()
 {
 	m_bIsCapture = TRUE;
-	CString defaultDir = _T("E:\\image_avi_save");   //Ä¬ÈÏ´ò¿ªµÄÎÄ¼şÂ·¾¶
+	CString defaultDir = _T("E:\\image_avi_save");   //é»˜è®¤æ‰“å¼€çš„æ–‡ä»¶è·¯å¾„
 	CString strAVIFileName = _T("");
-	CString filter = _T("AVI Files (*.avi)|*.avi;All Files (*.*)|*.*||");   //ÎÄ¼ş¹ıÂÇµÄÀàĞÍ 
+	CString filter = _T("AVI Files (*.avi)|*.avi;All Files (*.*)|*.*||");   //æ–‡ä»¶è¿‡è™‘çš„ç±»å‹ 
 	CFileDialog dlg(FALSE, defaultDir, _T("Video"), OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, filter, NULL);
 	if(dlg.DoModal() == IDOK)
 	{
@@ -500,7 +517,7 @@ void CSMTDlg::StoreVideo()
 		}
 		else
 		{
-			MessageBox(_T("ÎÄ¼şÂ·¾¶Îª¿Õ£¡\n"));
+			MessageBox(_T("æ–‡ä»¶è·¯å¾„ä¸ºç©ºï¼\n"));
 			return;
 		}	
 	}
@@ -527,4 +544,69 @@ void CSMTDlg::ShowImage(Mat img, INT_PTR ID)
 	cimg.CopyOf(&temp);
 	cimg.DrawToHDC(hDC, &rect);
 	ReleaseDC(pDC);
+}
+
+void CSMTDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	// TODO: Add your message handler code here and/or call default
+	UpdateData(TRUE);
+	int ctrlID=pScrollBar->GetDlgCtrlID();
+	int nPosition(0);
+	switch(ctrlID)
+	{
+	case IDC_SLIDER_GAIN:
+		nPosition=m_sliderGain.GetPos();
+		m_spinGain.SetPos(nPosition);
+		m_editGain = nPosition;
+		SetGain(IDC_SLIDER_GAIN);
+		break;
+	case IDC_SPIN_GAIN:
+		nPosition=m_spinGain.GetPos();
+		m_sliderGain.SetPos(nPosition);
+		m_editGain = nPosition;
+		SetGain(IDC_SPIN_GAIN);
+		break;
+	case IDC_SLIDER_SHUTTER:
+		nPosition=m_sliderShutter.GetPos();
+		m_spinShutter.SetPos(nPosition);
+		m_editShutter = nPosition;
+		SetExposureTime(m_hhv, Width, nPosition, ExposureTint_Lower, m_lHBlanking, SnapSpeed, Resolution);
+		break;
+	case IDC_SPIN_SHUTTER:
+		nPosition=m_spinShutter.GetPos();
+		m_sliderShutter.SetPos(nPosition);
+		m_editShutter = nPosition;
+		SetExposureTime(m_hhv, Width, nPosition, ExposureTint_Lower, m_lHBlanking, SnapSpeed,Resolution);
+		break;
+	default:
+		break;
+	}
+	UpdateData(FALSE);
+	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);
+}
+
+BOOL CSMTDlg::SetGain(int ctrID)
+{
+	HVSTATUS status=STATUS_OK;
+	long nGain;
+	switch(ctrID)
+	{
+	case IDC_SLIDER_GAIN:
+		nGain = m_sliderGain.GetPos();
+		for (int nChannel=RED_CHANNEL;nChannel<=BLUE_CHANNEL;nChannel++)
+		{
+			status=HVAGCControl(m_hhv, nChannel,nGain);
+			HV_VERIFY(status);
+		}
+	case IDC_SPIN_GAIN:
+		nGain = m_spinGain.GetPos();
+		for (int nChannel=RED_CHANNEL;nChannel<=BLUE_CHANNEL;nChannel++)
+		{
+			status=HVAGCControl(m_hhv, nChannel, nGain);
+			HV_VERIFY(status);
+		}
+	default:
+		break;
+	}	
+	return TRUE;
 }

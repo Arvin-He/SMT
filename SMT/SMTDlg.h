@@ -7,6 +7,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
+#include "afxcmn.h"
 
 using namespace cv;
 #pragma comment(lib, "Vfw32.lib")
@@ -69,6 +70,12 @@ protected:
 	CToolBar	m_toolBar;
 	CImageList	m_imageList;
 
+	CSliderCtrl m_sliderGain;
+	CSpinButtonCtrl m_spinGain;
+	CSliderCtrl m_sliderShutter;
+	CSpinButtonCtrl m_spinShutter;
+	int m_editShutter;
+	int m_editGain;
 private:
 	
 	BOOL m_bIsCapture;		//视频保存标识
@@ -91,4 +98,6 @@ public:
 	afx_msg void OnCamera_SavePic();
 	afx_msg void OnCamera_SaveVideo();
 	afx_msg void OnCamera_StopVideo();	
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	
 };
