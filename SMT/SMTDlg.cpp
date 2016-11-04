@@ -37,15 +37,13 @@ const HV_SNAP_SPEED SnapSpeed = HIGH_SPEED;
 // CSMTDlg dialog
 CSMTDlg::CSMTDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CSMTDlg::IDD, pParent)
-	, m_editShutter(0)
-	, m_editGain(0)
+	, m_editShutter(80)
+	, m_editGain(4)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_src = Mat(Size(640, 512), CV_8UC3);
 	InitialDHCamera();
 	m_bIsCapture = FALSE;
-	m_editGain = 4;
-	m_editShutter = 80;
 }
 
 void CSMTDlg::DoDataExchange(CDataExchange* pDX)
@@ -593,14 +591,14 @@ BOOL CSMTDlg::SetGain(int ctrID)
 	{
 	case IDC_SLIDER_GAIN:
 		nGain = m_sliderGain.GetPos();
-		for (int nChannel=RED_CHANNEL;nChannel<=BLUE_CHANNEL;nChannel++)
+		for (int nChannel=RED_CHANNEL; nChannel<=BLUE_CHANNEL; nChannel++)
 		{
-			status=HVAGCControl(m_hhv, nChannel,nGain);
+			status=HVAGCControl(m_hhv, nChannel, nGain);
 			HV_VERIFY(status);
 		}
 	case IDC_SPIN_GAIN:
 		nGain = m_spinGain.GetPos();
-		for (int nChannel=RED_CHANNEL;nChannel<=BLUE_CHANNEL;nChannel++)
+		for (int nChannel=RED_CHANNEL; nChannel<=BLUE_CHANNEL; nChannel++)
 		{
 			status=HVAGCControl(m_hhv, nChannel, nGain);
 			HV_VERIFY(status);
