@@ -583,13 +583,13 @@ void CSMTDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		nPosition=m_sliderShutter.GetPos();
 		m_spinShutter.SetPos(nPosition);
 		m_editShutter = nPosition;
-		//SetExposureTime(m_hhv, Width, nPosition, ExposureTint_Lower, m_lHBlanking, SnapSpeed, Resolution);
+		SetExposureTime(m_hhv, Width, nPosition, ExposureTint_Lower, m_lHBlanking, SnapSpeed, Resolution);
 		break;
 	case IDC_SPIN_SHUTTER:
 		nPosition=m_spinShutter.GetPos();
 		m_sliderShutter.SetPos(nPosition);
 		m_editShutter = nPosition;
-		//SetExposureTime(m_hhv, Width, nPosition, ExposureTint_Lower, m_lHBlanking, SnapSpeed,Resolution);
+		SetExposureTime(m_hhv, Width, nPosition, ExposureTint_Lower, m_lHBlanking, SnapSpeed,Resolution);
 		break;
 	default:
 		break;
@@ -605,20 +605,24 @@ BOOL CSMTDlg::SetGain(int ctrID)
 	switch(ctrID)
 	{
 	case IDC_SLIDER_GAIN:
-		nGain = m_sliderGain.GetPos();
-// 		for (int nChannel=RED_CHANNEL; nChannel<=BLUE_CHANNEL; nChannel++)
-// 		{
-// 			status=HVAGCControl(m_hhv, nChannel, nGain);
-// 			HV_VERIFY(status);
-// 		}
+		{
+			nGain = m_sliderGain.GetPos();
+			for (int nChannel=RED_CHANNEL; nChannel<=BLUE_CHANNEL; nChannel++)
+			{
+				status=HVAGCControl(m_hhv, nChannel, nGain);
+				HV_VERIFY(status);
+			}
+		}
 		break;
 	case IDC_SPIN_GAIN:
-		nGain = m_spinGain.GetPos();
-// 		for (int nChannel=RED_CHANNEL; nChannel<=BLUE_CHANNEL; nChannel++)
-// 		{
-// 			status=HVAGCControl(m_hhv, nChannel, nGain);
-// 			HV_VERIFY(status);
-// 		}
+		{
+			nGain = m_spinGain.GetPos();
+			for (int nChannel=RED_CHANNEL; nChannel<=BLUE_CHANNEL; nChannel++)
+			{
+				status=HVAGCControl(m_hhv, nChannel, nGain);
+				HV_VERIFY(status);
+			}
+		}
 		break;
 	default:
 		break;
