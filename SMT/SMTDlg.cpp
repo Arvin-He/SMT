@@ -37,7 +37,7 @@ const HV_SNAP_SPEED SnapSpeed = HIGH_SPEED;
 // CSMTDlg dialog
 CSMTDlg::CSMTDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CSMTDlg::IDD, pParent)
-	, m_editShutter(80)
+	, m_editShutter(800)
 	, m_editGain(4)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -54,7 +54,7 @@ void CSMTDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SLIDER_SHUTTER, m_sliderShutter);
 	DDX_Control(pDX, IDC_SPIN_SHUTTER, m_spinShutter);
 	DDX_Text(pDX, IDC_EDIT_SHUTTER, m_editShutter);
-	DDV_MinMaxInt(pDX, m_editShutter, 0, 100);
+	DDV_MinMaxInt(pDX, m_editShutter, 0, 1000);
 	DDX_Text(pDX, IDC_EDIT_GAIN, m_editGain);
 	DDV_MinMaxInt(pDX, m_editGain, 0, 63);
 }
@@ -113,6 +113,21 @@ BOOL CSMTDlg::OnInitDialog()
 	m_toolBar.ShowWindow(SW_SHOW);
 	RepositionBars(AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, 0);
 	m_imageList.Detach();
+
+	m_spinGain.SetRange(0, 63);
+	m_spinGain.SetPos(m_editGain);
+	m_spinGain.SetBuddy(GetDlgItem(IDC_EDIT_GAIN));
+	m_sliderGain.SetRange(0, 63);
+	m_sliderGain.SetPos(m_editGain);
+	m_sliderGain.SetTicFreq(6);
+
+	m_spinShutter.SetRange(0, 100);
+	m_spinShutter.SetPos(m_editShutter);
+	m_spinShutter.SetBuddy(GetDlgItem(IDC_EDIT_SHUTTER));
+	m_sliderShutter.SetRange(0,100);
+	m_sliderShutter.SetPos(m_editShutter);
+	m_sliderShutter.SetTicFreq(10);
+
 	
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -568,13 +583,13 @@ void CSMTDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		nPosition=m_sliderShutter.GetPos();
 		m_spinShutter.SetPos(nPosition);
 		m_editShutter = nPosition;
-		SetExposureTime(m_hhv, Width, nPosition, ExposureTint_Lower, m_lHBlanking, SnapSpeed, Resolution);
+		//SetExposureTime(m_hhv, Width, nPosition, ExposureTint_Lower, m_lHBlanking, SnapSpeed, Resolution);
 		break;
 	case IDC_SPIN_SHUTTER:
 		nPosition=m_spinShutter.GetPos();
 		m_sliderShutter.SetPos(nPosition);
 		m_editShutter = nPosition;
-		SetExposureTime(m_hhv, Width, nPosition, ExposureTint_Lower, m_lHBlanking, SnapSpeed,Resolution);
+		//SetExposureTime(m_hhv, Width, nPosition, ExposureTint_Lower, m_lHBlanking, SnapSpeed,Resolution);
 		break;
 	default:
 		break;
@@ -591,18 +606,20 @@ BOOL CSMTDlg::SetGain(int ctrID)
 	{
 	case IDC_SLIDER_GAIN:
 		nGain = m_sliderGain.GetPos();
-		for (int nChannel=RED_CHANNEL; nChannel<=BLUE_CHANNEL; nChannel++)
-		{
-			status=HVAGCControl(m_hhv, nChannel, nGain);
-			HV_VERIFY(status);
-		}
+// 		for (int nChannel=RED_CHANNEL; nChannel<=BLUE_CHANNEL; nChannel++)
+// 		{
+// 			status=HVAGCControl(m_hhv, nChannel, nGain);
+// 			HV_VERIFY(status);
+// 		}
+		break;
 	case IDC_SPIN_GAIN:
 		nGain = m_spinGain.GetPos();
-		for (int nChannel=RED_CHANNEL; nChannel<=BLUE_CHANNEL; nChannel++)
-		{
-			status=HVAGCControl(m_hhv, nChannel, nGain);
-			HV_VERIFY(status);
-		}
+// 		for (int nChannel=RED_CHANNEL; nChannel<=BLUE_CHANNEL; nChannel++)
+// 		{
+// 			status=HVAGCControl(m_hhv, nChannel, nGain);
+// 			HV_VERIFY(status);
+// 		}
+		break;
 	default:
 		break;
 	}	
