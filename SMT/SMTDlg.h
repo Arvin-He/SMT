@@ -23,7 +23,8 @@ class CSMTDlg : public CDialogEx
 // Construction
 public:
 	CSMTDlg(CWnd* pParent = NULL);	// standard constructor
-	Mat m_src;
+	BOOL InitDMCCard(); //初始化运动控制卡
+	Mat m_src;  
 ///////大恒CCD相关参数和函数///////////////////////////////
 private:
 	HHV	 m_hhv;			///< 数字摄像机句柄	

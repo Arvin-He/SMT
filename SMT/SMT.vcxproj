@@ -42,7 +42,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>.\daheng\inc;C:\opencv\build\include\opencv2;C:\opencv\build\include\opencv;C:\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>.\daheng\lib;C:\Program Files %28x86%29\Daheng Imavision\DH-USBDevice\SDK\VC\lib;C:\opencv\build\x86\vc10\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>.\daheng\lib;C:\opencv\build\x86\vc10\lib;$(LibraryPath)</LibraryPath>
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

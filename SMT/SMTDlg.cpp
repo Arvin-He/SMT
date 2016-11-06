@@ -37,7 +37,7 @@ const HV_SNAP_SPEED SnapSpeed = HIGH_SPEED;
 // CSMTDlg dialog
 CSMTDlg::CSMTDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CSMTDlg::IDD, pParent)
-	, m_editShutter(800)
+	, m_editShutter(600)
 	, m_editGain(4)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -152,8 +152,6 @@ void CSMTDlg::OnPaint()
 	}
 }
 
-// The system calls this function to obtain the cursor to display while the user drags
-//  the minimized window.
 HCURSOR CSMTDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
@@ -627,5 +625,10 @@ BOOL CSMTDlg::SetGain(int ctrID)
 	default:
 		break;
 	}	
+	return TRUE;
+}
+
+BOOL CSMTDlg::InitDMCCard()
+{
 	return TRUE;
 }

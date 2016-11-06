@@ -1,6 +1,0 @@
-2013.1.31
-作者：hewenyuan
-
-MyHVControl类
-大恒摄像头包装类
-
