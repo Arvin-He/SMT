@@ -5,6 +5,7 @@
 #include "afxdialogex.h"
 #include "ErrorBox.h"
 #include "CvvImage.h"
+#include "dmc3000/inc/LTDMC.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -128,7 +129,7 @@ BOOL CSMTDlg::OnInitDialog()
 	m_sliderShutter.SetPos(m_editShutter);
 	m_sliderShutter.SetTicFreq(10);
 
-	
+	InitDMC3000Card();
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -628,7 +629,15 @@ BOOL CSMTDlg::SetGain(int ctrID)
 	return TRUE;
 }
 
-BOOL CSMTDlg::InitDMCCard()
+BOOL CSMTDlg::InitDMC3000Card()
 {
+	WORD My_CardNum ;      //定义卡数
+	WORD My_CardList[8];   //定义卡号数组
+	DWORD My_CardTypeList[8];   //定义各卡类型
+	if( dmc_board_init() <= 0 )      //控制卡的初始化操作
+		MessageBox(_T("初始化控制卡失败！"), _T("出错"));
+	dmc_get_CardInfList(&My_CardNum, My_CardTypeList, My_CardList);    //获取正在使用的卡号列表
+	m_nCard = My_CardList[0]; 
+
 	return TRUE;
 }

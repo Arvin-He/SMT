@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SMT", "SMT\SMT.vcxproj", "{B7548D31-97C3-4AF8-A3E7-766CDB3092F5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{440A4357-3205-41D0-ACCA-8DE165F7D274}"
+	ProjectSection(SolutionItems) = preProject
+		SMT\dmc3000\inc\LTDMC.h = SMT\dmc3000\inc\LTDMC.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
