@@ -58,6 +58,7 @@ void CSMTDlg::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxInt(pDX, m_editShutter, 0, 1000);
 	DDX_Text(pDX, IDC_EDIT_GAIN, m_editGain);
 	DDV_MinMaxInt(pDX, m_editGain, 0, 63);
+	DDX_Control(pDX, IDC_TAB, m_tab);
 }
 
 BEGIN_MESSAGE_MAP(CSMTDlg, CDialogEx)
@@ -73,6 +74,7 @@ BEGIN_MESSAGE_MAP(CSMTDlg, CDialogEx)
 	ON_COMMAND(IDM_SAVE_VIDEO, &CSMTDlg::OnCamera_SaveVideo)
 	ON_COMMAND(IDM_STOP_VIDEO, &CSMTDlg::OnCamera_StopVideo)
 	ON_WM_HSCROLL()
+	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB, &CSMTDlg::OnTcnSelchangeTab)
 END_MESSAGE_MAP()
 
 
@@ -128,6 +130,41 @@ BOOL CSMTDlg::OnInitDialog()
 	m_sliderShutter.SetRange(0,100);
 	m_sliderShutter.SetPos(m_editShutter);
 	m_sliderShutter.SetTicFreq(10);
+
+	m_tab.InsertItem(0, _T("手动控制"));
+	m_tab.InsertItem(1, _T("自动控制"));
+	m_manualDlg.Create(IDD_MANUAL, GetDlgItem(IDC_TAB));
+	m_semiAutoDlg.Create(IDD_SEMI_AUTO, GetDlgItem(IDC_TAB));
+	m_manualDlg.EnableWindow(TRUE);
+	m_semiAutoDlg.EnableWindow(TRUE);
+
+	CRect mainDlgRect(0,0,0,0);
+	GetClientRect(&mainDlgRect);
+
+	mainDlgRect.top += 600;
+	mainDlgRect.left += 10;
+	mainDlgRect.bottom -= 10;
+	mainDlgRect.right -= 10;
+	m_tab.MoveWindow(&mainDlgRect);
+	//CRect tabRect(600, 10, 500, 300);
+	//m_tab.MoveWindow(&tabRect);
+
+	CRect tabRect(0,0,0,0);
+	m_tab.GetClientRect(&tabRect);
+
+	tabRect.top += 20;
+	tabRect.bottom -= 10;
+	tabRect.left += 10;
+	tabRect.right -= 10;
+	m_manualDlg.MoveWindow(&tabRect);
+	m_semiAutoDlg.MoveWindow(&tabRect);
+	//CRect pageRect(620, 20, 500, 300);
+	//m_manualDlg.MoveWindow(&pageRect);
+	//m_semiAutoDlg.MoveWindow(&pageRect);
+	m_manualDlg.ShowWindow(SW_SHOW);
+	m_semiAutoDlg.ShowWindow(SW_HIDE);
+	m_tab.SetCurSel(0);
+
 
 	InitDMC3000Card();
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -631,13 +668,33 @@ BOOL CSMTDlg::SetGain(int ctrID)
 
 BOOL CSMTDlg::InitDMC3000Card()
 {
-	WORD My_CardNum ;      //定义卡数
-	WORD My_CardList[8];   //定义卡号数组
-	DWORD My_CardTypeList[8];   //定义各卡类型
-	if( dmc_board_init() <= 0 )      //控制卡的初始化操作
-		MessageBox(_T("初始化控制卡失败！"), _T("出错"));
-	dmc_get_CardInfList(&My_CardNum, My_CardTypeList, My_CardList);    //获取正在使用的卡号列表
-	m_nCard = My_CardList[0]; 
+// 	WORD My_CardNum ;      //定义卡数
+// 	WORD My_CardList[8];   //定义卡号数组
+// 	DWORD My_CardTypeList[8];   //定义各卡类型
+// 	if( dmc_board_init() <= 0 )      //控制卡的初始化操作
+// 		MessageBox(_T("初始化控制卡失败！"), _T("出错"));
+// 	dmc_get_CardInfList(&My_CardNum, My_CardTypeList, My_CardList);    //获取正在使用的卡号列表
+// 	m_nCard = My_CardList[0]; 
 
 	return TRUE;
+}
+
+void CSMTDlg::OnTcnSelchangeTab(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// TODO: Add your control notification handler code here
+	int curSel = m_tab.GetCurSel();
+	switch(curSel)
+	{
+	case 0:
+		m_manualDlg.ShowWindow(TRUE);
+		m_semiAutoDlg.ShowWindow(FALSE);
+		break;
+	case 1:
+		m_manualDlg.ShowWindow(FALSE);
+		m_semiAutoDlg.ShowWindow(TRUE);
+		break;
+	default:
+		break;
+	}
+	*pResult = 0;
 }
