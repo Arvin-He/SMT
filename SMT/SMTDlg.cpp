@@ -133,28 +133,28 @@ BOOL CSMTDlg::OnInitDialog()
 
 	m_tab.InsertItem(0, _T("手动控制"));
 	m_tab.InsertItem(1, _T("自动控制"));
+
 	m_manualDlg.Create(IDD_MANUAL, GetDlgItem(IDC_TAB));
 	m_semiAutoDlg.Create(IDD_SEMI_AUTO, GetDlgItem(IDC_TAB));
+
 	m_manualDlg.EnableWindow(TRUE);
 	m_semiAutoDlg.EnableWindow(TRUE);
 
 	CRect mainDlgRect(0,0,0,0);
 	GetClientRect(&mainDlgRect);
 
-	mainDlgRect.top += 600;
-	mainDlgRect.left += 10;
+	mainDlgRect.top += 60;
+	mainDlgRect.left += 680;
 	mainDlgRect.bottom -= 10;
 	mainDlgRect.right -= 10;
 	m_tab.MoveWindow(&mainDlgRect);
-	//CRect tabRect(600, 10, 500, 300);
-	//m_tab.MoveWindow(&tabRect);
 
 	CRect tabRect(0,0,0,0);
 	m_tab.GetClientRect(&tabRect);
 
 	tabRect.top += 20;
-	tabRect.bottom -= 10;
 	tabRect.left += 10;
+	tabRect.bottom -= 10;
 	tabRect.right -= 10;
 	m_manualDlg.MoveWindow(&tabRect);
 	m_semiAutoDlg.MoveWindow(&tabRect);
@@ -686,15 +686,21 @@ void CSMTDlg::OnTcnSelchangeTab(NMHDR *pNMHDR, LRESULT *pResult)
 	switch(curSel)
 	{
 	case 0:
-		m_manualDlg.ShowWindow(TRUE);
-		m_semiAutoDlg.ShowWindow(FALSE);
+		{
+			m_manualDlg.ShowWindow(TRUE);
+			m_semiAutoDlg.ShowWindow(FALSE);
+		}
 		break;
 	case 1:
-		m_manualDlg.ShowWindow(FALSE);
-		m_semiAutoDlg.ShowWindow(TRUE);
+		{
+			m_manualDlg.ShowWindow(FALSE);
+			m_semiAutoDlg.ShowWindow(TRUE);
+		}
 		break;
 	default:
 		break;
 	}
 	*pResult = 0;
 }
+
+
