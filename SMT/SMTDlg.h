@@ -27,6 +27,7 @@ class CSMTDlg : public CDialogEx
 public:
 	CSMTDlg(CWnd* pParent = NULL);	// standard constructor
 	BOOL InitDMC3000Card(); // 初始化运动控制卡
+	BOOL ResetDMC3000Card();
 	Mat m_src;  
 
 ////////////////////dmc运动控制卡相关变量///////////////////
@@ -98,8 +99,9 @@ private:
 
 public:
 	void ShowImage(Mat img, INT_PTR ID);
-
-	// Generated message map functions
+	void DrawCross(Mat img);
+	void DrawImgScale(Mat img);
+	// Gap functionsenerated message m
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();

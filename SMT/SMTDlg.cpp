@@ -122,14 +122,14 @@ BOOL CSMTDlg::OnInitDialog()
 	m_spinGain.SetBuddy(GetDlgItem(IDC_EDIT_GAIN));
 	m_sliderGain.SetRange(0, 63);
 	m_sliderGain.SetPos(m_editGain);
-	m_sliderGain.SetTicFreq(6);
+	m_sliderGain.SetTicFreq(2);
 
-	m_spinShutter.SetRange(0, 100);
+	m_spinShutter.SetRange(0, 1000);
 	m_spinShutter.SetPos(m_editShutter);
 	m_spinShutter.SetBuddy(GetDlgItem(IDC_EDIT_SHUTTER));
-	m_sliderShutter.SetRange(0,100);
+	m_sliderShutter.SetRange(0,1000);
 	m_sliderShutter.SetPos(m_editShutter);
-	m_sliderShutter.SetTicFreq(10);
+	m_sliderShutter.SetTicFreq(25);
 
 	m_tab.InsertItem(0, _T("手动控制"));
 	m_tab.InsertItem(1, _T("自动控制"));
@@ -666,18 +666,6 @@ BOOL CSMTDlg::SetGain(int ctrID)
 	return TRUE;
 }
 
-BOOL CSMTDlg::InitDMC3000Card()
-{
-// 	WORD My_CardNum ;      //定义卡数
-// 	WORD My_CardList[8];   //定义卡号数组
-// 	DWORD My_CardTypeList[8];   //定义各卡类型
-// 	if( dmc_board_init() <= 0 )      //控制卡的初始化操作
-// 		MessageBox(_T("初始化控制卡失败！"), _T("出错"));
-// 	dmc_get_CardInfList(&My_CardNum, My_CardTypeList, My_CardList);    //获取正在使用的卡号列表
-// 	m_nCard = My_CardList[0]; 
-
-	return TRUE;
-}
 
 void CSMTDlg::OnTcnSelchangeTab(NMHDR *pNMHDR, LRESULT *pResult)
 {
@@ -704,3 +692,71 @@ void CSMTDlg::OnTcnSelchangeTab(NMHDR *pNMHDR, LRESULT *pResult)
 }
 
 
+BOOL CSMTDlg::InitDMC3000Card()
+{
+	WORD My_CardNum ;      //定义卡数
+	WORD My_CardList[8];   //定义卡号数组
+	DWORD My_CardTypeList[8];   //定义各卡类型
+	if( dmc_board_init() <= 0 )      //控制卡的初始化操作
+		MessageBox(_T("初始化控制卡失败！"), _T("出错"));
+	dmc_get_CardInfList(&My_CardNum, My_CardTypeList, My_CardList);    //获取正在使用的卡号列表
+	m_nCard = My_CardList[0]; 
+	return TRUE;
+}
+
+BOOL CSMTDlg::ResetDMC3000Card()
+{
+	short status = dmc_board_reset();
+	// 板卡重置需要5s后才能初始化
+	Sleep(6000);
+	return TRUE;
+}
+
+// 画十字
+void CSMTDlg::DrawCross(Mat img)
+{
+	int crossLen = 20;
+	Point centerPt(320, 256);
+	circle(img, centerPt, 15, Scalar(0,255,0), 1, CV_AA);
+	line(img, Point(centerPt.x-20, centerPt.y), 
+		 Point(centerPt.x+20, centerPt.y), Scalar(0,255,0), 1, CV_AA);
+	line(img, Point(centerPt.x, centerPt.y-20), 
+		 Point(centerPt.x, centerPt.y+20), Scalar(0,255,0), 1, CV_AA);
+}
+
+// 画比例尺
+void CSMTDlg::DrawImgScale(Mat img)
+{
+	rectangle(img, Point(568, 490), Point(630, 493), Scalar(0,255,0), -1, CV_AA);
+	putText(img, "400um", Point(574, 485), FONT_HERSHEY_COMPLEX_SMALL, 0.6, Scalar(0,255,0), 1, CV_AA);
+}
+
+// void CSMTDlg::DrawLine(Mat img)
+// {
+// 	if (m_bDrawLine && (m_LinePtNum == 2))
+// 		line(img, m_LinePt[0], m_LinePt[1], Scalar(255, 255, 0), 2, CV_AA);
+// }
+// 
+// void CSMTDlg::DrawRect(Mat img)
+// {
+// 	if (m_bDrawRect && m_RectPtNum == 3)
+// 	{
+// 		line(img, m_RectPt[0], m_RectPt[1], Scalar(255, 255, 0), 2, CV_AA);
+// 		line(img, m_RectPt[1], m_RectPt[2], Scalar(255, 255, 0), 2, CV_AA);
+// 		line(img, m_RectPt[2], Point(m_RectPt[0].x+(m_RectPt[2].x-m_RectPt[1].x), 
+// 			m_RectPt[2].y+(m_RectPt[0].y-m_RectPt[1].y)), Scalar(255, 255, 0), 2, CV_AA);
+// 		line(img, Point(m_RectPt[0].x+(m_RectPt[2].x-m_RectPt[1].x), 
+// 			m_RectPt[2].y+(m_RectPt[0].y-m_RectPt[1].y)), m_RectPt[0], Scalar(255, 255, 0), 2, CV_AA);
+// 	}
+// }
+// 
+// void CSMTDlg::DrawCircle(Mat img)
+// {
+// 	if (m_bDrawCircle && m_CirclePtNum == 2)
+// 	{
+// 		int disX = abs(m_CirclePt[1].x-m_CirclePt[0].x);
+// 		int disY = abs(m_CirclePt[1].y-m_CirclePt[0].y);
+// 		double radius = sqrt((double)(disX*disX) + (double)(disY*disY));
+// 		circle(img, m_CirclePt[0], (int)radius, Scalar(0, 255, 255), 2, CV_AA);
+// 	}
+// }
