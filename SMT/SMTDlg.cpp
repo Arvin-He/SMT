@@ -47,6 +47,11 @@ CSMTDlg::CSMTDlg(CWnd* pParent /*=NULL*/)
 	m_bIsCapture = FALSE;
 }
 
+CSMTDlg::~CSMTDlg()
+{
+	dmc_board_close();	//非常之重要，释放其占用的系统资源
+}
+
 void CSMTDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
@@ -742,13 +747,15 @@ void CSMTDlg::OnTcnSelchangeTab2(NMHDR *pNMHDR, LRESULT *pResult)
 
 BOOL CSMTDlg::InitDMC3000Card()
 {
-	WORD My_CardNum ;      //定义卡数
-	WORD My_CardList[8];   //定义卡号数组
-	DWORD My_CardTypeList[8];   //定义各卡类型
-	if( dmc_board_init() <= 0 )      //控制卡的初始化操作
+	WORD My_CardNum ;					//定义卡数
+	WORD My_CardList[8];				//定义卡号数组
+	DWORD My_CardTypeList[8];			//定义各卡类型
+	if( dmc_board_init() <= 0 )			//控制卡的初始化操作
 		MessageBox(_T("初始化控制卡失败！"), _T("出错"));
 	dmc_get_CardInfList(&My_CardNum, My_CardTypeList, My_CardList);    //获取正在使用的卡号列表
-	m_nCard = My_CardList[0]; 
+	m_nCard = My_CardList[0];
+
+
 
 	return TRUE;
 }

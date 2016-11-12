@@ -28,6 +28,7 @@ class CSMTDlg : public CDialogEx
 // Construction
 public:
 	CSMTDlg(CWnd* pParent = NULL);	// standard constructor
+	~CSMTDlg();
 	BOOL InitDMC3000Card(); // 初始化运动控制卡
 	BOOL ResetDMC3000Card();
 	Mat m_src;  
