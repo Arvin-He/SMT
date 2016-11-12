@@ -11,6 +11,8 @@
 
 #include "ManualDlg.h"
 #include "SemiAutoDlg.h"
+#include "ImageAssistDlg.h"
+#include "SettingDlg.h"
 
 using namespace cv;
 #pragma comment(lib, "Vfw32.lib")
@@ -88,12 +90,13 @@ protected:
 	int m_editShutter;
 	int m_editGain;
 
-
 	CTabCtrl		m_tab;
+	CTabCtrl		m_bottomTab;
 	CManualDlg		m_manualDlg;
 	CSemiAutoDlg	m_semiAutoDlg;
+	CImageAssistDlg m_imageAssistDlg;
+	CSettingDlg		m_settingDlg;
 		
-
 private:
 	BOOL m_bIsCapture;		//视频保存标识
 
@@ -118,5 +121,6 @@ public:
 	afx_msg void OnCamera_StopVideo();	
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnTcnSelchangeTab(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnTcnSelchangeTab2(NMHDR *pNMHDR, LRESULT *pResult);
 	
 };

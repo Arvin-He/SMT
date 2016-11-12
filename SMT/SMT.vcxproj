@@ -116,9 +116,11 @@
   <ItemGroup>
     <ClInclude Include="CvvImage.h" />
     <ClInclude Include="ErrorBox.h" />
+    <ClInclude Include="ImageAssistDlg.h" />
     <ClInclude Include="ManualDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SemiAutoDlg.h" />
+    <ClInclude Include="SettingDlg.h" />
     <ClInclude Include="SMT.h" />
     <ClInclude Include="SMTDlg.h" />
     <ClInclude Include="stdafx.h" />
@@ -127,8 +129,10 @@
   <ItemGroup>
     <ClCompile Include="CvvImage.cpp" />
     <ClCompile Include="ErrorBox.cpp" />
+    <ClCompile Include="ImageAssistDlg.cpp" />
     <ClCompile Include="ManualDlg.cpp" />
     <ClCompile Include="SemiAutoDlg.cpp" />
+    <ClCompile Include="SettingDlg.cpp" />
     <ClCompile Include="SMT.cpp" />
     <ClCompile Include="SMTDlg.cpp" />
     <ClCompile Include="stdafx.cpp">

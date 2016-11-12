@@ -5,7 +5,7 @@
 #include "SMT.h"
 #include "ManualDlg.h"
 #include "afxdialogex.h"
-
+#include "dmc3000/inc/LTDMC.h"
 
 // CManualDlg dialog
 
@@ -62,7 +62,6 @@ BOOL CManualDlg::OnInitDialog()
 	pStageSpeedComboBox->AddString(_T("500"));
 	pStageSpeedComboBox->AddString(_T("1000"));
 	pStageSpeedComboBox->SetCurSel(2);
-
 	CComboBox* pCCDStepSizeComboBox = (CComboBox*)GetDlgItem(IDC_CCD_STEPSIZE_COMBO);
 	pCCDStepSizeComboBox->AddString(_T("1"));
 	pCCDStepSizeComboBox->AddString(_T("2"));
@@ -95,7 +94,7 @@ BOOL CManualDlg::OnStageMove(UINT nID)
 	switch(nID)
 	{
 	case IDC_STAGE_XUP_BTN:
-
+		dmc_pmove(0, 0, 50, 0);
 		break;
 	case  IDC_STAGE_XDOWN_BTN:
 

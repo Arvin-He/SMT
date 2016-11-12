@@ -32,7 +32,7 @@ const long ADCLevel           = ADC_LEVEL2;
 const int XStart              = 0;
 const int YStart              = 0;
 const int Width               = 640;
-const int Height              = 512;
+const int Height              = 480;
 const HV_SNAP_SPEED SnapSpeed = HIGH_SPEED;
 
 // CSMTDlg dialog
@@ -42,7 +42,7 @@ CSMTDlg::CSMTDlg(CWnd* pParent /*=NULL*/)
 	, m_editGain(4)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	m_src = Mat(Size(640, 512), CV_8UC3);
+	m_src = Mat(Size(640, 480), CV_8UC3);
 	InitialDHCamera();
 	m_bIsCapture = FALSE;
 }
@@ -59,6 +59,7 @@ void CSMTDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_GAIN, m_editGain);
 	DDV_MinMaxInt(pDX, m_editGain, 0, 63);
 	DDX_Control(pDX, IDC_TAB, m_tab);
+	DDX_Control(pDX, IDC_TAB2, m_bottomTab);
 }
 
 BEGIN_MESSAGE_MAP(CSMTDlg, CDialogEx)
@@ -75,6 +76,7 @@ BEGIN_MESSAGE_MAP(CSMTDlg, CDialogEx)
 	ON_COMMAND(IDM_STOP_VIDEO, &CSMTDlg::OnCamera_StopVideo)
 	ON_WM_HSCROLL()
 	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB, &CSMTDlg::OnTcnSelchangeTab)
+	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB2, &CSMTDlg::OnTcnSelchangeTab2)
 END_MESSAGE_MAP()
 
 
@@ -142,7 +144,6 @@ BOOL CSMTDlg::OnInitDialog()
 
 	CRect mainDlgRect(0,0,0,0);
 	GetClientRect(&mainDlgRect);
-
 	mainDlgRect.top += 60;
 	mainDlgRect.left += 680;
 	mainDlgRect.bottom -= 10;
@@ -151,19 +152,43 @@ BOOL CSMTDlg::OnInitDialog()
 
 	CRect tabRect(0,0,0,0);
 	m_tab.GetClientRect(&tabRect);
-
 	tabRect.top += 20;
 	tabRect.left += 10;
 	tabRect.bottom -= 10;
 	tabRect.right -= 10;
 	m_manualDlg.MoveWindow(&tabRect);
 	m_semiAutoDlg.MoveWindow(&tabRect);
-	//CRect pageRect(620, 20, 500, 300);
-	//m_manualDlg.MoveWindow(&pageRect);
-	//m_semiAutoDlg.MoveWindow(&pageRect);
+
 	m_manualDlg.ShowWindow(SW_SHOW);
 	m_semiAutoDlg.ShowWindow(SW_HIDE);
 	m_tab.SetCurSel(0);
+
+
+	m_bottomTab.InsertItem(0, _T("图像辅助"));
+	m_bottomTab.InsertItem(1, _T("设置"));
+
+	m_imageAssistDlg.Create(IDD_IMAGE_ASSIST_DIALOG, GetDlgItem(IDC_TAB2));
+	m_settingDlg.Create(IDD_SETTING_DIALOG, GetDlgItem(IDC_TAB2));
+
+	m_imageAssistDlg.EnableWindow(TRUE);
+	m_settingDlg.EnableWindow(TRUE);
+
+	CRect bottomTabRect(0, 0, 0, 0);
+	m_bottomTab.GetClientRect(&bottomTabRect);
+	bottomTabRect.top += 20;
+	bottomTabRect.left += 10;
+	bottomTabRect.bottom -= 10;
+	bottomTabRect.right -= 10;
+	m_imageAssistDlg.MoveWindow(&bottomTabRect);
+	m_settingDlg.MoveWindow(&bottomTabRect);
+	m_imageAssistDlg.ShowWindow(SW_SHOW);
+	m_settingDlg.ShowWindow(SW_HIDE);
+	m_bottomTab.SetCurSel(0);
+
+	//CRect pageRect(620, 20, 500, 300);
+	//m_manualDlg.MoveWindow(&pageRect);
+	//m_semiAutoDlg.MoveWindow(&pageRect);
+	
 
 
 	InitDMC3000Card();
@@ -691,6 +716,29 @@ void CSMTDlg::OnTcnSelchangeTab(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 }
 
+void CSMTDlg::OnTcnSelchangeTab2(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// TODO: Add your control notification handler code here
+	int curSel = m_bottomTab.GetCurSel();
+	switch(curSel)
+	{
+	case 0:
+		{
+			m_imageAssistDlg.ShowWindow(TRUE);
+			m_settingDlg.ShowWindow(FALSE);
+		}
+		break;
+	case 1:
+		{
+			m_imageAssistDlg.ShowWindow(FALSE);
+			m_settingDlg.ShowWindow(TRUE);
+		}
+		break;
+	default:
+		break;
+	}
+	*pResult = 0;
+}
 
 BOOL CSMTDlg::InitDMC3000Card()
 {
@@ -701,6 +749,7 @@ BOOL CSMTDlg::InitDMC3000Card()
 		MessageBox(_T("初始化控制卡失败！"), _T("出错"));
 	dmc_get_CardInfList(&My_CardNum, My_CardTypeList, My_CardList);    //获取正在使用的卡号列表
 	m_nCard = My_CardList[0]; 
+
 	return TRUE;
 }
 
@@ -716,7 +765,7 @@ BOOL CSMTDlg::ResetDMC3000Card()
 void CSMTDlg::DrawCross(Mat img)
 {
 	int crossLen = 20;
-	Point centerPt(320, 256);
+	Point centerPt(320, 240);
 	circle(img, centerPt, 15, Scalar(0,255,0), 1, CV_AA);
 	line(img, Point(centerPt.x-20, centerPt.y), 
 		 Point(centerPt.x+20, centerPt.y), Scalar(0,255,0), 1, CV_AA);
