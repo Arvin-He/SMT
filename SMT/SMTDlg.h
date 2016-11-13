@@ -31,7 +31,7 @@ public:
 	~CSMTDlg();
 	BOOL InitDMC3000Card(); // 初始化运动控制卡
 	BOOL ResetDMC3000Card();
-	Mat m_src;  
+	//Mat m_src;  
 
 ////////////////////dmc运动控制卡相关变量///////////////////
 private:

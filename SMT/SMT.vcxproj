@@ -116,6 +116,7 @@
   <ItemGroup>
     <ClInclude Include="CvvImage.h" />
     <ClInclude Include="ErrorBox.h" />
+    <ClInclude Include="global.h" />
     <ClInclude Include="ImageAssistDlg.h" />
     <ClInclude Include="ManualDlg.h" />
     <ClInclude Include="Resource.h" />
@@ -129,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="CvvImage.cpp" />
     <ClCompile Include="ErrorBox.cpp" />
+    <ClCompile Include="global.cpp" />
     <ClCompile Include="ImageAssistDlg.cpp" />
     <ClCompile Include="ManualDlg.cpp" />
     <ClCompile Include="SemiAutoDlg.cpp" />

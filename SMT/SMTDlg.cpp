@@ -6,6 +6,7 @@
 #include "ErrorBox.h"
 #include "CvvImage.h"
 #include "dmc3000/inc/LTDMC.h"
+#include "global.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -39,10 +40,10 @@ const HV_SNAP_SPEED SnapSpeed = HIGH_SPEED;
 CSMTDlg::CSMTDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CSMTDlg::IDD, pParent)
 	, m_editShutter(600)
-	, m_editGain(4)
+	, m_editGain(10)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	m_src = Mat(Size(640, 480), CV_8UC3);
+	//m_src = Mat(Size(640, 480), CV_8UC3);
 	InitialDHCamera();
 	m_bIsCapture = FALSE;
 }
@@ -50,6 +51,7 @@ CSMTDlg::CSMTDlg(CWnd* pParent /*=NULL*/)
 CSMTDlg::~CSMTDlg()
 {
 	dmc_board_close();	//非常之重要，释放其占用的系统资源
+	OnCamera_Close();
 }
 
 void CSMTDlg::DoDataExchange(CDataExchange* pDX)
@@ -391,8 +393,10 @@ LRESULT CSMTDlg::OnSnapChange(WPARAM wParam, LPARAM lParam)
 	HVSTATUS status = STATUS_OK;	
 	//	将原始图像数据进行Bayer转换，转换后为24位。同时将原始数据进行上下翻转
 	ConvertBayer2Rgb(m_pImageBuffer, m_pRawBuffer, Width, Height, ConvertType, m_pLutR, m_pLutG, m_pLutB, false, m_Layout);	
-	m_src.data = (uchar*)m_pImageBuffer;
-	flip(m_src, m_src, -1);
+	g_src.data = (uchar*)m_pImageBuffer;
+	//m_src.data = (uchar*)m_pImageBuffer;
+	flip(g_src, g_src, -1);
+	// DrawCross(g_src);
 // 	if (m_bDrawCross1)
 // 		DrawCross(g_src1);
 // 	if (m_bCalibrateRectH && m_bDrawCalibrateRectH)
@@ -402,7 +406,7 @@ LRESULT CSMTDlg::OnSnapChange(WPARAM wParam, LPARAM lParam)
 // 	if (m_bSetImgScaleH)
 // 		SetImgScale(g_src1);
 
-	ShowImage(m_src, IDC_SHOW_PIC);	
+	ShowImage(g_src, IDC_SHOW_PIC);	
 	return 1;
 }
 
@@ -533,7 +537,8 @@ void CSMTDlg::OnCamera_Close()
 void CSMTDlg::OnCamera_SavePic()
 {
 	//	以下保存BMP文件设置基本相同
-	Mat saveImg = m_src.clone();
+	//Mat saveImg = m_src.clone();
+	Mat saveImg = g_src.clone();
 	CString defaultDir = _T("E:\\image_avi_save");   //默认打开的文件路径
 	CString filter = _T("Bitmap Files(*.bmp)|*.bmp");
 	CFileDialog dlg(FALSE, defaultDir, _T("img") ,OFN_OVERWRITEPROMPT|OFN_HIDEREADONLY, filter, this);
@@ -587,7 +592,8 @@ void CSMTDlg::StoreVideo()
 			VideoWriter camera1_Writer(videoPathAndName, CV_FOURCC('M', 'J', 'P', 'G'), 60.0, Size(640, 512));
 			while(m_bIsCapture)
 			{
-				Mat frame = m_src.clone();	
+				//Mat frame = m_src.clone();	
+				Mat frame = g_src.clone();	
 				camera1_Writer << frame;
 				waitKey(27);
 				if (m_bIsCapture == FALSE )
@@ -755,7 +761,23 @@ BOOL CSMTDlg::InitDMC3000Card()
 	dmc_get_CardInfList(&My_CardNum, My_CardTypeList, My_CardList);    //获取正在使用的卡号列表
 	m_nCard = My_CardList[0];
 
-
+	for (int i=0; i<4; i++)
+	{
+		// 设定脉冲模式及逻辑方向（此处脉冲模式固定为P+D方向：脉冲+方向）	
+		dmc_set_pulse_outmode(0, i, 4);
+		// 设置硬限位
+		dmc_set_el_mode(0, i, 0, 1, 0);
+		// 设置软限位
+		//dmc_set_softlimit(0, i, 1, 1, 0, 0, )
+		// 编码器设置
+		dmc_set_counter_inmode(0, i, 0);
+		//设置EZ
+		dmc_set_ez_mode(0, i, 0);
+		// 设置回原点
+		// dmc_set_home_pin_logic(0, i, 1);
+		// 设置回零方式
+		dmc_set_homemode(0, i, 0, 0, 0);
+	}
 
 	return TRUE;
 }
@@ -775,44 +797,7 @@ void CSMTDlg::DrawCross(Mat img)
 	Point centerPt(320, 240);
 	circle(img, centerPt, 15, Scalar(0,255,0), 1, CV_AA);
 	line(img, Point(centerPt.x-20, centerPt.y), 
-		 Point(centerPt.x+20, centerPt.y), Scalar(0,255,0), 1, CV_AA);
+		Point(centerPt.x+20, centerPt.y), Scalar(0,255,0), 1, CV_AA);
 	line(img, Point(centerPt.x, centerPt.y-20), 
-		 Point(centerPt.x, centerPt.y+20), Scalar(0,255,0), 1, CV_AA);
+		Point(centerPt.x, centerPt.y+20), Scalar(0,255,0), 1, CV_AA);
 }
-
-// 画比例尺
-void CSMTDlg::DrawImgScale(Mat img)
-{
-	rectangle(img, Point(568, 490), Point(630, 493), Scalar(0,255,0), -1, CV_AA);
-	putText(img, "400um", Point(574, 485), FONT_HERSHEY_COMPLEX_SMALL, 0.6, Scalar(0,255,0), 1, CV_AA);
-}
-
-// void CSMTDlg::DrawLine(Mat img)
-// {
-// 	if (m_bDrawLine && (m_LinePtNum == 2))
-// 		line(img, m_LinePt[0], m_LinePt[1], Scalar(255, 255, 0), 2, CV_AA);
-// }
-// 
-// void CSMTDlg::DrawRect(Mat img)
-// {
-// 	if (m_bDrawRect && m_RectPtNum == 3)
-// 	{
-// 		line(img, m_RectPt[0], m_RectPt[1], Scalar(255, 255, 0), 2, CV_AA);
-// 		line(img, m_RectPt[1], m_RectPt[2], Scalar(255, 255, 0), 2, CV_AA);
-// 		line(img, m_RectPt[2], Point(m_RectPt[0].x+(m_RectPt[2].x-m_RectPt[1].x), 
-// 			m_RectPt[2].y+(m_RectPt[0].y-m_RectPt[1].y)), Scalar(255, 255, 0), 2, CV_AA);
-// 		line(img, Point(m_RectPt[0].x+(m_RectPt[2].x-m_RectPt[1].x), 
-// 			m_RectPt[2].y+(m_RectPt[0].y-m_RectPt[1].y)), m_RectPt[0], Scalar(255, 255, 0), 2, CV_AA);
-// 	}
-// }
-// 
-// void CSMTDlg::DrawCircle(Mat img)
-// {
-// 	if (m_bDrawCircle && m_CirclePtNum == 2)
-// 	{
-// 		int disX = abs(m_CirclePt[1].x-m_CirclePt[0].x);
-// 		int disY = abs(m_CirclePt[1].y-m_CirclePt[0].y);
-// 		double radius = sqrt((double)(disX*disX) + (double)(disY*disY));
-// 		circle(img, m_CirclePt[0], (int)radius, Scalar(0, 255, 255), 2, CV_AA);
-// 	}
-// }

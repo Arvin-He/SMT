@@ -1,4 +1,5 @@
 #pragma once
+#include "afxwin.h"
 
 
 // CManualDlg dialog
@@ -25,4 +26,13 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL OnInitDialog();
+	int m_stageStepEdit;
+	int m_ccdStepEdit;
+	afx_msg void OnClickedStageGohomeBtn();
+	afx_msg void OnClickedCcdGohomeBtn();
+	CButton m_stageXCheck;
+	CButton m_stageYCheck;
+	CButton m_ccdXCheck;
+	CButton m_ccdYCheck;
+	
 };
