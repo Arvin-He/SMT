@@ -26,8 +26,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL OnInitDialog();
-	int m_stageStepEdit;
-	int m_ccdStepEdit;
+	int m_stageStep;
+	int m_ccdStep;
 	afx_msg void OnClickedStageGohomeBtn();
 	afx_msg void OnClickedCcdGohomeBtn();
 	CButton m_stageXCheck;

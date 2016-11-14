@@ -23,18 +23,18 @@
 //定义自己的0
 #define  MY_ZERO 0.000000001
 //const
-const HV_RESOLUTION Resolution          = RES_MODE0;
-const HV_SNAP_MODE SnapMode             = CONTINUATION;
-const HV_BAYER_CONVERT_TYPE ConvertType = BAYER2RGB_NEIGHBOUR1;
-const long Gain               = 10;
-const long ExposureTint_Upper = 60;
-const long ExposureTint_Lower = 1000;
-const long ADCLevel           = ADC_LEVEL2;
-const int XStart              = 0;
-const int YStart              = 0;
-const int Width               = 640;
-const int Height              = 480;
-const HV_SNAP_SPEED SnapSpeed = HIGH_SPEED;
+const HV_RESOLUTION				Resolution			= RES_MODE0;
+const HV_SNAP_MODE				SnapMode			= CONTINUATION;
+const HV_BAYER_CONVERT_TYPE		ConvertType			= BAYER2RGB_NEIGHBOUR1;
+//const long						Gain				= 10;
+const long						ExposureTint_Upper	= 60;
+const long						ExposureTint_Lower	= 1000;
+const long						ADCLevel			= ADC_LEVEL2;
+const int						XStart              = 0;
+const int						YStart              = 0;
+const int						Width               = 640;
+const int						Height              = 480;
+const HV_SNAP_SPEED				SnapSpeed			= HIGH_SPEED;
 
 // CSMTDlg dialog
 CSMTDlg::CSMTDlg(CWnd* pParent /*=NULL*/)
@@ -44,14 +44,14 @@ CSMTDlg::CSMTDlg(CWnd* pParent /*=NULL*/)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	//m_src = Mat(Size(640, 480), CV_8UC3);
-	InitialDHCamera();
+	
 	m_bIsCapture = FALSE;
 }
 
 CSMTDlg::~CSMTDlg()
 {
 	dmc_board_close();	//非常之重要，释放其占用的系统资源
-	OnCamera_Close();
+	OnCamera_Close();   
 }
 
 void CSMTDlg::DoDataExchange(CDataExchange* pDX)
@@ -84,6 +84,9 @@ BEGIN_MESSAGE_MAP(CSMTDlg, CDialogEx)
 	ON_WM_HSCROLL()
 	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB, &CSMTDlg::OnTcnSelchangeTab)
 	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB2, &CSMTDlg::OnTcnSelchangeTab2)
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
+	ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -95,7 +98,7 @@ BOOL CSMTDlg::OnInitDialog()
 	// Set the icon for this dialog.  The framework does this automatically
 	//  when the application's main window is not a dialog
 	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIcon, FALSE);		// Set small icon
+	//SetIcon(m_hIcon, FALSE);		// Set small icon
 	ShowWindow(SW_MAXIMIZE);
 	// TODO: Add extra initialization here
 	SetWindowText(_T("贴片机系统"));
@@ -136,7 +139,7 @@ BOOL CSMTDlg::OnInitDialog()
 	m_spinShutter.SetRange(0, 1000);
 	m_spinShutter.SetPos(m_editShutter);
 	m_spinShutter.SetBuddy(GetDlgItem(IDC_EDIT_SHUTTER));
-	m_sliderShutter.SetRange(0,1000);
+	m_sliderShutter.SetRange(0, 1000);
 	m_sliderShutter.SetPos(m_editShutter);
 	m_sliderShutter.SetTicFreq(25);
 
@@ -149,7 +152,7 @@ BOOL CSMTDlg::OnInitDialog()
 	m_manualDlg.EnableWindow(TRUE);
 	m_semiAutoDlg.EnableWindow(TRUE);
 
-	CRect mainDlgRect(0,0,0,0);
+	CRect mainDlgRect(0, 0, 0, 0);
 	GetClientRect(&mainDlgRect);
 	mainDlgRect.top += 60;
 	mainDlgRect.left += 680;
@@ -176,10 +179,8 @@ BOOL CSMTDlg::OnInitDialog()
 
 	m_imageAssistDlg.Create(IDD_IMAGE_ASSIST_DIALOG, GetDlgItem(IDC_TAB2));
 	m_settingDlg.Create(IDD_SETTING_DIALOG, GetDlgItem(IDC_TAB2));
-
 	m_imageAssistDlg.EnableWindow(TRUE);
 	m_settingDlg.EnableWindow(TRUE);
-
 	CRect bottomTabRect(0, 0, 0, 0);
 	m_bottomTab.GetClientRect(&bottomTabRect);
 	bottomTabRect.top += 20;
@@ -192,12 +193,9 @@ BOOL CSMTDlg::OnInitDialog()
 	m_settingDlg.ShowWindow(SW_HIDE);
 	m_bottomTab.SetCurSel(0);
 
-	//CRect pageRect(620, 20, 500, 300);
-	//m_manualDlg.MoveWindow(&pageRect);
-	//m_semiAutoDlg.MoveWindow(&pageRect);
-	
-
-
+	// 初始化相机
+	InitialDHCamera();
+	// 初始化DMC3000运动控制卡
 	InitDMC3000Card();
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -235,10 +233,12 @@ HV_BAYER_LAYOUT CSMTDlg::HVGetBayerType(HHV hhv)
 	HVSTATUS status = STATUS_OK;;
 	HV_BAYER_LAYOUT Layout;
 	status = HVGetDeviceInfo(hhv, DESC_DEVICE_BAYER_LAYOUT, NULL, &nSize);	          
-	if(STATUS_OK != status){
+	if(STATUS_OK != status)
+	{
 		Layout = BAYER_GR;
 	}
-	else{
+	else
+	{
 		BYTE *pbBayerLayout = NULL;
 		pbBayerLayout = new BYTE[nSize];
 		status = HVGetDeviceInfo(hhv, DESC_DEVICE_BAYER_LAYOUT, pbBayerLayout,&nSize);
@@ -249,12 +249,6 @@ HV_BAYER_LAYOUT CSMTDlg::HVGetBayerType(HHV hhv)
 	return Layout;
 }
 
-/*	函数:SetExposureTime
-	输入参数:int nWindWidth			当前图像宽度		
-			 int lTintUpper			曝光时间的分子，shutter的取值
-			 int lTintLower			曝光时间的分母，与shutter的单位相关	（ms:1000；s:1）
-	输出参数:无						
-	说明:设置曝光时间（其他的参数如摄像机时钟频率，消隐值都取默认值）*/
 HVSTATUS CSMTDlg::SetExposureTime(HHV hhv, int nWindWidth, long lTintUpper, long lTintLower, 
 								  long HBlanking, HV_SNAP_SPEED SnapSpeed, HV_RESOLUTION Resolution)
 {
@@ -265,7 +259,7 @@ HVSTATUS CSMTDlg::SetExposureTime(HHV hhv, int nWindWidth, long lTintUpper, long
 	double dExposure = 0.0;
 	double dTint = MAX((double)lTintUpper/(double)lTintLower, MY_ZERO);
 	double lClockFreq = 0.0;  
-	lClockFreq = (SnapSpeed == HIGH_SPEED)? 24000000:12000000;
+	lClockFreq = (SnapSpeed == HIGH_SPEED) ? 24000000 : 12000000;
 	long lTb = HBlanking;
 	lTb += 9;
 	lTb -= 19;	
@@ -291,8 +285,10 @@ LRESULT CSMTDlg::OnSnapError(WPARAM wParam, LPARAM lParam)
 {	
 	CErrorBox ErrDlg;
 	ErrDlg.m_dwStatus = lParam;
-	if (ErrDlg.m_dwStatus == dwLastStatus){
-		if (ErrDlg.DoModal()==IDOK){
+	if (ErrDlg.m_dwStatus == dwLastStatus)
+	{
+		if (ErrDlg.DoModal() == IDOK)
+		{
 			OnCamera_Stop();
 			OnCamera_Open();  
 		}
@@ -385,7 +381,7 @@ int CALLBACK CSMTDlg::SnapThreadCallback(HV_SNAP_INFO *pInfo)
 	return 1;
 }
 
-/*	函数:OnSnapChange1
+/*	函数:OnSnapChange
 	输入参数:WPARAM wParam	字参数，在消息中为当前可以处理的图像序号; LPARAM lParam	没有使用；
 	输出参数:LRESULT；说明:实现对采集数据的处理和显示*/
 LRESULT CSMTDlg::OnSnapChange(WPARAM wParam, LPARAM lParam)
@@ -396,15 +392,11 @@ LRESULT CSMTDlg::OnSnapChange(WPARAM wParam, LPARAM lParam)
 	g_src.data = (uchar*)m_pImageBuffer;
 	//m_src.data = (uchar*)m_pImageBuffer;
 	flip(g_src, g_src, -1);
-	// DrawCross(g_src);
-// 	if (m_bDrawCross1)
-// 		DrawCross(g_src1);
-// 	if (m_bCalibrateRectH && m_bDrawCalibrateRectH)
-// 		DrawCalibrateRectH(g_src1);
-// 	if (m_bMeasureSrc1)
-// 		MeasureSrc1(g_src1);
-// 	if (m_bSetImgScaleH)
-// 		SetImgScale(g_src1);
+
+	if (m_imageAssistDlg.m_bDrawCross)
+		DrawCross(g_src);
+	if (m_imageAssistDlg.m_bDrawScale)
+		DrawImgScale(g_src);
 
 	ShowImage(g_src, IDC_SHOW_PIC);	
 	return 1;
@@ -443,7 +435,8 @@ BOOL CSMTDlg::InitialDHCamera()
 	//  设置各个分量的增益
 	for (int i = 0; i < 4; i++)
 	{
-		HVAGCControl(m_hhv, RED_CHANNEL + i, Gain);
+		//HVAGCControl(m_hhv, RED_CHANNEL + i, Gain);
+		HVAGCControl(m_hhv, RED_CHANNEL + i, m_editGain);
 	}
 	//  设置ADC的级别
 	HVADCControl(m_hhv, ADC_BITS, ADCLevel);
@@ -459,7 +452,7 @@ BOOL CSMTDlg::InitialDHCamera()
 	//设置采集速度
 	HVSetSnapSpeed(m_hhv, SnapSpeed);
 	//设置曝光时间
-	SetExposureTime(m_hhv, Width, ExposureTint_Upper, ExposureTint_Lower, m_lHBlanking, SnapSpeed, Resolution);	
+	SetExposureTime(m_hhv, Width, m_editShutter, ExposureTint_Lower, m_lHBlanking, SnapSpeed, Resolution);	
 	//	m_pBmpInfo即指向m_chBmpBuf缓冲区，用户可以自己分配BTIMAPINFO缓冲区	
 	m_pBmpInfo					= (BITMAPINFO *)m_chBmpBuf;
 	//	初始化BITMAPINFO 结构，此结构在保存bmp文件、显示采集图像时使用
@@ -539,7 +532,7 @@ void CSMTDlg::OnCamera_SavePic()
 	//	以下保存BMP文件设置基本相同
 	//Mat saveImg = m_src.clone();
 	Mat saveImg = g_src.clone();
-	CString defaultDir = _T("E:\\image_avi_save");   //默认打开的文件路径
+	CString defaultDir = _T("D:\\image_avi_save");   //默认打开的文件路径
 	CString filter = _T("Bitmap Files(*.bmp)|*.bmp");
 	CFileDialog dlg(FALSE, defaultDir, _T("img") ,OFN_OVERWRITEPROMPT|OFN_HIDEREADONLY, filter, this);
 	if (dlg.DoModal() == IDOK) 
@@ -578,7 +571,7 @@ UINT CSMTDlg::StoreVideoThreadFunc(LPVOID lpParam)
 void CSMTDlg::StoreVideo()
 {
 	m_bIsCapture = TRUE;
-	CString defaultDir = _T("E:\\image_avi_save");   //默认打开的文件路径
+	CString defaultDir = _T("D:\\image_avi_save");   //默认打开的文件路径
 	CString strAVIFileName = _T("");
 	CString filter = _T("AVI Files (*.avi)|*.avi;All Files (*.*)|*.*||");   //文件过虑的类型 
 	CFileDialog dlg(FALSE, defaultDir, _T("Video"), OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, filter, NULL);
@@ -589,7 +582,8 @@ void CSMTDlg::StoreVideo()
 		{
 			USES_CONVERSION;
 			string videoPathAndName = T2CA(strAVIFileName);
-			VideoWriter camera1_Writer(videoPathAndName, CV_FOURCC('M', 'J', 'P', 'G'), 60.0, Size(640, 512));
+			VideoWriter camera1_Writer(videoPathAndName, 
+				CV_FOURCC('M', 'J', 'P', 'G'), 60.0, Size(Width, Height));
 			while(m_bIsCapture)
 			{
 				//Mat frame = m_src.clone();	
@@ -702,7 +696,6 @@ BOOL CSMTDlg::SetGain(int ctrID)
 	return TRUE;
 }
 
-
 void CSMTDlg::OnTcnSelchangeTab(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	// TODO: Add your control notification handler code here
@@ -763,7 +756,7 @@ BOOL CSMTDlg::InitDMC3000Card()
 
 	for (int i=0; i<4; i++)
 	{
-		// 设定脉冲模式及逻辑方向（此处脉冲模式固定为P+D方向：脉冲+方向）	
+		// 设定脉冲模式及逻辑方向	
 		dmc_set_pulse_outmode(0, i, 4);
 		// 设置硬限位
 		dmc_set_el_mode(0, i, 0, 1, 0);
@@ -778,7 +771,6 @@ BOOL CSMTDlg::InitDMC3000Card()
 		// 设置回零方式
 		dmc_set_homemode(0, i, 0, 0, 0);
 	}
-
 	return TRUE;
 }
 
@@ -793,11 +785,70 @@ BOOL CSMTDlg::ResetDMC3000Card()
 // 画十字
 void CSMTDlg::DrawCross(Mat img)
 {
-	int crossLen = 20;
-	Point centerPt(320, 240);
+	Point centerPt(Width/2, Height/2);
 	circle(img, centerPt, 15, Scalar(0,255,0), 1, CV_AA);
 	line(img, Point(centerPt.x-20, centerPt.y), 
 		Point(centerPt.x+20, centerPt.y), Scalar(0,255,0), 1, CV_AA);
 	line(img, Point(centerPt.x, centerPt.y-20), 
 		Point(centerPt.x, centerPt.y+20), Scalar(0,255,0), 1, CV_AA);
+}
+
+// 画比例尺
+void CSMTDlg::DrawImgScale(Mat img)
+{
+	rectangle(img, Point(568, 458), Point(630, 461), Scalar(0,255,0), -1, CV_AA);
+	putText(img, "??um", Point(574, 453), FONT_HERSHEY_COMPLEX_SMALL, 0.6, Scalar(0,255,0), 1, CV_AA);
+}
+
+void CSMTDlg::DrawLine(Mat img)
+{
+	//if (m_bDrawLine && (m_LinePtNum == 2))
+		//line(img, m_LinePt[0], m_LinePt[1], Scalar(255, 255, 0), 2, CV_AA);
+}
+
+// void CImageAssistDlg::DrawRect(Mat img)
+// {
+// 	if (m_bDrawRect && m_RectPtNum == 3)
+// 	{
+// 		line(img, m_RectPt[0], m_RectPt[1], Scalar(255, 255, 0), 2, CV_AA);
+// 		line(img, m_RectPt[1], m_RectPt[2], Scalar(255, 255, 0), 2, CV_AA);
+// 		line(img, m_RectPt[2], Point(m_RectPt[0].x+(m_RectPt[2].x-m_RectPt[1].x), 
+// 			m_RectPt[2].y+(m_RectPt[0].y-m_RectPt[1].y)), Scalar(255, 255, 0), 2, CV_AA);
+// 		line(img, Point(m_RectPt[0].x+(m_RectPt[2].x-m_RectPt[1].x), 
+// 			m_RectPt[2].y+(m_RectPt[0].y-m_RectPt[1].y)), m_RectPt[0], Scalar(255, 255, 0), 2, CV_AA);
+// 	}
+// }
+// 
+// void CImageAssistDlg::DrawCircle(Mat img)
+// {
+// 	if (m_bDrawCircle && m_CirclePtNum == 2)
+// 	{
+// 		int disX = abs(m_CirclePt[1].x-m_CirclePt[0].x);
+// 		int disY = abs(m_CirclePt[1].y-m_CirclePt[0].y);
+// 		double radius = sqrt((double)(disX*disX) + (double)(disY*disY));
+// 		circle(img, m_CirclePt[0], (int)radius, Scalar(0, 255, 255), 2, CV_AA);
+// 	}
+// }
+
+void CSMTDlg::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CDialogEx::OnLButtonDown(nFlags, point);
+}
+
+
+void CSMTDlg::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CDialogEx::OnLButtonUp(nFlags, point);
+}
+
+
+void CSMTDlg::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CDialogEx::OnRButtonDown(nFlags, point);
 }

@@ -105,6 +105,7 @@ public:
 	void ShowImage(Mat img, INT_PTR ID);
 	void DrawCross(Mat img);
 	void DrawImgScale(Mat img);
+	void DrawLine(Mat img);
 	// Gap functionsenerated message m
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
@@ -124,4 +125,7 @@ public:
 	afx_msg void OnTcnSelchangeTab(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnTcnSelchangeTab2(NMHDR *pNMHDR, LRESULT *pResult);
 	
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };

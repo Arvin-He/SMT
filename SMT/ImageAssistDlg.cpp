@@ -15,7 +15,13 @@ IMPLEMENT_DYNAMIC(CImageAssistDlg, CDialogEx)
 CImageAssistDlg::CImageAssistDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CImageAssistDlg::IDD, pParent)
 {
-
+	m_bDrawCross  = FALSE;
+	m_bDrawScale  = FALSE;
+	m_bDrawLine   = FALSE;
+	m_bDrawRect   = FALSE;
+	m_bDrawCircle = FALSE;
+	m_bMeasureDis = FALSE;
+	m_bMeasureAngle = FALSE;
 }
 
 CImageAssistDlg::~CImageAssistDlg()
@@ -31,62 +37,89 @@ void CImageAssistDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CImageAssistDlg, CDialogEx)
 	
 	ON_BN_CLICKED(IDC_SHOW_CROSS_BTN, &CImageAssistDlg::OnClickedShowCrossBtn)
+	ON_BN_CLICKED(IDC_DRAW_SCALE_BTN, &CImageAssistDlg::OnClickedDrawScaleBtn)
+	ON_BN_CLICKED(IDC_DRAW_LINE_BTN, &CImageAssistDlg::OnClickedDrawLineBtn)
+	ON_BN_CLICKED(IDC_DRAW_RECT_BTN, &CImageAssistDlg::OnClickedDrawRectBtn)
+	ON_BN_CLICKED(IDC_DRAW_CIRCLE_BTN, &CImageAssistDlg::OnClickedDrawCircleBtn)
 END_MESSAGE_MAP()
 
 
 // CImageAssistDlg message handlers
-
-// 画十字
-void CImageAssistDlg::DrawCross(Mat img)
-{
-	int crossLen = 20;
-	Point centerPt(320, 240);
-	circle(img, centerPt, 15, Scalar(0,255,0), 1, CV_AA);
-	line(img, Point(centerPt.x-20, centerPt.y), 
-		Point(centerPt.x+20, centerPt.y), Scalar(0,255,0), 1, CV_AA);
-	line(img, Point(centerPt.x, centerPt.y-20), 
-		Point(centerPt.x, centerPt.y+20), Scalar(0,255,0), 1, CV_AA);
-}
-
-// 画比例尺
-void CImageAssistDlg::DrawImgScale(Mat img)
-{
-	rectangle(img, Point(568, 490), Point(630, 493), Scalar(0,255,0), -1, CV_AA);
-	putText(img, "400um", Point(574, 485), FONT_HERSHEY_COMPLEX_SMALL, 0.6, Scalar(0,255,0), 1, CV_AA);
-}
-
-// void CImageAssistDlg::DrawLine(Mat img)
-// {
-// 	if (m_bDrawLine && (m_LinePtNum == 2))
-// 		line(img, m_LinePt[0], m_LinePt[1], Scalar(255, 255, 0), 2, CV_AA);
-// }
-// 
-// void CImageAssistDlg::DrawRect(Mat img)
-// {
-// 	if (m_bDrawRect && m_RectPtNum == 3)
-// 	{
-// 		line(img, m_RectPt[0], m_RectPt[1], Scalar(255, 255, 0), 2, CV_AA);
-// 		line(img, m_RectPt[1], m_RectPt[2], Scalar(255, 255, 0), 2, CV_AA);
-// 		line(img, m_RectPt[2], Point(m_RectPt[0].x+(m_RectPt[2].x-m_RectPt[1].x), 
-// 			m_RectPt[2].y+(m_RectPt[0].y-m_RectPt[1].y)), Scalar(255, 255, 0), 2, CV_AA);
-// 		line(img, Point(m_RectPt[0].x+(m_RectPt[2].x-m_RectPt[1].x), 
-// 			m_RectPt[2].y+(m_RectPt[0].y-m_RectPt[1].y)), m_RectPt[0], Scalar(255, 255, 0), 2, CV_AA);
-// 	}
-// }
-// 
-// void CImageAssistDlg::DrawCircle(Mat img)
-// {
-// 	if (m_bDrawCircle && m_CirclePtNum == 2)
-// 	{
-// 		int disX = abs(m_CirclePt[1].x-m_CirclePt[0].x);
-// 		int disY = abs(m_CirclePt[1].y-m_CirclePt[0].y);
-// 		double radius = sqrt((double)(disX*disX) + (double)(disY*disY));
-// 		circle(img, m_CirclePt[0], (int)radius, Scalar(0, 255, 255), 2, CV_AA);
-// 	}
-// }
-
 void CImageAssistDlg::OnClickedShowCrossBtn()
 {
 	// TODO: Add your control notification handler code here
-	DrawCross(g_src);
+	if (m_bDrawCross)
+	{
+		m_bDrawCross = FALSE;
+		GetDlgItem(IDC_SHOW_CROSS_BTN)->SetWindowText("隐藏十字");
+	}
+	else
+	{
+		m_bDrawCross =TRUE;
+		GetDlgItem(IDC_SHOW_CROSS_BTN)->SetWindowText("显示十字");
+	}
+}
+
+
+void CImageAssistDlg::OnClickedDrawScaleBtn()
+{
+	// TODO: Add your control notification handler code here
+	if (m_bDrawScale)
+	{
+		m_bDrawScale = FALSE;
+		GetDlgItem(IDC_DRAW_SCALE_BTN)->SetWindowText("隐藏比例尺");
+	}
+	else
+	{
+		m_bDrawScale =TRUE;
+		GetDlgItem(IDC_DRAW_SCALE_BTN)->SetWindowText("显示比例尺");
+	}
+}
+
+
+void CImageAssistDlg::OnClickedDrawLineBtn()
+{
+	// TODO: Add your control notification handler code here
+	if (m_bDrawLine)
+	{
+		m_bDrawLine = FALSE;
+		GetDlgItem(IDC_DRAW_LINE_BTN)->SetWindowText("隐藏直线");
+	}
+	else
+	{
+		m_bDrawLine =TRUE;
+		GetDlgItem(IDC_DRAW_LINE_BTN)->SetWindowText("显示直线");
+	}
+}
+
+
+void CImageAssistDlg::OnClickedDrawRectBtn()
+{
+	// TODO: Add your control notification handler code here
+	if (m_bDrawRect)
+	{
+		m_bDrawRect = FALSE;
+		GetDlgItem(IDC_DRAW_RECT_BTN)->SetWindowText("隐藏矩形框");
+	}
+	else
+	{
+		m_bDrawRect =TRUE;
+		GetDlgItem(IDC_DRAW_RECT_BTN)->SetWindowText("显示矩形框");
+	}
+}
+
+
+void CImageAssistDlg::OnClickedDrawCircleBtn()
+{
+	// TODO: Add your control notification handler code here
+	if (m_bDrawCircle)
+	{
+		m_bDrawCircle = FALSE;
+		GetDlgItem(IDC_DRAW_CIRCLE_BTN)->SetWindowText("隐藏圆形");
+	}
+	else
+	{
+		m_bDrawCircle =TRUE;
+		GetDlgItem(IDC_DRAW_CIRCLE_BTN)->SetWindowText("显示圆形");
+	}
 }

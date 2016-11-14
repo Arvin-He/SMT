@@ -13,8 +13,8 @@ IMPLEMENT_DYNAMIC(CManualDlg, CDialogEx)
 
 CManualDlg::CManualDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CManualDlg::IDD, pParent)
-	, m_stageStepEdit(1000)
-	, m_ccdStepEdit(1000)
+	, m_stageStep(1000)
+	, m_ccdStep(1000)
 {
 
 }
@@ -26,10 +26,10 @@ CManualDlg::~CManualDlg()
 void CManualDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Text(pDX, IDC_STAGE_STEP_EDIT, m_stageStepEdit);
-	DDV_MinMaxInt(pDX, m_stageStepEdit, 0, 100000);
-	DDX_Text(pDX, IDC_CCD_STEP_EDIT, m_ccdStepEdit);
-	DDV_MinMaxInt(pDX, m_ccdStepEdit, 0, 100000);
+	DDX_Text(pDX, IDC_STAGE_STEP_EDIT, m_stageStep);
+	DDV_MinMaxInt(pDX, m_stageStep, 0, 100000);
+	DDX_Text(pDX, IDC_CCD_STEP_EDIT, m_ccdStep);
+	DDV_MinMaxInt(pDX, m_ccdStep, 0, 100000);
 	DDX_Control(pDX, IDC_STAGE_X_CHECK, m_stageXCheck);
 	DDX_Control(pDX, IDC_STAGE_Y_CHECK, m_stageYCheck);
 	DDX_Control(pDX, IDC_CCD_X_CHECK, m_ccdXCheck);
@@ -56,7 +56,6 @@ END_MESSAGE_MAP()
 BOOL CManualDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-
 	// TODO:  Add extra initialization here
 	
 
@@ -66,47 +65,49 @@ BOOL CManualDlg::OnInitDialog()
 
 BOOL CManualDlg::OnStageMove(UINT nID)
 {
+	UpdateData(TRUE);
 	switch(nID)
 	{
 	case IDC_STAGE_XUP_BTN:
-		DMC3000_Move(0, 0, m_stageStepEdit, 1, 0);
+		DMC3000_Move(0, 0, m_stageStep, 1, 0);
 		break;
 	case  IDC_STAGE_XDOWN_BTN:
-		DMC3000_Move(0, 0, m_stageStepEdit, -1, 0);
+		DMC3000_Move(0, 0, m_stageStep, -1, 0);
 		break;
 	case IDC_STAGE_YUP_BTN:
-		DMC3000_Move(0, 1, m_stageStepEdit, 1, 0);
+		DMC3000_Move(0, 1, m_stageStep, 1, 0);
 		break;
 	case  IDC_STAGE_YDOWN_BTN:
-		DMC3000_Move(0, 1, m_stageStepEdit, -1, 0);
+		DMC3000_Move(0, 1, m_stageStep, -1, 0);
 		break;
 	default:
 		break;
 	}
+	UpdateData(FALSE);
 	return TRUE;
 }
 
 BOOL CManualDlg::OnCCDMove(UINT nID)
 {
+	UpdateData(TRUE);
 	switch(nID)
 	{
 	case IDC_CCD_XUP_BTN:
-		DMC3000_Move(0, 2, m_ccdStepEdit, 1, 0);
-		break;
+		DMC3000_Move(0, 2, m_ccdStep, 1, 0);
 		break;
 	case  IDC_CCD_XDOWN_BTN:
-		DMC3000_Move(0, 2, m_ccdStepEdit, -1, 0);
-		break;
+		DMC3000_Move(0, 2, m_ccdStep, -1, 0);
 		break;
 	case IDC_CCD_ZUP_BTN:
-		DMC3000_Move(0, 3, m_ccdStepEdit, -1, 0);
+		DMC3000_Move(0, 3, m_ccdStep, -1, 0);
 		break;
 	case  IDC_CCD_ZDOWN_BTN:
-		DMC3000_Move(0, 3, m_ccdStepEdit, 1, 0);
+		DMC3000_Move(0, 3, m_ccdStep, 1, 0);
 		break;
 	default:
 		break;
 	}
+	UpdateData(FALSE);
 	return TRUE;
 }
 

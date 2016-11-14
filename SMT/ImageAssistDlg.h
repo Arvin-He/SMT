@@ -1,9 +1,4 @@
 #pragma once
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/core/core.hpp>
-
-using namespace cv;
 
 // CImageAssistDlg dialog
 
@@ -14,8 +9,14 @@ class CImageAssistDlg : public CDialogEx
 public:
 	CImageAssistDlg(CWnd* pParent = NULL);   // standard constructor
 	virtual ~CImageAssistDlg();
-	void DrawCross(Mat img);
-	void DrawImgScale(Mat img);
+	BOOL	m_bDrawCross;
+	BOOL	m_bDrawScale;
+	BOOL    m_bDrawLine;
+	BOOL	m_bDrawRect;
+	BOOL    m_bDrawCircle;
+	BOOL    m_bMeasureDis;
+	BOOL    m_bMeasureAngle;
+
 
 // Dialog Data
 	enum { IDD = IDD_IMAGE_ASSIST_DIALOG };
@@ -25,6 +26,9 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	
 	afx_msg void OnClickedShowCrossBtn();
+	afx_msg void OnClickedDrawScaleBtn();
+	afx_msg void OnClickedDrawLineBtn();
+	afx_msg void OnClickedDrawRectBtn();
+	afx_msg void OnClickedDrawCircleBtn();
 };
