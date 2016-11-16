@@ -13,7 +13,8 @@
 #include "SemiAutoDlg.h"
 #include "ImageAssistDlg.h"
 #include "SettingDlg.h"
-
+#include <vector>
+using namespace std;
 using namespace cv;
 #pragma comment(lib, "Vfw32.lib")
 
@@ -32,11 +33,6 @@ public:
 	BOOL InitDMC3000Card(); // 初始化运动控制卡
 	BOOL ResetDMC3000Card();
 	//Mat m_src;  
-
-////////////////////dmc运动控制卡相关变量///////////////////
-private:
-	WORD	m_nCard;
-////////////////////dmc运动控制卡相关变量///////////////////
 
 ///////大恒CCD相关参数和函数///////////////////////////////
 private:
@@ -106,6 +102,19 @@ public:
 	void DrawCross(Mat img);
 	void DrawImgScale(Mat img);
 	void DrawLine(Mat img);
+	void DrawRect(Mat img);
+	void DrawCircle(Mat img);
+	void MeasureDis(Mat img);
+	vector <CvPoint> m_drawLinePoints;
+	vector <CvPoint> m_drawRectPoints;
+	vector <CvPoint> m_drawCirclePoints;
+	vector <CPoint>   m_measureDisPoints;
+	vector <CPoint>   m_measureAnglePoints;
+
+	//CvPoint m_drawLinePoints[2];
+	//CvPoint m_drawRectPoints[3];
+	//CvPoint m_drawCirclePoints[2];
+
 	// Gap functionsenerated message m
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();

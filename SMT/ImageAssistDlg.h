@@ -1,7 +1,5 @@
 #pragma once
-
 // CImageAssistDlg dialog
-
 class CImageAssistDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CImageAssistDlg)
@@ -16,6 +14,7 @@ public:
 	BOOL    m_bDrawCircle;
 	BOOL    m_bMeasureDis;
 	BOOL    m_bMeasureAngle;
+	void    *m_pSMTDlg;
 
 
 // Dialog Data
@@ -31,4 +30,6 @@ public:
 	afx_msg void OnClickedDrawLineBtn();
 	afx_msg void OnClickedDrawRectBtn();
 	afx_msg void OnClickedDrawCircleBtn();
+	afx_msg void OnClickedMeasureDisBtn();
+	afx_msg void OnClickedMeasureAngleBtn();
 };

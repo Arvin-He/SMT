@@ -7,7 +7,7 @@
 #include "afxdialogex.h"
 #include "dmc3000/inc/LTDMC.h"
 #include "global.h"
-
+#include "SMTDlg.h"
 // CImageAssistDlg dialog
 
 IMPLEMENT_DYNAMIC(CImageAssistDlg, CDialogEx)
@@ -41,6 +41,8 @@ BEGIN_MESSAGE_MAP(CImageAssistDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_DRAW_LINE_BTN, &CImageAssistDlg::OnClickedDrawLineBtn)
 	ON_BN_CLICKED(IDC_DRAW_RECT_BTN, &CImageAssistDlg::OnClickedDrawRectBtn)
 	ON_BN_CLICKED(IDC_DRAW_CIRCLE_BTN, &CImageAssistDlg::OnClickedDrawCircleBtn)
+	ON_BN_CLICKED(IDC_MEASURE_DIS_BTN, &CImageAssistDlg::OnClickedMeasureDisBtn)
+	ON_BN_CLICKED(IDC_MEASURE_ANGLE_BTN, &CImageAssistDlg::OnClickedMeasureAngleBtn)
 END_MESSAGE_MAP()
 
 
@@ -83,6 +85,8 @@ void CImageAssistDlg::OnClickedDrawLineBtn()
 	if (m_bDrawLine)
 	{
 		m_bDrawLine = FALSE;
+		CSMTDlg* pSMTDlg = (CSMTDlg*)m_pSMTDlg;
+		pSMTDlg->m_drawLinePoints.clear();
 		GetDlgItem(IDC_DRAW_LINE_BTN)->SetWindowText("“˛≤ÿ÷±œﬂ");
 	}
 	else
@@ -99,6 +103,8 @@ void CImageAssistDlg::OnClickedDrawRectBtn()
 	if (m_bDrawRect)
 	{
 		m_bDrawRect = FALSE;
+		CSMTDlg* pSMTDlg = (CSMTDlg*)m_pSMTDlg;
+		pSMTDlg->m_drawRectPoints.clear();
 		GetDlgItem(IDC_DRAW_RECT_BTN)->SetWindowText("“˛≤ÿæÿ–ŒøÚ");
 	}
 	else
@@ -115,6 +121,8 @@ void CImageAssistDlg::OnClickedDrawCircleBtn()
 	if (m_bDrawCircle)
 	{
 		m_bDrawCircle = FALSE;
+		CSMTDlg* pSMTDlg = (CSMTDlg*)m_pSMTDlg;
+		pSMTDlg->m_drawCirclePoints.clear();
 		GetDlgItem(IDC_DRAW_CIRCLE_BTN)->SetWindowText("“˛≤ÿ‘≤–Œ");
 	}
 	else
@@ -122,4 +130,29 @@ void CImageAssistDlg::OnClickedDrawCircleBtn()
 		m_bDrawCircle =TRUE;
 		GetDlgItem(IDC_DRAW_CIRCLE_BTN)->SetWindowText("œ‘ æ‘≤–Œ");
 	}
+}
+
+
+void CImageAssistDlg::OnClickedMeasureDisBtn()
+{
+	// TODO: Add your control notification handler code here
+	if (m_bMeasureDis)
+	{
+		m_bMeasureDis = FALSE;
+		CSMTDlg* pSMTDlg = (CSMTDlg*)m_pSMTDlg;
+		pSMTDlg->m_drawCirclePoints.clear();
+		//GetDlgItem(IDC_MEASURE_DIS_BTN)->SetWindowText("“˛≤ÿ‘≤–Œ");
+	}
+	else
+	{
+		m_bMeasureDis =TRUE;
+		//GetDlgItem(IDC_DRAW_CIRCLE_BTN)->SetWindowText("œ‘ æ‘≤–Œ");
+	}
+
+}
+
+
+void CImageAssistDlg::OnClickedMeasureAngleBtn()
+{
+	// TODO: Add your control notification handler code here
 }

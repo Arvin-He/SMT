@@ -46,6 +46,7 @@ CSMTDlg::CSMTDlg(CWnd* pParent /*=NULL*/)
 	//m_src = Mat(Size(640, 480), CV_8UC3);
 	
 	m_bIsCapture = FALSE;
+	
 }
 
 CSMTDlg::~CSMTDlg()
@@ -53,6 +54,8 @@ CSMTDlg::~CSMTDlg()
 	dmc_board_close();	//非常之重要，释放其占用的系统资源
 	OnCamera_Close();   
 }
+
+
 
 void CSMTDlg::DoDataExchange(CDataExchange* pDX)
 {
@@ -192,7 +195,7 @@ BOOL CSMTDlg::OnInitDialog()
 	m_imageAssistDlg.ShowWindow(SW_SHOW);
 	m_settingDlg.ShowWindow(SW_HIDE);
 	m_bottomTab.SetCurSel(0);
-
+	m_imageAssistDlg.m_pSMTDlg = this;
 	// 初始化相机
 	InitialDHCamera();
 	// 初始化DMC3000运动控制卡
@@ -752,24 +755,25 @@ BOOL CSMTDlg::InitDMC3000Card()
 	if( dmc_board_init() <= 0 )			//控制卡的初始化操作
 		MessageBox(_T("初始化控制卡失败！"), _T("出错"));
 	dmc_get_CardInfList(&My_CardNum, My_CardTypeList, My_CardList);    //获取正在使用的卡号列表
-	m_nCard = My_CardList[0];
+	//m_nCard = My_CardList[0];
+	g_nCardNo = My_CardList[0];
 
-	for (int i=0; i<4; i++)
+	for (int i=0; i<g_nAxisCount; i++)
 	{
 		// 设定脉冲模式及逻辑方向	
-		dmc_set_pulse_outmode(0, i, 4);
+		dmc_set_pulse_outmode(g_nCardNo, i, 4);
 		// 设置硬限位
-		dmc_set_el_mode(0, i, 0, 1, 0);
+		dmc_set_el_mode(g_nCardNo, i, 0, 1, 0);
 		// 设置软限位
-		//dmc_set_softlimit(0, i, 1, 1, 0, 0, )
+		//dmc_set_softlimit(g_nCardNo, i, 1, 1, 0, 0, )
 		// 编码器设置
-		dmc_set_counter_inmode(0, i, 0);
+		dmc_set_counter_inmode(g_nCardNo, i, 0);
 		//设置EZ
-		dmc_set_ez_mode(0, i, 0);
+		dmc_set_ez_mode(g_nCardNo, i, 0);
 		// 设置回原点
-		// dmc_set_home_pin_logic(0, i, 1);
+		// dmc_set_home_pin_logic(g_nCardNo, i, 1);
 		// 设置回零方式
-		dmc_set_homemode(0, i, 0, 0, 0);
+		dmc_set_homemode(g_nCardNo, i, 0, 0, 0);
 	}
 	return TRUE;
 }
@@ -802,38 +806,68 @@ void CSMTDlg::DrawImgScale(Mat img)
 
 void CSMTDlg::DrawLine(Mat img)
 {
-	//if (m_bDrawLine && (m_LinePtNum == 2))
-		//line(img, m_LinePt[0], m_LinePt[1], Scalar(255, 255, 0), 2, CV_AA);
+	if (m_imageAssistDlg.m_bDrawLine && m_drawLinePoints.size() == 2)
+		line(img, m_drawLinePoints[0], m_drawLinePoints[1], Scalar(255, 255, 0), 2, CV_AA);
 }
 
-// void CImageAssistDlg::DrawRect(Mat img)
-// {
-// 	if (m_bDrawRect && m_RectPtNum == 3)
-// 	{
-// 		line(img, m_RectPt[0], m_RectPt[1], Scalar(255, 255, 0), 2, CV_AA);
-// 		line(img, m_RectPt[1], m_RectPt[2], Scalar(255, 255, 0), 2, CV_AA);
-// 		line(img, m_RectPt[2], Point(m_RectPt[0].x+(m_RectPt[2].x-m_RectPt[1].x), 
-// 			m_RectPt[2].y+(m_RectPt[0].y-m_RectPt[1].y)), Scalar(255, 255, 0), 2, CV_AA);
-// 		line(img, Point(m_RectPt[0].x+(m_RectPt[2].x-m_RectPt[1].x), 
-// 			m_RectPt[2].y+(m_RectPt[0].y-m_RectPt[1].y)), m_RectPt[0], Scalar(255, 255, 0), 2, CV_AA);
-// 	}
-// }
-// 
-// void CImageAssistDlg::DrawCircle(Mat img)
-// {
-// 	if (m_bDrawCircle && m_CirclePtNum == 2)
-// 	{
-// 		int disX = abs(m_CirclePt[1].x-m_CirclePt[0].x);
-// 		int disY = abs(m_CirclePt[1].y-m_CirclePt[0].y);
-// 		double radius = sqrt((double)(disX*disX) + (double)(disY*disY));
-// 		circle(img, m_CirclePt[0], (int)radius, Scalar(0, 255, 255), 2, CV_AA);
-// 	}
-// }
+ void CSMTDlg::DrawRect(Mat img)
+ {
+ 	if (m_imageAssistDlg.m_bDrawRect && m_drawRectPoints.size() == 3)
+ 	{
+ 		line(img, m_drawRectPoints[0], m_drawRectPoints[1], Scalar(255, 255, 0), 2, CV_AA);
+ 		line(img, m_drawRectPoints[1], m_drawRectPoints[2], Scalar(255, 255, 0), 2, CV_AA);
+ 		line(img, m_drawRectPoints[2], Point(m_drawRectPoints[0].x+(m_drawRectPoints[2].x-m_drawRectPoints[1].x), 
+ 			m_drawRectPoints[2].y+(m_drawRectPoints[0].y-m_drawRectPoints[1].y)), Scalar(255, 255, 0), 2, CV_AA);
+ 		line(img, Point(m_drawRectPoints[0].x+(m_drawRectPoints[2].x-m_drawRectPoints[1].x), 
+ 			m_drawRectPoints[2].y+(m_drawRectPoints[0].y-m_drawRectPoints[1].y)), m_drawRectPoints[0], Scalar(255, 255, 0), 2, CV_AA);
+ 	}
+ }
+ 
+ void CSMTDlg::DrawCircle(Mat img)
+ {
+ 	if (m_imageAssistDlg.m_bDrawCircle && m_drawCirclePoints.size() == 2)
+ 	{
+ 		int disX = abs(m_drawCirclePoints[1].x-m_drawCirclePoints[0].x);
+ 		int disY = abs(m_drawCirclePoints[1].y-m_drawCirclePoints[0].y);
+ 		double radius = sqrt((double)(disX*disX) + (double)(disY*disY));
+ 		circle(img, m_drawCirclePoints[0], (int)radius, Scalar(0, 255, 255), 2, CV_AA);
+ 	}
+ }
+
+void CSMTDlg::MeasureDis(Mat img)
+{
+	if (m_imageAssistDlg.m_bMeasureDis && m_measureDisPoints.size() == 2)
+	{
+
+	}
+}
 
 void CSMTDlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: Add your message handler code here and/or call default
-
+	CvPoint pt;
+	pt.x = point.x;
+	pt.y = point.y;
+	if (m_imageAssistDlg.m_bDrawLine && m_drawLinePoints.size() < 3)
+	{
+		m_drawLinePoints.push_back(pt);
+	}
+	if (m_imageAssistDlg.m_bDrawRect && m_drawRectPoints.size() < 4)
+	{
+		m_drawRectPoints.push_back(pt);
+	}
+	if (m_imageAssistDlg.m_bDrawCircle && m_drawCirclePoints.size() < 3)
+	{
+		m_drawCirclePoints.push_back(pt);
+	}
+	if (m_imageAssistDlg.m_bMeasureDis && m_measureDisPoints.size() < 3)
+	{
+		m_measureDisPoints.push_back(point);
+	}
+	if (m_imageAssistDlg.m_bMeasureAngle && m_measureAnglePoints.size() < 5)
+	{
+		m_measureAnglePoints.push_back(point);
+	}
 	CDialogEx::OnLButtonDown(nFlags, point);
 }
 

@@ -6,4 +6,6 @@
 #include "global.h"
 
 Mat g_src(Size(640, 480), CV_8UC3);
+WORD g_nCardNo = 0;
+const int g_nAxisCount = 4;
 

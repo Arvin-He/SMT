@@ -8,6 +8,8 @@
 
 using namespace cv;
 
-extern Mat g_src;
+extern Mat g_src;      //Í¼Ïñ
+extern WORD g_nCardNo;   //¿¨ºÅ
+extern const int  g_nAxisCount;  //ÖáÊý
 
 
