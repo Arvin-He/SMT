@@ -108,8 +108,8 @@ public:
 	vector <CvPoint> m_drawLinePoints;
 	vector <CvPoint> m_drawRectPoints;
 	vector <CvPoint> m_drawCirclePoints;
-	vector <CPoint>   m_measureDisPoints;
-	vector <CPoint>   m_measureAnglePoints;
+	vector <CvPoint> m_measureDisPoints;
+	vector <CvPoint> m_measureAnglePoints;
 
 	//CvPoint m_drawLinePoints[2];
 	//CvPoint m_drawRectPoints[3];

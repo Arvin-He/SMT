@@ -146,6 +146,8 @@ BOOL CSMTDlg::OnInitDialog()
 	m_sliderShutter.SetPos(m_editShutter);
 	m_sliderShutter.SetTicFreq(25);
 
+	GetDlgItem(IDC_SHOW_PIC)->MoveWindow(10, 80, Width, Height, true); 
+
 	m_tab.InsertItem(0, _T("手动控制"));
 	m_tab.InsertItem(1, _T("自动控制"));
 
@@ -400,6 +402,12 @@ LRESULT CSMTDlg::OnSnapChange(WPARAM wParam, LPARAM lParam)
 		DrawCross(g_src);
 	if (m_imageAssistDlg.m_bDrawScale)
 		DrawImgScale(g_src);
+	if (m_imageAssistDlg.m_bDrawLine)
+		DrawLine(g_src);
+	if (m_imageAssistDlg.m_bDrawRect)
+		DrawRect(g_src);
+	if (m_imageAssistDlg.m_bDrawCircle)
+		DrawCircle(g_src);
 
 	ShowImage(g_src, IDC_SHOW_PIC);	
 	return 1;
@@ -483,6 +491,22 @@ BOOL CSMTDlg::InitialDHCamera()
 	return TRUE;
 }
 ////////////////////////////CCD的函数//////////////////////////////////////////////
+
+void CSMTDlg::ShowImage(Mat img, INT_PTR ID)
+{
+	CDC *pDC = GetDlgItem(ID)->GetDC();
+	HDC hDC = pDC->GetSafeHdc();
+	CRect rect(0,0,0,0);
+	GetDlgItem(ID)->GetClientRect(&rect);
+	int tx = (int)(rect.Width() - img.cols)/2;
+	int ty = (int)(rect.Height() - img.rows)/2;
+	SetRect(rect, tx, ty, tx+img.cols, ty+img.rows);
+	CvvImage cimg;
+	IplImage temp = img;
+	cimg.CopyOf(&temp);
+	cimg.DrawToHDC(hDC, &rect);
+	ReleaseDC(pDC);
+}
 
 void CSMTDlg::OnCamera_Open()
 {
@@ -612,21 +636,7 @@ void CSMTDlg::OnCamera_StopVideo()
 	m_bIsCapture = FALSE;
 }
 
-void CSMTDlg::ShowImage(Mat img, INT_PTR ID)
-{
-	CDC *pDC = GetDlgItem(ID)->GetDC();
-	HDC hDC = pDC->GetSafeHdc();
-	CRect rect(0,0,0,0);
-	GetDlgItem(ID)->GetClientRect(&rect);
-	int tx = (int)(rect.Width() - img.cols)/2;
-	int ty = (int)(rect.Height() - img.rows)/2;
-	SetRect(rect, tx, ty, tx+img.cols, ty+img.rows);
-	CvvImage cimg;
-	IplImage temp = img;
-	cimg.CopyOf(&temp);
-	cimg.DrawToHDC(hDC, &rect);
-	ReleaseDC(pDC);
-}
+
 
 void CSMTDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
@@ -838,16 +848,36 @@ void CSMTDlg::MeasureDis(Mat img)
 {
 	if (m_imageAssistDlg.m_bMeasureDis && m_measureDisPoints.size() == 2)
 	{
-
+		int disX = abs(m_measureDisPoints[1].x - m_measureDisPoints[0].x);
+		int disY = abs(m_measureDisPoints[1].y - m_measureDisPoints[0].y);
+		double dis = sqrt((double)(disX*disX) + (double)(disY*disY));
+		line(img, m_measureDisPoints[0], m_measureDisPoints[1], Scalar(0, 255, 0), 2, CV_AA);
+		CString strDis(_T(""));
+		strDis.Format("%.3f", dis);
+		strDis = strDis+_T("pixs");
+		int flagX(1), flagY(1);
+		if (m_measureDisPoints[1].x > m_measureDisPoints[0].x)
+			flagX = 1;
+		else
+			flagX = -1;
+		if (m_measureDisPoints[1].y > m_measureDisPoints[0].y)
+			flagY = 1;
+		else
+			flagY = -1;
+		putText(img, (string)strDis, Point(m_measureDisPoints[0].x+(disX/2)*flagX, 
+				m_measureDisPoints[0].y+(disY/2)*flagY),
+				FONT_HERSHEY_COMPLEX_SMALL, 1, Scalar(0, 255, 255), 1, CV_AA);
 	}
 }
 
 void CSMTDlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: Add your message handler code here and/or call default
+	CRect rect(0,0,0,0);
+	GetDlgItem(IDC_SHOW_PIC)->GetClientRect(&rect);
 	CvPoint pt;
-	pt.x = point.x;
-	pt.y = point.y;
+	pt.x = point.x - 10;
+	pt.y = point.y - 80;
 	if (m_imageAssistDlg.m_bDrawLine && m_drawLinePoints.size() < 3)
 	{
 		m_drawLinePoints.push_back(pt);
@@ -862,11 +892,11 @@ void CSMTDlg::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	if (m_imageAssistDlg.m_bMeasureDis && m_measureDisPoints.size() < 3)
 	{
-		m_measureDisPoints.push_back(point);
+		m_measureDisPoints.push_back(pt);
 	}
 	if (m_imageAssistDlg.m_bMeasureAngle && m_measureAnglePoints.size() < 5)
 	{
-		m_measureAnglePoints.push_back(point);
+		m_measureAnglePoints.push_back(pt);
 	}
 	CDialogEx::OnLButtonDown(nFlags, point);
 }
