@@ -159,7 +159,7 @@ BOOL CSMTDlg::OnInitDialog()
 
 	CRect mainDlgRect(0, 0, 0, 0);
 	GetClientRect(&mainDlgRect);
-	mainDlgRect.top += 60;
+	mainDlgRect.top += 260;
 	mainDlgRect.left += 680;
 	mainDlgRect.bottom -= 10;
 	mainDlgRect.right -= 10;
@@ -408,6 +408,8 @@ LRESULT CSMTDlg::OnSnapChange(WPARAM wParam, LPARAM lParam)
 		DrawRect(g_src);
 	if (m_imageAssistDlg.m_bDrawCircle)
 		DrawCircle(g_src);
+	if (m_imageAssistDlg.m_bMeasureDis)
+		MeasureDis(g_src);
 
 	ShowImage(g_src, IDC_SHOW_PIC);	
 	return 1;
@@ -873,8 +875,6 @@ void CSMTDlg::MeasureDis(Mat img)
 void CSMTDlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: Add your message handler code here and/or call default
-	CRect rect(0,0,0,0);
-	GetDlgItem(IDC_SHOW_PIC)->GetClientRect(&rect);
 	CvPoint pt;
 	pt.x = point.x - 10;
 	pt.y = point.y - 80;
