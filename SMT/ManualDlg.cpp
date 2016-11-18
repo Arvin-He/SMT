@@ -30,10 +30,6 @@ void CManualDlg::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxInt(pDX, m_stageStep, 0, 100000);
 	DDX_Text(pDX, IDC_CCD_STEP_EDIT, m_ccdStep);
 	DDV_MinMaxInt(pDX, m_ccdStep, 0, 100000);
-	DDX_Control(pDX, IDC_STAGE_X_CHECK, m_stageXCheck);
-	DDX_Control(pDX, IDC_STAGE_Y_CHECK, m_stageYCheck);
-	DDX_Control(pDX, IDC_CCD_X_CHECK, m_ccdXCheck);
-	DDX_Control(pDX, IDC_CCD_Z_CHECK, m_ccdYCheck);
 }
 
 
@@ -46,9 +42,6 @@ BEGIN_MESSAGE_MAP(CManualDlg, CDialogEx)
 	ON_COMMAND_EX(IDC_CCD_XDOWN_BTN, OnCCDMove)
 	ON_COMMAND_EX(IDC_CCD_ZDOWN_BTN, OnCCDMove)
 	ON_COMMAND_EX(IDC_CCD_ZUP_BTN, OnCCDMove)
-	ON_BN_CLICKED(IDC_STAGE_GOHOME_BTN, &CManualDlg::OnClickedStageGohomeBtn)
-	ON_BN_CLICKED(IDC_CCD_GOHOME_BTN, &CManualDlg::OnClickedCcdGohomeBtn)
-	
 END_MESSAGE_MAP()
 
 
@@ -137,31 +130,6 @@ void CManualDlg::DMC3000_GoHome(int nCardNo, int nAxisIndex, int nHomeDirection,
 // 	}
 	//GetDlgItem(IDC_BUTTON1)->EnableWindow(true); 
 	//UpdateData(false);
-}
-
-void CManualDlg::OnClickedStageGohomeBtn()
-{
-	// TODO: Add your control notification handler code here
-	DMC3000_GoHome(0, 0, 1, 0, 0);
-	//dmc_home_move(0, 0); //回零动作
-	// dmc_pmove(0, 0, 0, 1);
-// 	if (m_stageXCheck.GetCheck())
-// 	{
-// 		DMC3000_GoHome(0, 0, )
-// 	}
-// 	if (m_stageYCheck.GetCheck())
-// 	{
-// 
-// 	}
-	
-	//if (dmc_check_done(0, nAxisIndex) == 0) //已经在运动中
-		return; 
-}
-
-
-void CManualDlg::OnClickedCcdGohomeBtn()
-{
-	// TODO: Add your control notification handler code here
 }
 
 

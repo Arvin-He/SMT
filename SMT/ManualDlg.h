@@ -28,11 +28,4 @@ public:
 	virtual BOOL OnInitDialog();
 	int m_stageStep;
 	int m_ccdStep;
-	afx_msg void OnClickedStageGohomeBtn();
-	afx_msg void OnClickedCcdGohomeBtn();
-	CButton m_stageXCheck;
-	CButton m_stageYCheck;
-	CButton m_ccdXCheck;
-	CButton m_ccdYCheck;
-	
 };
