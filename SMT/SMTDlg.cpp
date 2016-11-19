@@ -98,6 +98,7 @@ BEGIN_MESSAGE_MAP(CSMTDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_STAGE_Y_GOHOME_BTN, &CSMTDlg::OnClickedStageYGohomeBtn)
 	ON_BN_CLICKED(IDC_CCD_X_GOHOME_BTN, &CSMTDlg::OnClickedCcdXGohomeBtn)
 	ON_BN_CLICKED(IDC_CCD_Z_GOHOME_BTN, &CSMTDlg::OnClickedCcdZGohomeBtn)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -210,6 +211,8 @@ BOOL CSMTDlg::OnInitDialog()
 	InitialDHCamera();
 	// 初始化DMC3000运动控制卡
 	InitDMC3000Card();
+	InitDMC3000Status();
+	SetTimer(0, 1000, NULL);
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -646,8 +649,6 @@ void CSMTDlg::OnCamera_StopVideo()
 	m_bIsCapture = FALSE;
 }
 
-
-
 void CSMTDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	// TODO: Add your message handler code here and/or call default
@@ -987,4 +988,69 @@ void CSMTDlg::OnClickedCcdXGohomeBtn()
 void CSMTDlg::OnClickedCcdZGohomeBtn()
 {
 	// TODO: Add your control notification handler code here
+}
+
+void CSMTDlg::InitDMC3000Status()
+{
+	SetDMC3000Status(FALSE, IDC_STAGE_X_EL_UP);
+	SetDMC3000Status(FALSE, IDC_STAGE_X_EL_DOWN);
+	SetDMC3000Status(FALSE, IDC_STAGE_X_ORG);
+	SetDMC3000Status(FALSE, IDC_STAGE_Y_EL_UP);
+	SetDMC3000Status(FALSE, IDC_STAGE_Y_EL_DOWN);
+	SetDMC3000Status(FALSE, IDC_STAGE_Y_ORG);
+	SetDMC3000Status(FALSE, IDC_CCD_X_EL_UP);
+	SetDMC3000Status(FALSE, IDC_CCD_X_EL_DOWN);
+	SetDMC3000Status(FALSE, IDC_CCD_X_ORG);
+	SetDMC3000Status(FALSE, IDC_CCD_Z_EL_UP);
+	SetDMC3000Status(FALSE, IDC_CCD_Z_EL_DOWN);
+	SetDMC3000Status(FALSE, IDC_CCD_Z_ORG);
+}
+
+void CSMTDlg::SetDMC3000Status(BOOL status, int nID)
+{
+	CStatic *pStatus =(CStatic*)GetDlgItem(nID);
+	pStatus->ModifyStyle(0, SS_BITMAP | SS_CENTERIMAGE);
+	if (status)
+	{
+		pStatus->SetBitmap(LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_GREEN)));
+	}
+	else
+	{
+		pStatus->SetBitmap(LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_RED)));
+	}
+}
+
+void CSMTDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	switch(nIDEvent)
+	{
+	case 0:
+		{
+			UpdateDMC3000Data();
+		}
+	default:
+		break;
+	}
+}
+
+void CSMTDlg::UpdateDMC3000Data()
+{
+	UpdateDMC3000PulseAndDistance(0, IDC_STAGE_X_PULSE_EDIT, IDC_STAGE_X_POS_EDIT);
+	UpdateDMC3000PulseAndDistance(1, IDC_STAGE_Y_PULSE_EDIT, IDC_STAGE_Y_POS_EDIT);
+	UpdateDMC3000PulseAndDistance(2, IDC_CCD_X_PULSE_EDIT, IDC_CCD_X_POS_EDIT);
+	UpdateDMC3000PulseAndDistance(3, IDC_CCD_Z_PULSE_EDIT, IDC_CCD_Z_POS_EDIT);
+}
+
+void CSMTDlg::UpdateDMC3000Status()
+{
+
+}
+
+void CSMTDlg::UpdateDMC3000PulseAndDistance(int nAxisIndex, int nPulseID, int nDisID)
+{
+	long currentPos = dmc_get_position(g_nCardNo, nAxisIndex); //获取当前轴位置
+	m_strPulseCount.Format(_T("%ld"), currentPos);
+	m_strDistance.Format(_T("%ld"), TransPulseToDistance(nAxisIndex, currentPos));
+	GetDlgItem(nPulseID)->SetWindowText(m_strPulseCount);
+	GetDlgItem(nDisID)->SetWindowText(m_strDistance);
 }

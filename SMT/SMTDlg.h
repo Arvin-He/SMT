@@ -32,6 +32,14 @@ public:
 	~CSMTDlg();
 	BOOL InitDMC3000Card(); // 初始化运动控制卡
 	BOOL ResetDMC3000Card();
+	void InitDMC3000Status();
+	void SetDMC3000Status(BOOL status, int nID);
+	void UpdateDMC3000Data();
+	void UpdateDMC3000Status();
+	void UpdateDMC3000PulseAndDistance(int nAxisIndex, int nPulseID, int nDisID);
+private:
+	CString m_strPulseCount;
+	CString m_strDistance;
 	//Mat m_src;  
 
 ///////大恒CCD相关参数和函数///////////////////////////////
@@ -145,4 +153,5 @@ public:
 	afx_msg void OnClickedStageYGohomeBtn();
 	afx_msg void OnClickedCcdXGohomeBtn();
 	afx_msg void OnClickedCcdZGohomeBtn();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

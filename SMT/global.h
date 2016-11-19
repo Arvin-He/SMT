@@ -7,9 +7,24 @@
 #include <opencv2/core/core.hpp>
 
 using namespace cv;
+//Í¼Ïñ
+extern Mat g_src;    
+//¿¨ºÅ
+extern WORD g_nCardNo;  
+//ÖáÊý
+extern const int  g_nAxisCount;  
+// 
+extern struct
+{
+	int nStartSpeed;
+	int nRunSpeed;
+	int nEndSpeed;
+	int nAccelerateTime;
+	int nDecelerateTime;
+	int nSDecelerateTime;
+};
 
-extern Mat g_src;      //Í¼Ïñ
-extern WORD g_nCardNo;   //¿¨ºÅ
-extern const int  g_nAxisCount;  //ÖáÊý
+extern double TransPulseToDistance(int nAxisIndex, int nPulse);
+extern int TransDistanceToPulse(int nAxisIndex, int nDistance);
 
 

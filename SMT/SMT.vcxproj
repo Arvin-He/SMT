@@ -106,7 +106,9 @@
     <None Include="res\icon\Camera.ico" />
     <None Include="res\icon\close.ico" />
     <None Include="res\icon\delete.ico" />
+    <None Include="res\icon\green.bmp" />
     <None Include="res\icon\open.ico" />
+    <None Include="res\icon\red.bmp" />
     <None Include="res\icon\stop.ico" />
     <None Include="res\icon\video.ico" />
     <None Include="res\SMT.ico" />

@@ -6,6 +6,7 @@
 #include "ManualDlg.h"
 #include "afxdialogex.h"
 #include "dmc3000/inc/LTDMC.h"
+#include "global.h"
 
 // CManualDlg dialog
 
@@ -62,16 +63,16 @@ BOOL CManualDlg::OnStageMove(UINT nID)
 	switch(nID)
 	{
 	case IDC_STAGE_XUP_BTN:
-		DMC3000_Move(0, 0, m_stageStep, 1, 0);
+		DMC3000_Move(0, 0, TransDistanceToPulse(0, m_stageStep), 1, 0);
 		break;
 	case  IDC_STAGE_XDOWN_BTN:
-		DMC3000_Move(0, 0, m_stageStep, -1, 0);
+		DMC3000_Move(0, 0, TransDistanceToPulse(1, m_stageStep), -1, 0);
 		break;
 	case IDC_STAGE_YUP_BTN:
-		DMC3000_Move(0, 1, m_stageStep, 1, 0);
+		DMC3000_Move(0, 1, TransDistanceToPulse(2, m_stageStep), 1, 0);
 		break;
 	case  IDC_STAGE_YDOWN_BTN:
-		DMC3000_Move(0, 1, m_stageStep, -1, 0);
+		DMC3000_Move(0, 1, TransDistanceToPulse(3, m_stageStep), -1, 0);
 		break;
 	default:
 		break;
@@ -83,19 +84,20 @@ BOOL CManualDlg::OnStageMove(UINT nID)
 BOOL CManualDlg::OnCCDMove(UINT nID)
 {
 	UpdateData(TRUE);
+
 	switch(nID)
 	{
 	case IDC_CCD_XUP_BTN:
-		DMC3000_Move(0, 2, m_ccdStep, 1, 0);
+		DMC3000_Move(0, 2, TransDistanceToPulse(0, m_ccdStep), 1, 0);
 		break;
 	case  IDC_CCD_XDOWN_BTN:
-		DMC3000_Move(0, 2, m_ccdStep, -1, 0);
+		DMC3000_Move(0, 2, TransDistanceToPulse(0, m_ccdStep), -1, 0);
 		break;
 	case IDC_CCD_ZUP_BTN:
-		DMC3000_Move(0, 3, m_ccdStep, -1, 0);
+		DMC3000_Move(0, 3, TransDistanceToPulse(0, m_ccdStep), -1, 0);
 		break;
 	case  IDC_CCD_ZDOWN_BTN:
-		DMC3000_Move(0, 3, m_ccdStep, 1, 0);
+		DMC3000_Move(0, 3, TransDistanceToPulse(0, m_ccdStep), 1, 0);
 		break;
 	default:
 		break;
