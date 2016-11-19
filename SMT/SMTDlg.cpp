@@ -34,8 +34,8 @@ const int						XStart              = 0;
 const int						YStart              = 0;
 const int						Width               = 640;
 const int						Height              = 480;
-const HV_SNAP_SPEED				SnapSpeed			= HIGH_SPEED;
-
+//const HV_SNAP_SPEED				SnapSpeed			= HIGH_SPEED;
+const HV_SNAP_SPEED				SnapSpeed			= NORMAL_SPEED;
 // CSMTDlg dialog
 CSMTDlg::CSMTDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CSMTDlg::IDD, pParent)
@@ -90,6 +90,14 @@ BEGIN_MESSAGE_MAP(CSMTDlg, CDialogEx)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_RBUTTONDOWN()
+	ON_BN_CLICKED(IDC_SET_STAGE_X_HOME_BTN, &CSMTDlg::OnClickedSetStageXHomeBtn)
+	ON_BN_CLICKED(IDC_SET_STAGE_Y_HOME_BTN, &CSMTDlg::OnClickedSetStageYHomeBtn)
+	ON_BN_CLICKED(IDC_SET_CCD_X_HOME_BTN, &CSMTDlg::OnClickedSetCcdXHomeBtn)
+	ON_BN_CLICKED(IDC_SET_CCD_Z_HOME_BTN, &CSMTDlg::OnClickedSetCcdZHomeBtn)
+	ON_BN_CLICKED(IDC_STAGE_X_GOHOME_BTN, &CSMTDlg::OnClickedStageXGohomeBtn)
+	ON_BN_CLICKED(IDC_STAGE_Y_GOHOME_BTN, &CSMTDlg::OnClickedStageYGohomeBtn)
+	ON_BN_CLICKED(IDC_CCD_X_GOHOME_BTN, &CSMTDlg::OnClickedCcdXGohomeBtn)
+	ON_BN_CLICKED(IDC_CCD_Z_GOHOME_BTN, &CSMTDlg::OnClickedCcdZGohomeBtn)
 END_MESSAGE_MAP()
 
 
@@ -612,7 +620,7 @@ void CSMTDlg::StoreVideo()
 			USES_CONVERSION;
 			string videoPathAndName = T2CA(strAVIFileName);
 			VideoWriter camera1_Writer(videoPathAndName, 
-				CV_FOURCC('M', 'J', 'P', 'G'), 60.0, Size(Width, Height));
+				CV_FOURCC('M', 'J', 'P', 'G'), 30.0, Size(Width, Height));
 			while(m_bIsCapture)
 			{
 				//Mat frame = m_src.clone();	
@@ -915,4 +923,68 @@ void CSMTDlg::OnRButtonDown(UINT nFlags, CPoint point)
 	// TODO: Add your message handler code here and/or call default
 
 	CDialogEx::OnRButtonDown(nFlags, point);
+}
+
+
+void CSMTDlg::OnClickedSetStageXHomeBtn()
+{
+	// TODO: Add your control notification handler code here
+	dmc_set_position(g_nCardNo, 0, 0);
+}
+
+
+void CSMTDlg::OnClickedSetStageYHomeBtn()
+{
+	// TODO: Add your control notification handler code here
+	dmc_set_position(g_nCardNo, 1, 0);
+}
+
+
+void CSMTDlg::OnClickedSetCcdXHomeBtn()
+{
+	// TODO: Add your control notification handler code here
+	dmc_set_position(g_nCardNo, 2, 0);
+}
+
+
+void CSMTDlg::OnClickedSetCcdZHomeBtn()
+{
+	// TODO: Add your control notification handler code here
+	dmc_set_position(g_nCardNo, 3, 0);
+}
+
+
+void CSMTDlg::OnClickedStageXGohomeBtn()
+{
+	// TODO: Add your control notification handler code here
+	UpdateData(true);//刷新参数
+	dmc_set_pulse_outmode(g_nCardNo, 0, 0);  //设置脉冲输出模式
+	//dmc_set_profile(g_nCardNo, 0, m_nSpeedmin,m_nSpeedmax,m_nAcc,m_nDec,500);//设置速度曲线
+	//dmc_set_homemode(g_nCardNo, 0, m_nPositive,m_nLowspeed,m_nHome,1);//设置回零方式
+	dmc_home_move(g_nCardNo, 0);//回零动作
+	while (dmc_check_done(g_nCardNo, 0) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
+	{
+		AfxGetApp()->PumpMessage();
+		GetDlgItem(IDC_STAGE_X_GOHOME_BTN)->EnableWindow(false); 
+	}
+	GetDlgItem(IDC_STAGE_X_GOHOME_BTN)->EnableWindow(true); 
+	UpdateData(false);
+}
+
+
+void CSMTDlg::OnClickedStageYGohomeBtn()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+void CSMTDlg::OnClickedCcdXGohomeBtn()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+void CSMTDlg::OnClickedCcdZGohomeBtn()
+{
+	// TODO: Add your control notification handler code here
 }

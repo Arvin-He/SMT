@@ -137,4 +137,12 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnClickedSetStageXHomeBtn();
+	afx_msg void OnClickedSetStageYHomeBtn();
+	afx_msg void OnClickedSetCcdXHomeBtn();
+	afx_msg void OnClickedSetCcdZHomeBtn();
+	afx_msg void OnClickedStageXGohomeBtn();
+	afx_msg void OnClickedStageYGohomeBtn();
+	afx_msg void OnClickedCcdXGohomeBtn();
+	afx_msg void OnClickedCcdZGohomeBtn();
 };
