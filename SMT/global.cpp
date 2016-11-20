@@ -9,6 +9,46 @@ Mat g_src(Size(640, 480), CV_8UC3);
 WORD g_nCardNo = 0;
 const int g_nAxisCount = 4;
 
+struct StageXAxisParam stageXAxisParam =
+{
+	stageXAxisParam.nStartSpeed = 0,
+	stageXAxisParam.nRunSpeed = 1000,
+	stageXAxisParam.nEndSpeed = 100,
+	stageXAxisParam.nAccelerateTime = 0.02,
+	stageXAxisParam.nDecelerateTime = 0.02,
+	stageXAxisParam.nSDecelerateTime = 0.2
+};
+
+struct StageYAxisParam stageYAxisParam = 
+{
+	stageXAxisParam.nStartSpeed = 0,
+	stageXAxisParam.nRunSpeed = 1000,
+	stageXAxisParam.nEndSpeed = 100,
+	stageXAxisParam.nAccelerateTime = 0.02,
+	stageXAxisParam.nDecelerateTime = 0.02,
+	stageXAxisParam.nSDecelerateTime = 0.2
+};
+
+struct CCDXAxisParam ccdXAxisParam= 
+{
+	stageXAxisParam.nStartSpeed = 0,
+	stageXAxisParam.nRunSpeed = 1000,
+	stageXAxisParam.nEndSpeed = 100,
+	stageXAxisParam.nAccelerateTime = 0.02,
+	stageXAxisParam.nDecelerateTime = 0.02,
+	stageXAxisParam.nSDecelerateTime = 0.2
+};
+
+struct CCDZAxisParam ccdZAxisParam =
+{
+	stageXAxisParam.nStartSpeed = 0,
+	stageXAxisParam.nRunSpeed = 1000,
+	stageXAxisParam.nEndSpeed = 100,
+	stageXAxisParam.nAccelerateTime = 0.02,
+	stageXAxisParam.nDecelerateTime = 0.02,
+	stageXAxisParam.nSDecelerateTime = 0.2
+};
+
 double TransPulseToDistance(int nAxisIndex, int nPulse)
 {
 	switch(nAxisIndex)

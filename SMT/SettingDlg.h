@@ -16,10 +16,6 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-
 	DECLARE_MESSAGE_MAP()
-// 	afx_msg void OnClickedSetStageOriginXBtn();
-// 	afx_msg void OnClickedSetStageOriginYBtn();
-// 	afx_msg void OnClickedSetCcdOriginXBtn();
-// 	afx_msg void OnClickedSetCcdOriginZBtn();
+
 };

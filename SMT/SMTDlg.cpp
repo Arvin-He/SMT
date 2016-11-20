@@ -407,8 +407,7 @@ LRESULT CSMTDlg::OnSnapChange(WPARAM wParam, LPARAM lParam)
 	ConvertBayer2Rgb(m_pImageBuffer, m_pRawBuffer, Width, Height, ConvertType, m_pLutR, m_pLutG, m_pLutB, false, m_Layout);	
 	g_src.data = (uchar*)m_pImageBuffer;
 	//m_src.data = (uchar*)m_pImageBuffer;
-	flip(g_src, g_src, -1);
-
+	//flip(g_src, g_src, -1);
 	if (m_imageAssistDlg.m_bDrawCross)
 		DrawCross(g_src);
 	if (m_imageAssistDlg.m_bDrawScale)
@@ -960,8 +959,8 @@ void CSMTDlg::OnClickedStageXGohomeBtn()
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
 	dmc_set_pulse_outmode(g_nCardNo, 0, 0);  //设置脉冲输出模式
-	//dmc_set_profile(g_nCardNo, 0, m_nSpeedmin,m_nSpeedmax,m_nAcc,m_nDec,500);//设置速度曲线
-	//dmc_set_homemode(g_nCardNo, 0, m_nPositive,m_nLowspeed,m_nHome,1);//设置回零方式
+	dmc_set_profile(g_nCardNo, 0, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	dmc_set_homemode(g_nCardNo, 0, 0, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 0);//回零动作
 	while (dmc_check_done(g_nCardNo, 0) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
 	{

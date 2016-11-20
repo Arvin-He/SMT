@@ -14,15 +14,45 @@ extern WORD g_nCardNo;
 //ÖáÊý
 extern const int  g_nAxisCount;  
 // 
-extern struct
+extern struct StageXAxisParam
 {
 	int nStartSpeed;
 	int nRunSpeed;
 	int nEndSpeed;
-	int nAccelerateTime;
-	int nDecelerateTime;
-	int nSDecelerateTime;
-};
+	double nAccelerateTime;
+	double nDecelerateTime;
+	double nSDecelerateTime;
+} stageXAxisParam;
+
+extern struct StageYAxisParam
+{
+	int nStartSpeed;
+	int nRunSpeed;
+	int nEndSpeed;
+	double nAccelerateTime;
+	double nDecelerateTime;
+	double nSDecelerateTime;
+} stageYAxisParam;
+
+extern struct CCDXAxisParam
+{
+	int nStartSpeed;
+	int nRunSpeed;
+	int nEndSpeed;
+	double nAccelerateTime;
+	double nDecelerateTime;
+	double nSDecelerateTime;
+} ccdXAxisParam;
+
+extern struct CCDZAxisParam
+{
+	int nStartSpeed;
+	int nRunSpeed;
+	int nEndSpeed;
+	double nAccelerateTime;
+	double nDecelerateTime;
+	double nSDecelerateTime;
+} ccdZAxisParam;
 
 extern double TransPulseToDistance(int nAxisIndex, int nPulse);
 extern int TransDistanceToPulse(int nAxisIndex, int nDistance);
