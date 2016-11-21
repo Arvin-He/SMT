@@ -140,13 +140,13 @@ void CImageAssistDlg::OnClickedMeasureDisBtn()
 	{
 		m_bMeasureDis = FALSE;
 		CSMTDlg* pSMTDlg = (CSMTDlg*)m_pSMTDlg;
-		pSMTDlg->m_drawCirclePoints.clear();
-		//GetDlgItem(IDC_MEASURE_DIS_BTN)->SetWindowText("隐藏圆形");
+		pSMTDlg->m_measureDisPoints.clear();
+		GetDlgItem(IDC_MEASURE_DIS_BTN)->SetWindowText("关闭测量两点");
 	}
 	else
 	{
 		m_bMeasureDis =TRUE;
-		//GetDlgItem(IDC_DRAW_CIRCLE_BTN)->SetWindowText("显示圆形");
+		GetDlgItem(IDC_DRAW_CIRCLE_BTN)->SetWindowText("开始测量两点");
 	}
 
 }

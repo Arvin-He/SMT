@@ -99,6 +99,10 @@ BEGIN_MESSAGE_MAP(CSMTDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CCD_X_GOHOME_BTN, &CSMTDlg::OnClickedCcdXGohomeBtn)
 	ON_BN_CLICKED(IDC_CCD_Z_GOHOME_BTN, &CSMTDlg::OnClickedCcdZGohomeBtn)
 	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_STAGE_X_STOP_BTN, &CSMTDlg::OnClickedStageXStopBtn)
+	ON_BN_CLICKED(IDC_STAGE_Y_STOP_BTN, &CSMTDlg::OnClickedStageYStopBtn)
+	ON_BN_CLICKED(IDC_CCD_X_STOP_BTN, &CSMTDlg::OnClickedCcdXStopBtn)
+	ON_BN_CLICKED(IDC_CCD_Z_STOP_BTN, &CSMTDlg::OnClickedCcdZStopBtn)
 END_MESSAGE_MAP()
 
 
@@ -783,17 +787,17 @@ BOOL CSMTDlg::InitDMC3000Card()
 		// 设定脉冲模式及逻辑方向	
 		dmc_set_pulse_outmode(g_nCardNo, i, 4);
 		// 设置硬限位
-		dmc_set_el_mode(g_nCardNo, i, 0, 1, 0);
+		dmc_set_el_mode(g_nCardNo, i, 1, 1, 0);
 		// 设置软限位
 		//dmc_set_softlimit(g_nCardNo, i, 1, 1, 0, 0, )
 		// 编码器设置
 		dmc_set_counter_inmode(g_nCardNo, i, 0);
 		//设置EZ
 		dmc_set_ez_mode(g_nCardNo, i, 0);
-		// 设置回原点
+		// 设置回原点信号
 		// dmc_set_home_pin_logic(g_nCardNo, i, 1);
-		// 设置回零方式
-		dmc_set_homemode(g_nCardNo, i, 0, 0, 0);
+		// 设置回原点模式,和方向有关
+		//dmc_set_homemode(g_nCardNo, i, 0, 0, 0);
 	}
 	return TRUE;
 }
@@ -975,18 +979,54 @@ void CSMTDlg::OnClickedStageXGohomeBtn()
 void CSMTDlg::OnClickedStageYGohomeBtn()
 {
 	// TODO: Add your control notification handler code here
+	UpdateData(true);//刷新参数
+	dmc_set_pulse_outmode(g_nCardNo, 1, 0);  //设置脉冲输出模式
+	dmc_set_profile(g_nCardNo, 1, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	dmc_set_homemode(g_nCardNo, 1, 0, 1, 0, 1);//设置回零方式
+	dmc_home_move(g_nCardNo, 1);//回零动作
+	while (dmc_check_done(g_nCardNo, 1) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
+	{
+		AfxGetApp()->PumpMessage();
+		GetDlgItem(IDC_STAGE_Y_GOHOME_BTN)->EnableWindow(false); 
+	}
+	GetDlgItem(IDC_STAGE_Y_GOHOME_BTN)->EnableWindow(true); 
+	UpdateData(false);
 }
 
 
 void CSMTDlg::OnClickedCcdXGohomeBtn()
 {
 	// TODO: Add your control notification handler code here
+	UpdateData(true);//刷新参数
+	dmc_set_pulse_outmode(g_nCardNo, 2, 0);  //设置脉冲输出模式
+	dmc_set_profile(g_nCardNo, 2, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	dmc_set_homemode(g_nCardNo, 2, 0, 1, 0, 1);//设置回零方式
+	dmc_home_move(g_nCardNo, 2);//回零动作
+	while (dmc_check_done(g_nCardNo, 2) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
+	{
+		AfxGetApp()->PumpMessage();
+		GetDlgItem(IDC_CCD_X_GOHOME_BTN)->EnableWindow(false); 
+	}
+	GetDlgItem(IDC_CCD_X_GOHOME_BTN)->EnableWindow(true); 
+	UpdateData(false);
 }
 
 
 void CSMTDlg::OnClickedCcdZGohomeBtn()
 {
 	// TODO: Add your control notification handler code here
+	UpdateData(true);//刷新参数
+	dmc_set_pulse_outmode(g_nCardNo, 3, 0);  //设置脉冲输出模式
+	dmc_set_profile(g_nCardNo, 3, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	dmc_set_homemode(g_nCardNo, 3, 0, 1, 0, 1);//设置回零方式
+	dmc_home_move(g_nCardNo, 3);//回零动作
+	while (dmc_check_done(g_nCardNo, 3) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
+	{
+		AfxGetApp()->PumpMessage();
+		GetDlgItem(IDC_CCD_Z_GOHOME_BTN)->EnableWindow(false); 
+	}
+	GetDlgItem(IDC_CCD_Z_GOHOME_BTN)->EnableWindow(true); 
+	UpdateData(false);
 }
 
 void CSMTDlg::InitDMC3000Status()
@@ -1005,6 +1045,7 @@ void CSMTDlg::InitDMC3000Status()
 	SetDMC3000Status(FALSE, IDC_CCD_Z_ORG);
 }
 
+// 设置DMC3000运动状态中一些io的图标
 void CSMTDlg::SetDMC3000Status(BOOL status, int nID)
 {
 	CStatic *pStatus =(CStatic*)GetDlgItem(nID);
@@ -1032,24 +1073,64 @@ void CSMTDlg::OnTimer(UINT_PTR nIDEvent)
 	}
 }
 
+// 更新DMC3000运动状态
 void CSMTDlg::UpdateDMC3000Data()
 {
 	UpdateDMC3000PulseAndDistance(0, IDC_STAGE_X_PULSE_EDIT, IDC_STAGE_X_POS_EDIT);
 	UpdateDMC3000PulseAndDistance(1, IDC_STAGE_Y_PULSE_EDIT, IDC_STAGE_Y_POS_EDIT);
 	UpdateDMC3000PulseAndDistance(2, IDC_CCD_X_PULSE_EDIT, IDC_CCD_X_POS_EDIT);
 	UpdateDMC3000PulseAndDistance(3, IDC_CCD_Z_PULSE_EDIT, IDC_CCD_Z_POS_EDIT);
+	UpdateDMC3000Status(0, IDC_STAGE_X_EL_UP, IDC_STAGE_X_EL_DOWN, IDC_STAGE_X_ORG);
+	UpdateDMC3000Status(1, IDC_STAGE_Y_EL_UP, IDC_STAGE_Y_EL_DOWN, IDC_STAGE_Y_ORG);
+	UpdateDMC3000Status(2, IDC_CCD_X_EL_UP, IDC_CCD_X_EL_DOWN, IDC_CCD_X_ORG);
+	UpdateDMC3000Status(3, IDC_CCD_Z_EL_UP, IDC_CCD_Z_EL_DOWN, IDC_CCD_Z_ORG);
 }
 
-void CSMTDlg::UpdateDMC3000Status()
+// 更新状态位
+void CSMTDlg::UpdateDMC3000Status(int nAxisIndex, int elupID, int eldownID, int orgID)
 {
-
+	int elup = dmc_axis_io_status(g_nCardNo, nAxisIndex) & 0x01;
+	int eldown = dmc_axis_io_status(g_nCardNo, nAxisIndex) & 0x02;
+	int org = dmc_axis_io_status(g_nCardNo, nAxisIndex) &0x10;
+	SetDMC3000Status(elup, elupID);
+	SetDMC3000Status(eldown, eldownID);
+	SetDMC3000Status(org, orgID);
 }
 
+// 更新脉冲数和距离
 void CSMTDlg::UpdateDMC3000PulseAndDistance(int nAxisIndex, int nPulseID, int nDisID)
 {
-	long currentPos = dmc_get_position(g_nCardNo, nAxisIndex); //获取当前轴位置
-	m_strPulseCount.Format(_T("%ld"), currentPos);
-	m_strDistance.Format(_T("%ld"), TransPulseToDistance(nAxisIndex, currentPos));
+	long currentPulse = dmc_get_position(g_nCardNo, nAxisIndex); //获取当前轴位置
+	double currentPos = TransPulseToDistance(nAxisIndex, currentPulse);
+	m_strPulseCount.Format(_T("%ld"), currentPulse);
+	m_strDistance.Format(_T("%ld"), currentPos);
 	GetDlgItem(nPulseID)->SetWindowText(m_strPulseCount);
 	GetDlgItem(nDisID)->SetWindowText(m_strDistance);
+}
+
+void CSMTDlg::OnClickedStageXStopBtn()
+{
+	// TODO: Add your control notification handler code here
+	dmc_stop(g_nCardNo, 0, 0); //减速停止
+}
+
+
+void CSMTDlg::OnClickedStageYStopBtn()
+{
+	// TODO: Add your control notification handler code here
+	dmc_stop(g_nCardNo, 1, 0); //减速停止
+}
+
+
+void CSMTDlg::OnClickedCcdXStopBtn()
+{
+	// TODO: Add your control notification handler code here
+	dmc_stop(g_nCardNo, 2, 0); //减速停止
+}
+
+
+void CSMTDlg::OnClickedCcdZStopBtn()
+{
+	// TODO: Add your control notification handler code here
+	dmc_stop(g_nCardNo, 3, 0); //减速停止
 }
