@@ -123,6 +123,7 @@
     <ClInclude Include="ManualDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SemiAutoDlg.h" />
+    <ClInclude Include="SetParamDlg.h" />
     <ClInclude Include="SettingDlg.h" />
     <ClInclude Include="SMT.h" />
     <ClInclude Include="SMTDlg.h" />
@@ -136,6 +137,7 @@
     <ClCompile Include="ImageAssistDlg.cpp" />
     <ClCompile Include="ManualDlg.cpp" />
     <ClCompile Include="SemiAutoDlg.cpp" />
+    <ClCompile Include="SetParamDlg.cpp" />
     <ClCompile Include="SettingDlg.cpp" />
     <ClCompile Include="SMT.cpp" />
     <ClCompile Include="SMTDlg.cpp" />

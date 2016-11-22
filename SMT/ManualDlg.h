@@ -28,4 +28,6 @@ public:
 	virtual BOOL OnInitDialog();
 	int m_stageStep;
 	int m_ccdStep;
+	afx_msg void OnClickedInhaleOnBtn();
+	afx_msg void OnClickedInhaleOffBtn();
 };

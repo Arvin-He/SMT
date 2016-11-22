@@ -194,11 +194,13 @@ BOOL CSMTDlg::OnInitDialog()
 
 	m_bottomTab.InsertItem(0, _T("图像辅助"));
 	m_bottomTab.InsertItem(1, _T("设置"));
-
+	m_bottomTab.InsertItem(3, _T("运动参数设置"));
 	m_imageAssistDlg.Create(IDD_IMAGE_ASSIST_DIALOG, GetDlgItem(IDC_TAB2));
 	m_settingDlg.Create(IDD_SETTING_DIALOG, GetDlgItem(IDC_TAB2));
+	m_setParamDlg.Create(IDD_SETTING_SOFTWARE_DIALOG, GetDlgItem(IDC_TAB2));
 	m_imageAssistDlg.EnableWindow(TRUE);
 	m_settingDlg.EnableWindow(TRUE);
+	m_setParamDlg.EnableWindow(TRUE);
 	CRect bottomTabRect(0, 0, 0, 0);
 	m_bottomTab.GetClientRect(&bottomTabRect);
 	bottomTabRect.top += 20;
@@ -207,16 +209,17 @@ BOOL CSMTDlg::OnInitDialog()
 	bottomTabRect.right -= 10;
 	m_imageAssistDlg.MoveWindow(&bottomTabRect);
 	m_settingDlg.MoveWindow(&bottomTabRect);
+	m_setParamDlg.MoveWindow(&bottomTabRect);
 	m_imageAssistDlg.ShowWindow(SW_SHOW);
 	m_settingDlg.ShowWindow(SW_HIDE);
+	m_setParamDlg.ShowWindow(SW_HIDE);
 	m_bottomTab.SetCurSel(0);
 	m_imageAssistDlg.m_pSMTDlg = this;
 	// 初始化相机
 	InitialDHCamera();
-	// 初始化DMC3000运动控制卡
-	InitDMC3000Card();
+	InitDMC3000Card(); // 初始化DMC3000运动控制卡
 	InitDMC3000Status();
-	SetTimer(0, 1000, NULL);
+	SetTimer(0, 500, NULL);
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -757,12 +760,21 @@ void CSMTDlg::OnTcnSelchangeTab2(NMHDR *pNMHDR, LRESULT *pResult)
 		{
 			m_imageAssistDlg.ShowWindow(TRUE);
 			m_settingDlg.ShowWindow(FALSE);
+			m_setParamDlg.ShowWindow(FALSE);
 		}
 		break;
 	case 1:
 		{
 			m_imageAssistDlg.ShowWindow(FALSE);
 			m_settingDlg.ShowWindow(TRUE);
+			m_setParamDlg.ShowWindow(FALSE);
+		}
+		break;
+	case 2:
+		{
+			m_imageAssistDlg.ShowWindow(FALSE);
+			m_settingDlg.ShowWindow(FALSE);
+			m_setParamDlg.ShowWindow(TRUE);
 		}
 		break;
 	default:

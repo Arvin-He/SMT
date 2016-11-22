@@ -43,6 +43,8 @@ BEGIN_MESSAGE_MAP(CManualDlg, CDialogEx)
 	ON_COMMAND_EX(IDC_CCD_XDOWN_BTN, OnCCDMove)
 	ON_COMMAND_EX(IDC_CCD_ZDOWN_BTN, OnCCDMove)
 	ON_COMMAND_EX(IDC_CCD_ZUP_BTN, OnCCDMove)
+	ON_BN_CLICKED(IDC_INHALE_ON_BTN, &CManualDlg::OnClickedInhaleOnBtn)
+	ON_BN_CLICKED(IDC_INHALE_OFF_BTN, &CManualDlg::OnClickedInhaleOffBtn)
 END_MESSAGE_MAP()
 
 
@@ -125,13 +127,28 @@ void CManualDlg::DMC3000_GoHome(int nCardNo, int nAxisIndex, int nHomeDirection,
 	dmc_set_profile(nCardNo, nAxisIndex, 100, 1000, 0.02, 0.02, 100);//设置速度曲线
 	dmc_set_homemode(nCardNo, nAxisIndex, nHomeDirection, nHomeVelMode, nHomeMode, 1);//设置回零方式
 	dmc_home_move(nCardNo, nAxisIndex); //回零动作
-// 	while (dmc_check_done(nCardNo, nAxisIndex)==0)      //判断当前轴状态
-// 	{
-// // 		AfxGetApp()->PumpMessage();
-// // 		GetDlgItem(IDC_BUTTON1)->EnableWindow(false); 
-// 	}
+	while (dmc_check_done(nCardNo, nAxisIndex)==0)      //判断当前轴状态
+	{
+// 		AfxGetApp()->PumpMessage();
+// 		GetDlgItem(IDC_BUTTON1)->EnableWindow(false); 
+		return;
+	}
 	//GetDlgItem(IDC_BUTTON1)->EnableWindow(true); 
 	//UpdateData(false);
 }
 
 
+
+
+void CManualDlg::OnClickedInhaleOnBtn()
+{
+	// TODO: Add your control notification handler code here
+	dmc_write_outbit(g_nCardNo, 0, 1);
+}
+
+
+void CManualDlg::OnClickedInhaleOffBtn()
+{
+	// TODO: Add your control notification handler code here
+	dmc_write_outbit(g_nCardNo, 0, 0);
+}

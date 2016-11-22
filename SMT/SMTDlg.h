@@ -13,6 +13,7 @@
 #include "SemiAutoDlg.h"
 #include "ImageAssistDlg.h"
 #include "SettingDlg.h"
+#include "SetParamDlg.h"
 #include <vector>
 using namespace std;
 using namespace cv;
@@ -102,6 +103,7 @@ protected:
 	CSemiAutoDlg	m_semiAutoDlg;
 	CImageAssistDlg m_imageAssistDlg;
 	CSettingDlg		m_settingDlg;
+	CSetParamDlg    m_setParamDlg;
 		
 private:
 	BOOL m_bIsCapture;		//视频保存标识
