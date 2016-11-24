@@ -1064,11 +1064,11 @@ void CSMTDlg::SetDMC3000Status(BOOL status, int nID)
 	pStatus->ModifyStyle(0, SS_BITMAP | SS_CENTERIMAGE);
 	if (status)
 	{
-		pStatus->SetBitmap(LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_GREEN)));
+		pStatus->SetBitmap(LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_RED)));
 	}
 	else
 	{
-		pStatus->SetBitmap(LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_RED)));
+		pStatus->SetBitmap(LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_GREEN)));
 	}
 }
 
@@ -1103,7 +1103,7 @@ void CSMTDlg::UpdateDMC3000Status(int nAxisIndex, int elupID, int eldownID, int 
 {
 	int elup = dmc_axis_io_status(g_nCardNo, nAxisIndex) & 0x01;
 	int eldown = dmc_axis_io_status(g_nCardNo, nAxisIndex) & 0x02;
-	int org = dmc_axis_io_status(g_nCardNo, nAxisIndex) &0x10;
+	int org = dmc_axis_io_status(g_nCardNo, nAxisIndex) & 0x10;
 	SetDMC3000Status(elup, elupID);
 	SetDMC3000Status(eldown, eldownID);
 	SetDMC3000Status(org, orgID);
