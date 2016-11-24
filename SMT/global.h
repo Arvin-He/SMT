@@ -13,8 +13,21 @@ extern Mat g_src;
 extern WORD g_nCardNo;  
 //轴数
 extern const int  g_nAxisCount;  
+// 软限位设置参数
+struct SoftLimitParam
+{
+	int nStageELUpX;
+	int nStageELDownX;
+	int nStageELUpY;
+	int nStageELDownY;
+	int nCCDELUpX;
+	int nCCDELDownX;
+	int nCCDELUpZ;
+	int nCCDELDownZ;
+};
+
 // 
-extern struct StageXAxisParam
+struct StageXAxisParam
 {
 	int nStartSpeed;
 	int nRunSpeed;
@@ -22,9 +35,9 @@ extern struct StageXAxisParam
 	double nAccelerateTime;
 	double nDecelerateTime;
 	double nSDecelerateTime;
-} stageXAxisParam;
+};
 
-extern struct StageYAxisParam
+struct StageYAxisParam
 {
 	int nStartSpeed;
 	int nRunSpeed;
@@ -32,9 +45,9 @@ extern struct StageYAxisParam
 	double nAccelerateTime;
 	double nDecelerateTime;
 	double nSDecelerateTime;
-} stageYAxisParam;
+};
 
-extern struct CCDXAxisParam
+struct CCDXAxisParam
 {
 	int nStartSpeed;
 	int nRunSpeed;
@@ -42,9 +55,9 @@ extern struct CCDXAxisParam
 	double nAccelerateTime;
 	double nDecelerateTime;
 	double nSDecelerateTime;
-} ccdXAxisParam;
+};
 
-extern struct CCDZAxisParam
+struct CCDZAxisParam
 {
 	int nStartSpeed;
 	int nRunSpeed;
@@ -52,7 +65,7 @@ extern struct CCDZAxisParam
 	double nAccelerateTime;
 	double nDecelerateTime;
 	double nSDecelerateTime;
-} ccdZAxisParam;
+};
 
 extern double TransPulseToDistance(int nAxisIndex, int nPulse);
 extern int TransDistanceToPulse(int nAxisIndex, int nDistance);

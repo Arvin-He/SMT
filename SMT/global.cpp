@@ -9,15 +9,11 @@ Mat g_src(Size(640, 480), CV_8UC3);
 WORD g_nCardNo = 0;
 const int g_nAxisCount = 4;
 
-struct StageXAxisParam stageXAxisParam =
-{
-	stageXAxisParam.nStartSpeed = 0,
-	stageXAxisParam.nRunSpeed = 1000,
-	stageXAxisParam.nEndSpeed = 100,
-	stageXAxisParam.nAccelerateTime = 0.02,
-	stageXAxisParam.nDecelerateTime = 0.02,
-	stageXAxisParam.nSDecelerateTime = 0.2
-};
+struct SoftLimitParam softLimitParam ={0, 0, 0, 0, 0, 0, 0, 0};
+
+
+struct StageXAxisParam stageXAxisParam ={0, 1000, 100, 0.02, 0.02, 0.2};
+
 
 struct StageYAxisParam stageYAxisParam = 
 {

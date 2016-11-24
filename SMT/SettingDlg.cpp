@@ -6,6 +6,7 @@
 #include "SettingDlg.h"
 #include "afxdialogex.h"
 #include "dmc3000/inc/LTDMC.h"
+#include "global.h"
 
 // CSettingDlg dialog
 
@@ -67,5 +68,13 @@ void CSettingDlg::OnClickedApplySoftlimitBtn()
 	SetSoftLimitModifiable(IDC_CCD_EL_DOWN_X_EDIT, TRUE);
 	SetSoftLimitModifiable(IDC_CCD_EL_UP_Z_EDIT, TRUE);
 	SetSoftLimitModifiable(IDC_CCD_EL_DOWN_Z_EDIT, TRUE);
+// 	softLimitParam.nStageELUpX = GetDlgItemInt(IDC_STAGE_EL_UP_X_EDIT);
+// 	softLimitParam.nStageELDownX = GetDlgItemInt(IDC_STAGE_X_EL_DOWN);
+// 	softLimitParam.nStageELUpY = GetDlgItemInt(IDC_STAGE_EL_UP_Y_EDIT);
+// 	softLimitParam.nStageELDownY = GetDlgItemInt(IDC_STAGE_Y_EL_DOWN);
+// 	softLimitParam.nCCDELUpX = GetDlgItemInt(IDC_CCD_EL_UP_X_EDIT);
+// 	softLimitParam.nCCDELDownX = GetDlgItemInt(IDC_CCD_EL_DOWN_Z_EDIT);
+// 	softLimitParam.nCCDELUpZ = GetDlgItemInt(IDC_CCD_EL_UP_Z_EDIT);
+// 	softLimitParam.nCCDELDownZ = GetDlgItemInt(IDC_CCD_EL_DOWN_Z_EDIT);
 	UpdateData(FALSE);
 }
