@@ -16,6 +16,10 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	void SetMotionParamModifiable(int nID, BOOL modifiable);
 
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedModifyMotionParamBtn();
+	afx_msg void OnBnClickedApplyMotionParamBtn();
 };

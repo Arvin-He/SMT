@@ -1112,12 +1112,14 @@ void CSMTDlg::UpdateDMC3000Status(int nAxisIndex, int elupID, int eldownID, int 
 // 更新脉冲数和距离
 void CSMTDlg::UpdateDMC3000PulseAndDistance(int nAxisIndex, int nPulseID, int nDisID)
 {
+	UpdateData(TRUE);
 	long currentPulse = dmc_get_position(g_nCardNo, nAxisIndex); //获取当前轴位置
 	double currentPos = TransPulseToDistance(nAxisIndex, currentPulse);
 	m_strPulseCount.Format(_T("%ld"), currentPulse);
-	m_strDistance.Format(_T("%ld"), currentPos);
+	m_strDistance.Format(_T("%.3f"), currentPos);
 	GetDlgItem(nPulseID)->SetWindowText(m_strPulseCount);
 	GetDlgItem(nDisID)->SetWindowText(m_strDistance);
+	UpdateData(FALSE);
 }
 
 void CSMTDlg::OnClickedStageXStopBtn()
