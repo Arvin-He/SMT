@@ -51,16 +51,20 @@ double TransPulseToDistance(int nAxisIndex, int nPulse)
 	{
 	case 0:
 		return nPulse;
+		break;
 	case 1:
 		return nPulse;
+		break;
 	case 2:
 		return (2*nPulse);
+		break;
 	case 3:
 		return (2*nPulse);
+		break;
 	default:
+		return -1;
 		break;
 	}
-	return 0;
 }
 
 int TransDistanceToPulse(int nAxisIndex, int nDistance)
@@ -69,14 +73,18 @@ int TransDistanceToPulse(int nAxisIndex, int nDistance)
 	{
 	case 0:
 		return nDistance;
+		break;
 	case 1:
 		return nDistance;
+		break;
 	case 2:
 		return (nDistance/2);
+		break;
 	case 3:
 		return (nDistance/2);
+		break;
 	default:
+		return -1;
 		break;
 	}
-	return 0;
 }
