@@ -197,8 +197,8 @@ BOOL CSMTDlg::OnInitDialog()
 
 
 	m_bottomTab.InsertItem(0, _T("图像辅助"));
-	m_bottomTab.InsertItem(1, _T("设置"));
-	m_bottomTab.InsertItem(3, _T("运动参数设置"));
+	m_bottomTab.InsertItem(1, _T("软限位设置"));
+	m_bottomTab.InsertItem(2, _T("运动参数设置"));
 	m_imageAssistDlg.Create(IDD_IMAGE_ASSIST_DIALOG, GetDlgItem(IDC_TAB2));
 	m_settingDlg.Create(IDD_SETTING_DIALOG, GetDlgItem(IDC_TAB2));
 	m_setParamDlg.Create(IDD_SETTING_SOFTWARE_DIALOG, GetDlgItem(IDC_TAB2));
@@ -1096,7 +1096,7 @@ void CSMTDlg::OnBnClickedStageXGohomeBackBtn()
 		GetDlgItem(IDC_STAGE_X_GOHOME_BACK_BTN)->EnableWindow(false); 
 	}
 	GetDlgItem(IDC_STAGE_X_GOHOME_BACK_BTN)->EnableWindow(true); 
-	UpdateData(false);
+	UpdateData(false); 
 }
 
 
@@ -1126,7 +1126,7 @@ void CSMTDlg::OnBnClickedCcdXGohomeBackBtn()
 	dmc_set_profile(g_nCardNo, 2, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
 	dmc_set_homemode(g_nCardNo, 2, 0, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 2);//回零动作
-	while (dmc_check_done(g_nCardNo, 0) == 2)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
+	while (dmc_check_done(g_nCardNo, 2) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
 	{
 		//AfxGetApp()->PumpMessage();
 		GetDlgItem(IDC_CCD_X_GOHOME_BACK_BTN)->EnableWindow(false); 
@@ -1195,9 +1195,9 @@ void CSMTDlg::OnBnClickedCcdXGohomeForwardBtn()
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
 	//dmc_set_pulse_outmode(g_nCardNo, 0, 0);  //设置脉冲输出模式
-	dmc_set_profile(g_nCardNo, 0, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
-	dmc_set_homemode(g_nCardNo, 0, 0, 1, 0, 1);//设置回零方式
-	dmc_home_move(g_nCardNo, 0);//回零动作
+	dmc_set_profile(g_nCardNo, 2, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	dmc_set_homemode(g_nCardNo, 2, 1, 1, 0, 1);//设置回零方式
+	dmc_home_move(g_nCardNo, 2);//回零动作
 	while (dmc_check_done(g_nCardNo, 2) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
 	{
 		//AfxGetApp()->PumpMessage();
@@ -1213,9 +1213,9 @@ void CSMTDlg::OnBnClickedCcdZGohomeForwardBtn()
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
 	//dmc_set_pulse_outmode(g_nCardNo, 0, 0);  //设置脉冲输出模式
-	dmc_set_profile(g_nCardNo, 0, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
-	dmc_set_homemode(g_nCardNo, 0, 0, 1, 0, 1);//设置回零方式
-	dmc_home_move(g_nCardNo, 0);//回零动作
+	dmc_set_profile(g_nCardNo, 3, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	dmc_set_homemode(g_nCardNo, 3, 1, 1, 0, 1);//设置回零方式
+	dmc_home_move(g_nCardNo, 3);//回零动作
 	while (dmc_check_done(g_nCardNo, 3) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
 	{
 		//AfxGetApp()->PumpMessage();

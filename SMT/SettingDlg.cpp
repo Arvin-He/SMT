@@ -15,7 +15,7 @@ IMPLEMENT_DYNAMIC(CSettingDlg, CDialogEx)
 CSettingDlg::CSettingDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CSettingDlg::IDD, pParent)
 {
-
+	
 }
 
 CSettingDlg::~CSettingDlg()
@@ -68,13 +68,31 @@ void CSettingDlg::OnClickedApplySoftlimitBtn()
 	SetSoftLimitModifiable(IDC_CCD_EL_DOWN_X_EDIT, TRUE);
 	SetSoftLimitModifiable(IDC_CCD_EL_UP_Z_EDIT, TRUE);
 	SetSoftLimitModifiable(IDC_CCD_EL_DOWN_Z_EDIT, TRUE);
-// 	softLimitParam.nStageELUpX = GetDlgItemInt(IDC_STAGE_EL_UP_X_EDIT);
-// 	softLimitParam.nStageELDownX = GetDlgItemInt(IDC_STAGE_X_EL_DOWN);
-// 	softLimitParam.nStageELUpY = GetDlgItemInt(IDC_STAGE_EL_UP_Y_EDIT);
-// 	softLimitParam.nStageELDownY = GetDlgItemInt(IDC_STAGE_Y_EL_DOWN);
-// 	softLimitParam.nCCDELUpX = GetDlgItemInt(IDC_CCD_EL_UP_X_EDIT);
-// 	softLimitParam.nCCDELDownX = GetDlgItemInt(IDC_CCD_EL_DOWN_Z_EDIT);
-// 	softLimitParam.nCCDELUpZ = GetDlgItemInt(IDC_CCD_EL_UP_Z_EDIT);
-// 	softLimitParam.nCCDELDownZ = GetDlgItemInt(IDC_CCD_EL_DOWN_Z_EDIT);
+	g_softLimitParamStruct.nStageELUpX = GetDlgItemInt(IDC_STAGE_EL_UP_X_EDIT);
+	g_softLimitParamStruct.nStageELDownX = GetDlgItemInt(IDC_STAGE_X_EL_DOWN);
+	g_softLimitParamStruct.nStageELUpY = GetDlgItemInt(IDC_STAGE_EL_UP_Y_EDIT);
+	g_softLimitParamStruct.nStageELDownY = GetDlgItemInt(IDC_STAGE_Y_EL_DOWN);
+	g_softLimitParamStruct.nCCDELUpX = GetDlgItemInt(IDC_CCD_EL_UP_X_EDIT);
+	g_softLimitParamStruct.nCCDELDownX = GetDlgItemInt(IDC_CCD_EL_DOWN_Z_EDIT);
+	g_softLimitParamStruct.nCCDELUpZ = GetDlgItemInt(IDC_CCD_EL_UP_Z_EDIT);
+	g_softLimitParamStruct.nCCDELDownZ = GetDlgItemInt(IDC_CCD_EL_DOWN_Z_EDIT);
 	UpdateData(FALSE);
+}
+
+
+BOOL CSettingDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	// TODO:  Add extra initialization here
+	SetDlgItemInt(IDC_STAGE_EL_UP_X_EDIT, g_softLimitParamStruct.nStageELUpX);
+	SetDlgItemInt(IDC_STAGE_EL_DOWN_X_EDIT, g_softLimitParamStruct.nStageELDownX);
+	SetDlgItemInt(IDC_STAGE_EL_UP_Y_EDIT, g_softLimitParamStruct.nStageELUpY);
+	SetDlgItemInt(IDC_STAGE_EL_DOWN_Y_EDIT, g_softLimitParamStruct.nStageELDownY);
+	SetDlgItemInt(IDC_CCD_EL_UP_X_EDIT, g_softLimitParamStruct.nCCDELUpX);
+	SetDlgItemInt(IDC_CCD_EL_UP_Z_EDIT, g_softLimitParamStruct.nCCDELUpZ);
+	SetDlgItemInt(IDC_CCD_EL_DOWN_X_EDIT, g_softLimitParamStruct.nCCDELDownX);
+	SetDlgItemInt(IDC_CCD_EL_DOWN_Z_EDIT, g_softLimitParamStruct.nCCDELDownZ);
+	return TRUE;  // return TRUE unless you set the focus to a control
+	// EXCEPTION: OCX Property Pages should return FALSE
 }

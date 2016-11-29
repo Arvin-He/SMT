@@ -22,4 +22,5 @@ protected:
 public:
 	afx_msg void OnClickedModifySoftlimitBtn();
 	afx_msg void OnClickedApplySoftlimitBtn();
+	virtual BOOL OnInitDialog();
 };

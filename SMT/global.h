@@ -1,14 +1,9 @@
 //////////////////////////////////////////////////////////////////////////
 //这里是一些全局变量
 //////////////////////////////////////////////////////////////////////////
-
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
-
-using namespace cv;
 //图像
-extern Mat g_src;    
+extern cv::Mat g_src;    
 //卡号
 extern WORD g_nCardNo;  
 //轴数
@@ -25,6 +20,7 @@ struct SoftLimitParam
 	int nCCDELUpZ;
 	int nCCDELDownZ;
 };
+extern SoftLimitParam g_softLimitParamStruct;
 
 // 
 struct StageXAxisParam
@@ -36,6 +32,7 @@ struct StageXAxisParam
 	double nDecelerateTime;
 	double nSDecelerateTime;
 };
+extern StageXAxisParam g_stageXAxisParamStruct;
 
 struct StageYAxisParam
 {
@@ -46,6 +43,7 @@ struct StageYAxisParam
 	double nDecelerateTime;
 	double nSDecelerateTime;
 };
+extern StageYAxisParam g_stageYAxisParamStruct;
 
 struct CCDXAxisParam
 {
@@ -56,6 +54,7 @@ struct CCDXAxisParam
 	double nDecelerateTime;
 	double nSDecelerateTime;
 };
+extern CCDXAxisParam g_CCDXAxisParamStruct;
 
 struct CCDZAxisParam
 {
@@ -66,6 +65,7 @@ struct CCDZAxisParam
 	double nDecelerateTime;
 	double nSDecelerateTime;
 };
+extern CCDZAxisParam g_CCDZAxisParamStruct;
 
 extern double TransPulseToDistance(int nAxisIndex, int nPulse);
 extern int TransDistanceToPulse(int nAxisIndex, int nDistance);
