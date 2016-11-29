@@ -220,8 +220,8 @@ BOOL CSMTDlg::OnInitDialog()
 	m_bottomTab.SetCurSel(0);
 	m_imageAssistDlg.m_pSMTDlg = this;
 	// 初始化相机
-	//InitialDHCamera();
-	//InitDMC3000Card(); // 初始化DMC3000运动控制卡
+	InitialDHCamera();
+	InitDMC3000Card(); // 初始化DMC3000运动控制卡
 	InitDMC3000Status();
 	SetTimer(0, 500, NULL);
 	return TRUE;  // return TRUE  unless you set the focus to a control
