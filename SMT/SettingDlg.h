@@ -11,6 +11,8 @@ public:
 	CSettingDlg(CWnd* pParent = NULL);   // standard constructor
 	virtual ~CSettingDlg();
 	void SetSoftLimitModifiable(int nID, BOOL modifiable);
+	void SetSoftLimit();
+	void GetSoftLimit();
 
 // Dialog Data
 	enum { IDD = IDD_SETTING_DIALOG };

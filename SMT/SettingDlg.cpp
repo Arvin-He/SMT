@@ -76,6 +76,7 @@ void CSettingDlg::OnClickedApplySoftlimitBtn()
 	g_softLimitParamStruct.nCCDELDownX = GetDlgItemInt(IDC_CCD_EL_DOWN_Z_EDIT);
 	g_softLimitParamStruct.nCCDELUpZ = GetDlgItemInt(IDC_CCD_EL_UP_Z_EDIT);
 	g_softLimitParamStruct.nCCDELDownZ = GetDlgItemInt(IDC_CCD_EL_DOWN_Z_EDIT);
+	SetSoftLimit();
 	UpdateData(FALSE);
 }
 
@@ -95,4 +96,23 @@ BOOL CSettingDlg::OnInitDialog()
 	SetDlgItemInt(IDC_CCD_EL_DOWN_Z_EDIT, g_softLimitParamStruct.nCCDELDownZ);
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
+}
+
+
+void CSettingDlg::SetSoftLimit()
+{
+	dmc_set_softlimit(g_nCardNo, 0, 1, 1, 0, g_softLimitParamStruct.nStageELDownX, g_softLimitParamStruct.nStageELUpX);
+	dmc_set_softlimit(g_nCardNo, 1, 1, 1, 0, g_softLimitParamStruct.nStageELDownY, g_softLimitParamStruct.nStageELUpY);
+	dmc_set_softlimit(g_nCardNo, 2, 1, 1, 0, g_softLimitParamStruct.nCCDELDownX, g_softLimitParamStruct.nCCDELUpX);
+	dmc_set_softlimit(g_nCardNo, 3, 1, 1, 0, g_softLimitParamStruct.nCCDELDownZ, g_softLimitParamStruct.nCCDELUpZ);
+}
+
+void CSettingDlg::GetSoftLimit()
+{
+// 	dmc_get_softlimit(g_nCardNo, 0, 1, 1, 0, g_softLimitParamStruct.nStageELDownX, g_softLimitParamStruct.nStageELUpX);
+// 	dmc_get_softlimit(g_nCardNo, 1, 1, 1, 0, g_softLimitParamStruct.nStageELDownY, g_softLimitParamStruct.nStageELUpY);
+// 	dmc_get_softlimit(g_nCardNo, 2, 1, 1, 0, g_softLimitParamStruct.nCCDELDownX, g_softLimitParamStruct.nCCDELUpX);
+// 	dmc_get_softlimit(g_nCardNo, 3, 1, 1, 0, g_softLimitParamStruct.nCCDELDownZ, g_softLimitParamStruct.nCCDELUpZ);
+
+
 }
