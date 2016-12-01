@@ -96,10 +96,10 @@ BOOL CManualDlg::OnCCDMove(UINT nID)
 		DMC3000_Move(0, 2, TransDistanceToPulse(0, m_ccdStep), -1, 0);
 		break;
 	case IDC_CCD_ZUP_BTN:
-		DMC3000_Move(0, 3, TransDistanceToPulse(0, m_ccdStep), -1, 0);
+		DMC3000_Move(0, 3, TransDistanceToPulse(0, m_ccdStep), 1, 0);
 		break;
 	case  IDC_CCD_ZDOWN_BTN:
-		DMC3000_Move(0, 3, TransDistanceToPulse(0, m_ccdStep), 1, 0);
+		DMC3000_Move(0, 3, TransDistanceToPulse(0, m_ccdStep), -1, 0);
 		break;
 	default:
 		break;

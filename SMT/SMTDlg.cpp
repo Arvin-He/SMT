@@ -989,21 +989,6 @@ void CSMTDlg::InitDMC3000Status()
 	SetDMC3000Status(TRUE, IDC_CCD_Z_ORG);
 }
 
-// 设置DMC3000运动状态中一些io的图标
-void CSMTDlg::SetDMC3000Status(BOOL status, int nID)
-{
-	CStatic *pStatus =(CStatic*)GetDlgItem(nID);
-	pStatus->ModifyStyle(0, SS_BITMAP | SS_CENTERIMAGE);
-	if (status)
-	{
-		pStatus->SetBitmap(LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_RED)));
-	}
-	else
-	{
-		pStatus->SetBitmap(LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_GREEN)));
-	}
-}
-
 void CSMTDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	switch(nIDEvent)
@@ -1020,21 +1005,40 @@ void CSMTDlg::OnTimer(UINT_PTR nIDEvent)
 // 更新DMC3000运动状态
 void CSMTDlg::UpdateDMC3000Data()
 {
-	UpdateDMC3000PulseAndDistance(0, IDC_STAGE_X_PULSE_EDIT, IDC_STAGE_X_POS_EDIT);
-	UpdateDMC3000PulseAndDistance(1, IDC_STAGE_Y_PULSE_EDIT, IDC_STAGE_Y_POS_EDIT);
-	UpdateDMC3000PulseAndDistance(2, IDC_CCD_X_PULSE_EDIT, IDC_CCD_X_POS_EDIT);
-	UpdateDMC3000PulseAndDistance(3, IDC_CCD_Z_PULSE_EDIT, IDC_CCD_Z_POS_EDIT);
+	UpdateDMC3000Pulse(0, IDC_STAGE_X_PULSE_EDIT);
+	UpdateDMC3000Pulse(1, IDC_STAGE_Y_PULSE_EDIT);
+	UpdateDMC3000Pulse(2, IDC_CCD_X_PULSE_EDIT);
+	UpdateDMC3000Pulse(3, IDC_CCD_Z_PULSE_EDIT);
+	UpdateDistance(0, IDC_STAGE_X_POS_EDIT);
+	UpdateDistance(1, IDC_STAGE_Y_POS_EDIT);
+	UpdateDistance(2, IDC_CCD_X_POS_EDIT);
+	UpdateDistance(3, IDC_CCD_Z_POS_EDIT);
 	UpdateDMC3000Status(0, IDC_STAGE_X_EL_UP, IDC_STAGE_X_EL_DOWN, IDC_STAGE_X_ORG);
 	UpdateDMC3000Status(1, IDC_STAGE_Y_EL_UP, IDC_STAGE_Y_EL_DOWN, IDC_STAGE_Y_ORG);
 	UpdateDMC3000Status(2, IDC_CCD_X_EL_UP, IDC_CCD_X_EL_DOWN, IDC_CCD_X_ORG);
 	UpdateDMC3000Status(3, IDC_CCD_Z_EL_UP, IDC_CCD_Z_EL_DOWN, IDC_CCD_Z_ORG);
 }
 
+// 设置DMC3000运动状态中一些io的图标
+void CSMTDlg::SetDMC3000Status(BOOL status, int nID)
+{
+	CStatic *pStatus =(CStatic*)GetDlgItem(nID);
+	pStatus->ModifyStyle(0, SS_BITMAP | SS_CENTERIMAGE);
+	if (status)
+	{
+		pStatus->SetBitmap(LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_RED)));
+	}
+	else
+	{
+		pStatus->SetBitmap(LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_GREEN)));
+	}
+}
+
 // 更新状态位
 void CSMTDlg::UpdateDMC3000Status(int nAxisIndex, int elupID, int eldownID, int orgID)
 {
-	int elup = dmc_axis_io_status(g_nCardNo, nAxisIndex) & 0x01;
-	int eldown = dmc_axis_io_status(g_nCardNo, nAxisIndex) & 0x02;
+	int elup = dmc_axis_io_status(g_nCardNo, nAxisIndex) & 0x02; //上限位
+	int eldown = dmc_axis_io_status(g_nCardNo, nAxisIndex) & 0x04; //下限位
 	int org = dmc_axis_io_status(g_nCardNo, nAxisIndex) & 0x10;
 	SetDMC3000Status(elup, elupID);
 	SetDMC3000Status(eldown, eldownID);
@@ -1042,14 +1046,21 @@ void CSMTDlg::UpdateDMC3000Status(int nAxisIndex, int elupID, int eldownID, int 
 }
 
 // 更新脉冲数和距离
-void CSMTDlg::UpdateDMC3000PulseAndDistance(int nAxisIndex, int nPulseID, int nDisID)
+void CSMTDlg::UpdateDMC3000Pulse(int nAxisIndex, int nPulseID)
+{
+	UpdateData(TRUE);
+	long currentPulse = dmc_get_position(g_nCardNo, nAxisIndex); //获取当前轴位置
+	m_strPulseCount.Format(_T("%ld"), currentPulse);
+	GetDlgItem(nPulseID)->SetWindowText(m_strPulseCount);
+	UpdateData(FALSE);
+}
+
+void CSMTDlg::UpdateDistance(int nAxisIndex, int nDisID)
 {
 	UpdateData(TRUE);
 	long currentPulse = dmc_get_position(g_nCardNo, nAxisIndex); //获取当前轴位置
 	double currentPos = TransPulseToDistance(nAxisIndex, currentPulse);
-	m_strPulseCount.Format(_T("%ld"), currentPulse);
 	m_strDistance.Format(_T("%.3f"), currentPos);
-	GetDlgItem(nPulseID)->SetWindowText(m_strPulseCount);
 	GetDlgItem(nDisID)->SetWindowText(m_strDistance);
 	UpdateData(FALSE);
 }
@@ -1060,13 +1071,11 @@ void CSMTDlg::OnClickedStageXStopBtn()
 	dmc_stop(g_nCardNo, 0, 0); //减速停止
 }
 
-
 void CSMTDlg::OnClickedStageYStopBtn()
 {
 	// TODO: Add your control notification handler code here
 	dmc_stop(g_nCardNo, 1, 0); //减速停止
 }
-
 
 void CSMTDlg::OnClickedCcdXStopBtn()
 {
@@ -1074,13 +1083,11 @@ void CSMTDlg::OnClickedCcdXStopBtn()
 	dmc_stop(g_nCardNo, 2, 0); //减速停止
 }
 
-
 void CSMTDlg::OnClickedCcdZStopBtn()
 {
 	// TODO: Add your control notification handler code here
 	dmc_stop(g_nCardNo, 3, 0); //减速停止
 }
-
 
 void CSMTDlg::OnBnClickedStageXGohomeBackBtn()
 {
@@ -1099,7 +1106,6 @@ void CSMTDlg::OnBnClickedStageXGohomeBackBtn()
 	UpdateData(false); 
 }
 
-
 void CSMTDlg::OnBnClickedStageYGohomeBackBtn()
 {
 	// TODO: Add your control notification handler code here
@@ -1116,7 +1122,6 @@ void CSMTDlg::OnBnClickedStageYGohomeBackBtn()
 	GetDlgItem(IDC_STAGE_Y_GOHOME_BACK_BTN)->EnableWindow(true); 
 	UpdateData(false);
 }
-
 
 void CSMTDlg::OnBnClickedCcdXGohomeBackBtn()
 {
@@ -1135,7 +1140,6 @@ void CSMTDlg::OnBnClickedCcdXGohomeBackBtn()
 	UpdateData(false);
 }
 
-
 void CSMTDlg::OnBnClickedCcdZGohomeBackBtn()
 {
 	// TODO: Add your control notification handler code here
@@ -1152,7 +1156,6 @@ void CSMTDlg::OnBnClickedCcdZGohomeBackBtn()
 	GetDlgItem(IDC_CCD_Z_GOHOME_BACK_BTN)->EnableWindow(true); 
 	UpdateData(false);
 }
-
 
 void CSMTDlg::OnBnClickedStageXGohomeForwardBtn()
 {
@@ -1171,7 +1174,6 @@ void CSMTDlg::OnBnClickedStageXGohomeForwardBtn()
 	UpdateData(false);
 }
 
-
 void CSMTDlg::OnBnClickedStageYGohomeForwardBtn()
 {
 	// TODO: Add your control notification handler code here
@@ -1189,7 +1191,6 @@ void CSMTDlg::OnBnClickedStageYGohomeForwardBtn()
 	UpdateData(false);
 }
 
-
 void CSMTDlg::OnBnClickedCcdXGohomeForwardBtn()
 {
 	// TODO: Add your control notification handler code here
@@ -1206,7 +1207,6 @@ void CSMTDlg::OnBnClickedCcdXGohomeForwardBtn()
 	GetDlgItem(IDC_CCD_X_GOHOME_FORWARD_BTN)->EnableWindow(true); 
 	UpdateData(false);
 }
-
 
 void CSMTDlg::OnBnClickedCcdZGohomeForwardBtn()
 {

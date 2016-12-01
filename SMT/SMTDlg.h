@@ -37,7 +37,8 @@ public:
 	void SetDMC3000Status(BOOL status, int nID);
 	void UpdateDMC3000Data();
 	void UpdateDMC3000Status();
-	void UpdateDMC3000PulseAndDistance(int nAxisIndex, int nPulseID, int nDisID);
+	void UpdateDMC3000Pulse(int nAxisIndex, int nPulseID);
+	void UpdateDistance(int nAxisIndex, int nDisID);
 	void UpdateDMC3000Status(int nAxisIndex, int elupID, int eldownID, int orgID);
 private:
 	CString m_strPulseCount;
