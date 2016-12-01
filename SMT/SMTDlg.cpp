@@ -804,16 +804,10 @@ BOOL CSMTDlg::InitDMC3000Card()
 		dmc_set_pulse_outmode(g_nCardNo, i, 4);
 		// 设置硬限位
 		dmc_set_el_mode(g_nCardNo, i, 1, 1, 0);
-		// 设置软限位
-		//dmc_set_softlimit(g_nCardNo, i, 1, 1, 0, 0, )
 		// 编码器设置
 		dmc_set_counter_inmode(g_nCardNo, i, 0);
 		//设置EZ
 		dmc_set_ez_mode(g_nCardNo, i, 0);
-		// 设置回原点信号
-		// dmc_set_home_pin_logic(g_nCardNo, i, 1);
-		// 设置回原点模式,和方向有关
-		//dmc_set_homemode(g_nCardNo, i, 0, 0, 0);
 	}
 	return TRUE;
 }
@@ -1093,13 +1087,13 @@ void CSMTDlg::OnBnClickedStageXGohomeBackBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	//dmc_set_pulse_outmode(g_nCardNo, 0, 0);  //设置脉冲输出模式
+	dmc_set_pulse_outmode(g_nCardNo, 0, 4);  //设置脉冲输出模式
 	dmc_set_profile(g_nCardNo, 0, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
 	dmc_set_homemode(g_nCardNo, 0, 0, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 0);//回零动作
 	while (dmc_check_done(g_nCardNo, 0) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
 	{
-		//AfxGetApp()->PumpMessage();
+		AfxGetApp()->PumpMessage();
 		GetDlgItem(IDC_STAGE_X_GOHOME_BACK_BTN)->EnableWindow(false); 
 	}
 	GetDlgItem(IDC_STAGE_X_GOHOME_BACK_BTN)->EnableWindow(true); 
@@ -1110,13 +1104,13 @@ void CSMTDlg::OnBnClickedStageYGohomeBackBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	//dmc_set_pulse_outmode(g_nCardNo, 0, 0);  //设置脉冲输出模式
-	dmc_set_profile(g_nCardNo, 1, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	dmc_set_pulse_outmode(g_nCardNo, 1, 4);  //设置脉冲输出模式
+	dmc_set_profile(g_nCardNo, 1, 100, 1000, 0.02, 0.02, 200);//设置速度曲线
 	dmc_set_homemode(g_nCardNo, 1, 0, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 1);//回零动作
 	while (dmc_check_done(g_nCardNo, 1) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
 	{
-		//AfxGetApp()->PumpMessage();
+		AfxGetApp()->PumpMessage();
 		GetDlgItem(IDC_STAGE_Y_GOHOME_BACK_BTN)->EnableWindow(false); 
 	}
 	GetDlgItem(IDC_STAGE_Y_GOHOME_BACK_BTN)->EnableWindow(true); 
@@ -1127,13 +1121,13 @@ void CSMTDlg::OnBnClickedCcdXGohomeBackBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	//dmc_set_pulse_outmode(g_nCardNo, 0, 0);  //设置脉冲输出模式
+	dmc_set_pulse_outmode(g_nCardNo, 2, 4);  //设置脉冲输出模式
 	dmc_set_profile(g_nCardNo, 2, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
 	dmc_set_homemode(g_nCardNo, 2, 0, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 2);//回零动作
 	while (dmc_check_done(g_nCardNo, 2) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
 	{
-		//AfxGetApp()->PumpMessage();
+		AfxGetApp()->PumpMessage();
 		GetDlgItem(IDC_CCD_X_GOHOME_BACK_BTN)->EnableWindow(false); 
 	}
 	GetDlgItem(IDC_CCD_X_GOHOME_BACK_BTN)->EnableWindow(true); 
@@ -1144,13 +1138,13 @@ void CSMTDlg::OnBnClickedCcdZGohomeBackBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	//dmc_set_pulse_outmode(g_nCardNo, 0, 0);  //设置脉冲输出模式
+	dmc_set_pulse_outmode(g_nCardNo, 3, 4);  //设置脉冲输出模式
 	dmc_set_profile(g_nCardNo, 3, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
 	dmc_set_homemode(g_nCardNo, 3, 0, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 3);//回零动作
 	while (dmc_check_done(g_nCardNo, 3) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
 	{
-		//AfxGetApp()->PumpMessage();
+		AfxGetApp()->PumpMessage();
 		GetDlgItem(IDC_CCD_Z_GOHOME_BACK_BTN)->EnableWindow(false); 
 	}
 	GetDlgItem(IDC_CCD_Z_GOHOME_BACK_BTN)->EnableWindow(true); 
@@ -1161,13 +1155,13 @@ void CSMTDlg::OnBnClickedStageXGohomeForwardBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	//dmc_set_pulse_outmode(g_nCardNo, 0, 0);  //设置脉冲输出模式
+	dmc_set_pulse_outmode(g_nCardNo, 0, 4);  //设置脉冲输出模式
 	dmc_set_profile(g_nCardNo, 0, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
 	dmc_set_homemode(g_nCardNo, 0, 1, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 0);//回零动作
 	while (dmc_check_done(g_nCardNo, 0) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
 	{
-		//AfxGetApp()->PumpMessage();
+		AfxGetApp()->PumpMessage();
 		GetDlgItem(IDC_STAGE_X_GOHOME_FORWARD_BTN)->EnableWindow(false); 
 	}
 	GetDlgItem(IDC_STAGE_X_GOHOME_FORWARD_BTN)->EnableWindow(true); 
@@ -1178,13 +1172,13 @@ void CSMTDlg::OnBnClickedStageYGohomeForwardBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	//dmc_set_pulse_outmode(g_nCardNo, 0, 0);  //设置脉冲输出模式
+	dmc_set_pulse_outmode(g_nCardNo, 1, 4);  //设置脉冲输出模式
 	dmc_set_profile(g_nCardNo, 1, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
 	dmc_set_homemode(g_nCardNo, 1, 1, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 1);//回零动作
 	while (dmc_check_done(g_nCardNo, 1) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
 	{
-		//AfxGetApp()->PumpMessage();
+		AfxGetApp()->PumpMessage();
 		GetDlgItem(IDC_STAGE_Y_GOHOME_FORWARD_BTN)->EnableWindow(false); 
 	}
 	GetDlgItem(IDC_STAGE_Y_GOHOME_FORWARD_BTN)->EnableWindow(true); 
@@ -1195,13 +1189,13 @@ void CSMTDlg::OnBnClickedCcdXGohomeForwardBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	//dmc_set_pulse_outmode(g_nCardNo, 0, 0);  //设置脉冲输出模式
+	dmc_set_pulse_outmode(g_nCardNo, 2, 4);  //设置脉冲输出模式
 	dmc_set_profile(g_nCardNo, 2, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
 	dmc_set_homemode(g_nCardNo, 2, 1, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 2);//回零动作
 	while (dmc_check_done(g_nCardNo, 2) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
 	{
-		//AfxGetApp()->PumpMessage();
+		AfxGetApp()->PumpMessage();
 		GetDlgItem(IDC_CCD_X_GOHOME_FORWARD_BTN)->EnableWindow(false); 
 	}
 	GetDlgItem(IDC_CCD_X_GOHOME_FORWARD_BTN)->EnableWindow(true); 
@@ -1212,13 +1206,13 @@ void CSMTDlg::OnBnClickedCcdZGohomeForwardBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	//dmc_set_pulse_outmode(g_nCardNo, 0, 0);  //设置脉冲输出模式
+	dmc_set_pulse_outmode(g_nCardNo, 3, 4);  //设置脉冲输出模式
 	dmc_set_profile(g_nCardNo, 3, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
 	dmc_set_homemode(g_nCardNo, 3, 1, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 3);//回零动作
 	while (dmc_check_done(g_nCardNo, 3) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
 	{
-		//AfxGetApp()->PumpMessage();
+		AfxGetApp()->PumpMessage();
 		GetDlgItem(IDC_CCD_Z_GOHOME_FORWARD_BTN)->EnableWindow(false); 
 	}
 	GetDlgItem(IDC_CCD_Z_GOHOME_FORWARD_BTN)->EnableWindow(true); 
