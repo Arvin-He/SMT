@@ -84,6 +84,8 @@ BEGIN_MESSAGE_MAP(CSMTDlg, CDialogEx)
 	ON_COMMAND(IDM_SAVE_PIC, &CSMTDlg::OnCamera_SavePic)
 	ON_COMMAND(IDM_SAVE_VIDEO, &CSMTDlg::OnCamera_SaveVideo)
 	ON_COMMAND(IDM_STOP_VIDEO, &CSMTDlg::OnCamera_StopVideo)
+	ON_COMMAND(IDM_SAVE_PARAM, &CSMTDlg::OnSaveParam)
+	ON_COMMAND(IDM_LOAD_PARAM, &CSMTDlg::OnLoadParam)
 	ON_WM_HSCROLL()
 	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB, &CSMTDlg::OnTcnSelchangeTab)
 	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB2, &CSMTDlg::OnTcnSelchangeTab2)
@@ -144,6 +146,8 @@ BOOL CSMTDlg::OnInitDialog()
 	m_imageList.Add(AfxGetApp()->LoadIcon(IDI_SAVE_PIC));
 	m_imageList.Add(AfxGetApp()->LoadIcon(IDI_SAVE_VIDEO));
 	m_imageList.Add(AfxGetApp()->LoadIcon(IDI_STOP_VIDEO));
+	m_imageList.Add(AfxGetApp()->LoadIcon(IDI_SAVE_PARAM));
+	m_imageList.Add(AfxGetApp()->LoadIcon(IDI_LOAD_PARAM));
 	m_toolBar.GetToolBarCtrl().SetImageList(&m_imageList);
 	m_toolBar.ShowWindow(SW_SHOW);
 	RepositionBars(AFX_IDW_CONTROLBAR_FIRST, AFX_IDW_CONTROLBAR_LAST, 0);
@@ -730,6 +734,54 @@ BOOL CSMTDlg::SetGain(int ctrID)
 	return TRUE;
 }
 
+void CSMTDlg::WriteCCDConfig()
+{
+	CString		fileName(_T(".\\config\\CCD.ini"));
+	CString		appName(_T("section1"));
+	CString		keyName(_T("CCD增益"));
+	CString		data(_T(""));
+	GetDlgItem(IDC_EDIT_GAIN)->GetWindowText(data);
+	WritePrivateProfileString(appName, keyName, data, fileName);
+	appName = _T("section2");
+	keyName = _T("CCD曝光度");
+	GetDlgItem(IDC_EDIT_SHUTTER)->GetWindowText(data);
+	WritePrivateProfileString(appName, keyName, data, fileName);
+}
+
+void CSMTDlg::OnSaveParam()
+{
+	WriteCCDConfig();
+}
+
+void CSMTDlg::ReadCCDConfig()
+{
+	CString		fileName(_T(".\\config\\CCD.ini"));
+	char gain[20];
+	CString gainValue(_T(""));
+	char shutter[20];
+	CString shutterValue(_T(""));
+	int nGainPosition(0);
+	int nShutterPosition(0);
+	GetPrivateProfileString(_T("section1"), _T("CCD增益"), _T("gain"), gain, 20, fileName);
+	gainValue = gain;
+	nGainPosition = atoi(gainValue);
+	m_sliderGain.SetPos(nGainPosition);    //设置滑块控件到指定位置
+	m_spinGain.SetPos(nGainPosition);
+	SetGain(IDC_SLIDER_GAIN);
+
+	GetPrivateProfileString(_T("section2"), _T("CCD曝光度"), _T("shutter"), shutter, 20, fileName);
+	shutterValue = shutter;
+	nShutterPosition = atoi(shutterValue);
+	m_sliderShutter.SetPos(nShutterPosition);    //设置滑块控件到指定位置
+	m_spinShutter.SetPos(nShutterPosition);
+	SetExposureTime(m_hhv, Width, nShutterPosition, ExposureTint_Lower, m_lHBlanking, SnapSpeed, Resolution);	
+}
+
+void CSMTDlg::OnLoadParam()
+{
+	ReadCCDConfig();
+}
+
 void CSMTDlg::OnTcnSelchangeTab(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	// TODO: Add your control notification handler code here
@@ -795,18 +847,17 @@ BOOL CSMTDlg::InitDMC3000Card()
 	if( dmc_board_init() <= 0 )			//控制卡的初始化操作
 		MessageBox(_T("初始化控制卡失败！"), _T("出错"));
 	dmc_get_CardInfList(&My_CardNum, My_CardTypeList, My_CardList);    //获取正在使用的卡号列表
-	//m_nCard = My_CardList[0];
 	g_nCardNo = My_CardList[0];
 
 	for (int i=0; i<g_nAxisCount; i++)
 	{
 		// 设定脉冲模式及逻辑方向	
 		dmc_set_pulse_outmode(g_nCardNo, i, 4);
-		// 设置硬限位
+		// 设置 EL 限位信号
 		dmc_set_el_mode(g_nCardNo, i, 1, 1, 0);
-		// 编码器设置
+		// 设置编码器的计数方式
 		dmc_set_counter_inmode(g_nCardNo, i, 0);
-		//设置EZ
+		//设置指定轴的 EZ 信号
 		dmc_set_ez_mode(g_nCardNo, i, 0);
 	}
 	return TRUE;
@@ -1039,7 +1090,7 @@ void CSMTDlg::UpdateDMC3000Status(int nAxisIndex, int elupID, int eldownID, int 
 	SetDMC3000Status(org, orgID);
 }
 
-// 更新脉冲数和距离
+// 更新脉冲数
 void CSMTDlg::UpdateDMC3000Pulse(int nAxisIndex, int nPulseID)
 {
 	UpdateData(TRUE);
@@ -1048,7 +1099,7 @@ void CSMTDlg::UpdateDMC3000Pulse(int nAxisIndex, int nPulseID)
 	GetDlgItem(nPulseID)->SetWindowText(m_strPulseCount);
 	UpdateData(FALSE);
 }
-
+// 更新距离
 void CSMTDlg::UpdateDistance(int nAxisIndex, int nDisID)
 {
 	UpdateData(TRUE);
@@ -1087,7 +1138,7 @@ void CSMTDlg::OnBnClickedStageXGohomeBackBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	dmc_set_profile(g_nCardNo, 0, 100, 1000, 0.02, 0.02, 100);//设置速度曲线
+	SetMotionParam(0);
 	dmc_set_homemode(g_nCardNo, 0, 0, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 0);//回零动作
 	while (dmc_check_done(g_nCardNo, 0) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
@@ -1103,7 +1154,7 @@ void CSMTDlg::OnBnClickedStageYGohomeBackBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	dmc_set_profile(g_nCardNo, 1, 100, 1000, 0.02, 0.02, 200);//设置速度曲线
+	SetMotionParam(1);
 	dmc_set_homemode(g_nCardNo, 1, 0, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 1);//回零动作
 	while (dmc_check_done(g_nCardNo, 1) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
@@ -1119,7 +1170,7 @@ void CSMTDlg::OnBnClickedCcdXGohomeBackBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	dmc_set_profile(g_nCardNo, 2, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	SetMotionParam(2);
 	dmc_set_homemode(g_nCardNo, 2, 0, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 2);//回零动作
 	while (dmc_check_done(g_nCardNo, 2) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
@@ -1135,7 +1186,7 @@ void CSMTDlg::OnBnClickedCcdZGohomeBackBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	dmc_set_profile(g_nCardNo, 3, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	SetMotionParam(3);
 	dmc_set_homemode(g_nCardNo, 3, 0, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 3);//回零动作
 	while (dmc_check_done(g_nCardNo, 3) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
@@ -1151,7 +1202,7 @@ void CSMTDlg::OnBnClickedStageXGohomeForwardBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	dmc_set_profile(g_nCardNo, 0, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	SetMotionParam(0);
 	dmc_set_homemode(g_nCardNo, 0, 1, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 0);//回零动作
 	while (dmc_check_done(g_nCardNo, 0) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
@@ -1167,7 +1218,7 @@ void CSMTDlg::OnBnClickedStageYGohomeForwardBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	dmc_set_profile(g_nCardNo, 1, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	SetMotionParam(1);
 	dmc_set_homemode(g_nCardNo, 1, 1, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 1);//回零动作
 	while (dmc_check_done(g_nCardNo, 1) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
@@ -1183,7 +1234,7 @@ void CSMTDlg::OnBnClickedCcdXGohomeForwardBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	dmc_set_profile(g_nCardNo, 2, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	SetMotionParam(2);
 	dmc_set_homemode(g_nCardNo, 2, 1, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 2);//回零动作
 	while (dmc_check_done(g_nCardNo, 2) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止
@@ -1199,7 +1250,7 @@ void CSMTDlg::OnBnClickedCcdZGohomeForwardBtn()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(true);//刷新参数
-	dmc_set_profile(g_nCardNo, 3, 100, 1000, 0.02, 0.02, 500);//设置速度曲线
+	SetMotionParam(3);
 	dmc_set_homemode(g_nCardNo, 3, 1, 1, 0, 1);//设置回零方式
 	dmc_home_move(g_nCardNo, 3);//回零动作
 	while (dmc_check_done(g_nCardNo, 3) == 0)      //判断当前轴状态 0：指定轴正在运行，1：指定轴已停止

@@ -1,6 +1,5 @@
 #pragma once
 
-
 // CSettingDlg dialog
 
 class CSettingDlg : public CDialogEx
@@ -10,7 +9,7 @@ class CSettingDlg : public CDialogEx
 public:
 	CSettingDlg(CWnd* pParent = NULL);   // standard constructor
 	virtual ~CSettingDlg();
-	void SetSoftLimitModifiable(int nID, BOOL modifiable);
+	void SetSoftLimitReadOnly(int nID, BOOL modifiable);
 	void SetSoftLimit();
 	void GetSoftLimit();
 

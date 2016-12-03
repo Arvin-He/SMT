@@ -141,10 +141,47 @@ void CSetParamDlg::OnBnClickedModifyMotionParamBtn()
 void CSetParamDlg::OnBnClickedApplyMotionParamBtn()
 {
 	// TODO: Add your control notification handler code here
+	CString tempText="";
+	//char tempText[20];
 	g_stageXAxisParamStruct.nStartSpeed = GetDlgItemInt(IDC_STAGE_START_SPEED_X);
 	g_stageXAxisParamStruct.nRunSpeed = GetDlgItemInt(IDC_STAGE_RUN_SPEED_X);
 	g_stageXAxisParamStruct.nEndSpeed = GetDlgItemInt(IDC_STAGE_END_SPEED_X);
-	//g_stageXAxisParamStruct.nAccelerateTime = atof(GetDlgItemText())
+	GetDlgItem(IDC_STAGE_ACC_TIME_X)->GetWindowText(tempText);
+	g_stageXAxisParamStruct.nAccelerateTime = atof(tempText);
+	GetDlgItem(IDC_STAGE_DEC_TIME_X)->GetWindowText(tempText);
+	g_stageXAxisParamStruct.nDecelerateTime = atof(tempText);
+	GetDlgItem(IDC_STAGE_S_TIME_X)->GetWindowText(tempText);
+	g_stageXAxisParamStruct.nSDecelerateTime = atof(tempText);
+
+	g_stageYAxisParamStruct.nStartSpeed = GetDlgItemInt(IDC_STAGE_START_SPEED_Y);
+	g_stageYAxisParamStruct.nRunSpeed = GetDlgItemInt(IDC_STAGE_RUN_SPEED_Y);
+	g_stageYAxisParamStruct.nEndSpeed = GetDlgItemInt(IDC_STAGE_END_SPEED_Y);
+	GetDlgItem(IDC_STAGE_ACC_TIME_Y)->GetWindowText(tempText);
+	g_stageYAxisParamStruct.nAccelerateTime = atof(tempText);
+	GetDlgItem(IDC_STAGE_DEC_TIME_Y)->GetWindowText(tempText);
+	g_stageYAxisParamStruct.nDecelerateTime = atof(tempText);
+	GetDlgItem(IDC_STAGE_S_TIME_Y)->GetWindowText(tempText);
+	g_stageYAxisParamStruct.nSDecelerateTime = atof(tempText);
+
+	g_CCDXAxisParamStruct.nStartSpeed = GetDlgItemInt(IDC_CCD_START_SPEED_X);
+	g_CCDXAxisParamStruct.nRunSpeed = GetDlgItemInt(IDC_CCD_RUN_SPEED_X);
+	g_CCDXAxisParamStruct.nEndSpeed = GetDlgItemInt(IDC_CCD_END_SPEED_X);
+	GetDlgItem(IDC_CCD_ACC_TIME_X)->GetWindowText(tempText);
+	g_CCDXAxisParamStruct.nAccelerateTime = atof(tempText);
+	GetDlgItem(IDC_CCD_DEC_TIME_X)->GetWindowText(tempText);
+	g_CCDXAxisParamStruct.nDecelerateTime = atof(tempText);
+	GetDlgItem(IDC_CCD_S_TIME_X)->GetWindowText(tempText);
+	g_CCDXAxisParamStruct.nSDecelerateTime = atof(tempText);
+
+	g_CCDZAxisParamStruct.nStartSpeed = GetDlgItemInt(IDC_CCD_START_SPEED_Z);
+	g_CCDZAxisParamStruct.nRunSpeed = GetDlgItemInt(IDC_CCD_RUN_SPEED_Z);
+	g_CCDZAxisParamStruct.nEndSpeed = GetDlgItemInt(IDC_CCD_END_SPEED_Z);
+	GetDlgItem(IDC_CCD_ACC_TIME_Z)->GetWindowText(tempText);
+	g_CCDZAxisParamStruct.nAccelerateTime = atof(tempText);
+	GetDlgItem(IDC_CCD_DEC_TIME_Z)->GetWindowText(tempText);
+	g_CCDZAxisParamStruct.nDecelerateTime = atof(tempText);
+	GetDlgItem(IDC_CCD_S_TIME_Z)->GetWindowText(tempText);
+	g_CCDZAxisParamStruct.nSDecelerateTime = atof(tempText);
 	UpdateData(TRUE);
 	SetMotionParamModifiable(IDC_STAGE_START_SPEED_X, TRUE);
 	SetMotionParamModifiable(IDC_STAGE_START_SPEED_Y,TRUE);

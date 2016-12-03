@@ -21,8 +21,7 @@ struct SoftLimitParam
 	int nCCDELDownZ;
 };
 extern SoftLimitParam g_softLimitParamStruct;
-
-// 
+///////////////// 设置各轴的运动参数////////////
 struct StageXAxisParam
 {
 	int nStartSpeed;
@@ -66,8 +65,9 @@ struct CCDZAxisParam
 	double nSDecelerateTime;
 };
 extern CCDZAxisParam g_CCDZAxisParamStruct;
-
+///////////////// 设置各轴的运动参数////////////
 extern double TransPulseToDistance(int nAxisIndex, int nPulse);
 extern int TransDistanceToPulse(int nAxisIndex, int nDistance);
-
+extern void SetMotionParam(int nAxisIndex);
+extern void DMC3000_Move(int nCardNo, int nAxisIndex, int nPulse, int nDirection, int nMoveMode);
 

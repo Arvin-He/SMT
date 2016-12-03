@@ -65,16 +65,28 @@ BOOL CManualDlg::OnStageMove(UINT nID)
 	switch(nID)
 	{
 	case IDC_STAGE_XUP_BTN:
-		DMC3000_Move(0, 0, TransDistanceToPulse(0, m_stageStep), 1, 0);
+		{
+			SetMotionParam(0);
+			DMC3000_Move(g_nCardNo, 0, TransDistanceToPulse(0, m_stageStep), 1, 0);
+		}
 		break;
 	case  IDC_STAGE_XDOWN_BTN:
-		DMC3000_Move(0, 0, TransDistanceToPulse(1, m_stageStep), -1, 0);
+		{
+			SetMotionParam(0);
+			DMC3000_Move(g_nCardNo, 0, TransDistanceToPulse(1, m_stageStep), -1, 0);
+		}
 		break;
 	case IDC_STAGE_YUP_BTN:
-		DMC3000_Move(0, 1, TransDistanceToPulse(2, m_stageStep), 1, 0);
+		{
+			SetMotionParam(1);
+			DMC3000_Move(g_nCardNo, 1, TransDistanceToPulse(2, m_stageStep), 1, 0);
+		}
 		break;
 	case  IDC_STAGE_YDOWN_BTN:
-		DMC3000_Move(0, 1, TransDistanceToPulse(3, m_stageStep), -1, 0);
+		{
+			SetMotionParam(1);
+			DMC3000_Move(g_nCardNo, 1, TransDistanceToPulse(3, m_stageStep), -1, 0);
+		}
 		break;
 	default:
 		break;
@@ -90,16 +102,28 @@ BOOL CManualDlg::OnCCDMove(UINT nID)
 	switch(nID)
 	{
 	case IDC_CCD_XUP_BTN:
-		DMC3000_Move(0, 2, TransDistanceToPulse(0, m_ccdStep), 1, 0);
+		{
+			SetMotionParam(2);
+			DMC3000_Move(g_nCardNo, 2, TransDistanceToPulse(0, m_ccdStep), 1, 0);
+		}
 		break;
 	case  IDC_CCD_XDOWN_BTN:
-		DMC3000_Move(0, 2, TransDistanceToPulse(0, m_ccdStep), -1, 0);
+		{
+			SetMotionParam(2);
+			DMC3000_Move(g_nCardNo, 2, TransDistanceToPulse(0, m_ccdStep), -1, 0);
+		}
 		break;
 	case IDC_CCD_ZUP_BTN:
-		DMC3000_Move(0, 3, TransDistanceToPulse(0, m_ccdStep), 1, 0);
+		{
+			SetMotionParam(3);
+			DMC3000_Move(g_nCardNo, 3, TransDistanceToPulse(0, m_ccdStep), 1, 0);
+		}
 		break;
 	case  IDC_CCD_ZDOWN_BTN:
-		DMC3000_Move(0, 3, TransDistanceToPulse(0, m_ccdStep), -1, 0);
+		{
+			SetMotionParam(3);
+			DMC3000_Move(g_nCardNo, 3, TransDistanceToPulse(0, m_ccdStep), -1, 0);
+		}
 		break;
 	default:
 		break;
@@ -108,44 +132,11 @@ BOOL CManualDlg::OnCCDMove(UINT nID)
 	return TRUE;
 }
 
-// 封装dmc运动函数:卡号, 轴号, 脉冲数, 运动方向, 运动模式
-void CManualDlg::DMC3000_Move(int nCardNo, int nAxisIndex, int nPulse, int nDirection, int nMoveMode)
-{
-	if (dmc_check_done(nCardNo, nAxisIndex) == 0) //已经在运动中
-		return; 
-	// 设置单轴运动速度曲线, m_nSpeedMin
-	dmc_set_profile(nCardNo, nAxisIndex, 100, 1000, 0.02, 0.02, 100);
-	//设定S段时间
-	dmc_set_s_profile(nCardNo, nAxisIndex, 0, 0.2); //S 段时间，单位：s；范围：0~0.5 s
-	//点动(位置模式)
-	dmc_pmove(nCardNo, nAxisIndex, nPulse*nDirection, nMoveMode);  //最后的0表示相对运动
-}
-
-// 封装回零函数,卡号,轴号,回零方向,回零速度模式,回零模式
-void CManualDlg::DMC3000_GoHome(int nCardNo, int nAxisIndex, int nHomeDirection, int nHomeVelMode, int nHomeMode)
-{
-	dmc_set_profile(nCardNo, nAxisIndex, 100, 1000, 0.02, 0.02, 100);//设置速度曲线
-	dmc_set_homemode(nCardNo, nAxisIndex, nHomeDirection, nHomeVelMode, nHomeMode, 1);//设置回零方式
-	dmc_home_move(nCardNo, nAxisIndex); //回零动作
-	while (dmc_check_done(nCardNo, nAxisIndex)==0)      //判断当前轴状态
-	{
-// 		AfxGetApp()->PumpMessage();
-// 		GetDlgItem(IDC_BUTTON1)->EnableWindow(false); 
-		return;
-	}
-	//GetDlgItem(IDC_BUTTON1)->EnableWindow(true); 
-	//UpdateData(false);
-}
-
-
-
-
 void CManualDlg::OnClickedInhaleOnBtn()
 {
 	// TODO: Add your control notification handler code here
 	dmc_write_outbit(g_nCardNo, 0, 1);
 }
-
 
 void CManualDlg::OnClickedInhaleOffBtn()
 {

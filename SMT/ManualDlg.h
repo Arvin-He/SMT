@@ -13,9 +13,6 @@ public:
 	virtual ~CManualDlg();
 	BOOL OnStageMove(UINT nID);
 	BOOL OnCCDMove(UINT nID);
-	void DMC3000_Move(int nCardNo, int nAxisIndex, int nPulse, int nDirection, int nMoveMode);
-	void DMC3000_GoHome(int nCardNo, int nAxisIndex, int nHomeDirection, int nHomeVelMode, int nHomeMode);
-
 
 // Dialog Data
 	enum { IDD = IDD_MANUAL };
