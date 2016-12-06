@@ -14,7 +14,7 @@ public:
 	void GetSoftLimit();
 
 // Dialog Data
-	enum { IDD = IDD_SETTING_DIALOG };
+	enum { IDD = IDD_SETTING_SOFTLIMIT_DIALOG };
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

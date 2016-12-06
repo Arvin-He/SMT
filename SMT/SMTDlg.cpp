@@ -204,8 +204,8 @@ BOOL CSMTDlg::OnInitDialog()
 	m_bottomTab.InsertItem(1, _T("软限位设置"));
 	m_bottomTab.InsertItem(2, _T("运动参数设置"));
 	m_imageAssistDlg.Create(IDD_IMAGE_ASSIST_DIALOG, GetDlgItem(IDC_TAB2));
-	m_settingDlg.Create(IDD_SETTING_DIALOG, GetDlgItem(IDC_TAB2));
-	m_setParamDlg.Create(IDD_SETTING_SOFTWARE_DIALOG, GetDlgItem(IDC_TAB2));
+	m_settingDlg.Create(IDD_SETTING_SOFTLIMIT_DIALOG, GetDlgItem(IDC_TAB2));
+	m_setParamDlg.Create(IDD_SETTING_PARAM_DIALOG, GetDlgItem(IDC_TAB2));
 	m_imageAssistDlg.EnableWindow(TRUE);
 	m_settingDlg.EnableWindow(TRUE);
 	m_setParamDlg.EnableWindow(TRUE);

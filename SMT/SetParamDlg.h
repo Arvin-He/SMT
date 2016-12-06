@@ -12,7 +12,7 @@ public:
 	virtual ~CSetParamDlg();
 
 // Dialog Data
-	enum { IDD = IDD_SETTING_SOFTWARE_DIALOG };
+	enum { IDD = IDD_SETTING_PARAM_DIALOG };
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
