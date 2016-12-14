@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="USBDHCamera.cs" />
     <EmbeddedResource Include="SMTDlg.resx">
       <DependentUpon>SMTDlg.cs</DependentUpon>
     </EmbeddedResource>
