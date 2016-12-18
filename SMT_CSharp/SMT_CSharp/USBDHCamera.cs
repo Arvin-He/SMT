@@ -516,7 +516,7 @@ namespace USBDHCamera
         protected const HV_SNAP_MODE            m_kSnapMode     = HV_SNAP_MODE.CONTINUATION;                ///< 采集模式
         protected const int                     m_kGain         = 9;                                        ///< 增益
         protected const int                     m_kADCLevel     = (int)HV_ADC_LEVEL.ADC_LEVEL2;             ///< 增益级别
-        protected Rectangle                     m_OutPutWindow  = new Rectangle(0, 0, 800, 600);            ///< 输出窗口
+        protected Rectangle                     m_OutPutWindow  = new Rectangle(0, 0, 640, 480);            ///< 输出窗口
         protected const int                     m_kHBlanking    = 0;                                        ///< 水平消隐
         protected const int                     m_kVBlanking    = 0;                                        ///< 垂直消隐
         protected const HV_SNAP_SPEED           m_kSnapSpeed    = HV_SNAP_SPEED.HIGH_SPEED;                 ///< 采集速度
