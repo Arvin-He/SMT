@@ -32,12 +32,11 @@ namespace SMT_CSharp
 #endregion
 
 #region private method
-        private void openCCDBtn_Click(object sender, EventArgs e)
+        private void OpenCCDBtn_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("hello");
-            //OpenSnap();
-            //StartSnap();
-            //UpdateUI();
+            OpenSnap();
+            StartSnap();
+            UpdateUI();
         }
         private void StopCCD_Click(object sender, EventArgs e)
         {
@@ -48,6 +47,26 @@ namespace SMT_CSharp
         {
             CloseSnap();
             UpdateUI();
+        }
+        private void SavePic_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void SaveVideo_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void StopSaveVideo_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void SaveCCDParam_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void LoadCCDParam_Click(object sender, EventArgs e)
+        {
+
         }
         private void UpdateUI()
         {
@@ -112,7 +131,8 @@ namespace SMT_CSharp
         {
             m_Camera.SaveImage();
             Graphics gc = this.CreateGraphics();
-            gc.DrawImage(m_Camera.GetCurrentBMP(), this.ClientRectangle);
+            //gc.DrawImage(m_Camera.GetCurrentBMP(), this.ClientRectangle);
+            gc.DrawImage(m_Camera.GetCurrentBMP(), ccdView.ClientRectangle);
         }
 #endregion
 

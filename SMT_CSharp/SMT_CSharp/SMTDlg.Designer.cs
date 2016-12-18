@@ -33,16 +33,18 @@
             this.toolBar = new System.Windows.Forms.ToolStrip();
             this.openCCDBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.closeCCDBtn = new System.Windows.Forms.ToolStripButton();
+            this.stopCCDBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.savePicBtn = new System.Windows.Forms.ToolStripButton();
+            this.closeCCDBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.saveVideoBtn = new System.Windows.Forms.ToolStripButton();
+            this.savePicBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.closeVideoBtn = new System.Windows.Forms.ToolStripButton();
+            this.saveVideoBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.saveCCDParamBtn = new System.Windows.Forms.ToolStripButton();
+            this.closeVideoBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.saveCCDParamBtn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.loadCCDParamBtn = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.ccdView)).BeginInit();
             this.toolBar.SuspendLayout();
@@ -64,16 +66,18 @@
             this.toolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openCCDBtn,
             this.toolStripSeparator1,
-            this.closeCCDBtn,
+            this.stopCCDBtn,
             this.toolStripSeparator2,
-            this.savePicBtn,
+            this.closeCCDBtn,
             this.toolStripSeparator3,
-            this.saveVideoBtn,
+            this.savePicBtn,
             this.toolStripSeparator4,
-            this.closeVideoBtn,
+            this.saveVideoBtn,
             this.toolStripSeparator5,
-            this.saveCCDParamBtn,
+            this.closeVideoBtn,
             this.toolStripSeparator6,
+            this.saveCCDParamBtn,
+            this.toolStripSeparator7,
             this.loadCCDParamBtn});
             this.toolBar.Location = new System.Drawing.Point(0, 0);
             this.toolBar.Name = "toolBar";
@@ -90,11 +94,27 @@
             this.openCCDBtn.Name = "openCCDBtn";
             this.openCCDBtn.Size = new System.Drawing.Size(36, 36);
             this.openCCDBtn.Text = "toolStripButton1";
+            this.openCCDBtn.Click += new System.EventHandler(this.OpenCCDBtn_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
+            // 
+            // stopCCDBtn
+            // 
+            this.stopCCDBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.stopCCDBtn.Image = ((System.Drawing.Image)(resources.GetObject("stopCCDBtn.Image")));
+            this.stopCCDBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.stopCCDBtn.Name = "stopCCDBtn";
+            this.stopCCDBtn.Size = new System.Drawing.Size(36, 36);
+            this.stopCCDBtn.Text = "toolStripButton2";
+            this.stopCCDBtn.Click += new System.EventHandler(this.StopCCD_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
             // 
             // closeCCDBtn
             // 
@@ -103,12 +123,13 @@
             this.closeCCDBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.closeCCDBtn.Name = "closeCCDBtn";
             this.closeCCDBtn.Size = new System.Drawing.Size(36, 36);
-            this.closeCCDBtn.Text = "toolStripButton2";
+            this.closeCCDBtn.Text = "toolStripButton3";
+            this.closeCCDBtn.Click += new System.EventHandler(this.CloseCCD_Click);
             // 
-            // toolStripSeparator2
+            // toolStripSeparator3
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
             // 
             // savePicBtn
             // 
@@ -117,12 +138,13 @@
             this.savePicBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.savePicBtn.Name = "savePicBtn";
             this.savePicBtn.Size = new System.Drawing.Size(36, 36);
-            this.savePicBtn.Text = "toolStripButton3";
+            this.savePicBtn.Text = "toolStripButton4";
+            this.savePicBtn.Click += new System.EventHandler(this.SavePic_Click);
             // 
-            // toolStripSeparator3
+            // toolStripSeparator4
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 39);
             // 
             // saveVideoBtn
             // 
@@ -131,12 +153,13 @@
             this.saveVideoBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.saveVideoBtn.Name = "saveVideoBtn";
             this.saveVideoBtn.Size = new System.Drawing.Size(36, 36);
-            this.saveVideoBtn.Text = "toolStripButton4";
+            this.saveVideoBtn.Text = "toolStripButton5";
+            this.saveVideoBtn.Click += new System.EventHandler(this.SaveVideo_Click);
             // 
-            // toolStripSeparator4
+            // toolStripSeparator5
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 39);
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 39);
             // 
             // closeVideoBtn
             // 
@@ -145,12 +168,13 @@
             this.closeVideoBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.closeVideoBtn.Name = "closeVideoBtn";
             this.closeVideoBtn.Size = new System.Drawing.Size(36, 36);
-            this.closeVideoBtn.Text = "toolStripButton5";
+            this.closeVideoBtn.Text = "toolStripButton6";
+            this.closeVideoBtn.Click += new System.EventHandler(this.StopSaveVideo_Click);
             // 
-            // toolStripSeparator5
+            // toolStripSeparator6
             // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 39);
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 39);
             // 
             // saveCCDParamBtn
             // 
@@ -159,12 +183,13 @@
             this.saveCCDParamBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.saveCCDParamBtn.Name = "saveCCDParamBtn";
             this.saveCCDParamBtn.Size = new System.Drawing.Size(36, 36);
-            this.saveCCDParamBtn.Text = "toolStripButton6";
+            this.saveCCDParamBtn.Text = "toolStripButton7";
+            this.saveCCDParamBtn.Click += new System.EventHandler(this.SaveCCDParam_Click);
             // 
-            // toolStripSeparator6
+            // toolStripSeparator7
             // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 39);
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 39);
             // 
             // loadCCDParamBtn
             // 
@@ -173,7 +198,8 @@
             this.loadCCDParamBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.loadCCDParamBtn.Name = "loadCCDParamBtn";
             this.loadCCDParamBtn.Size = new System.Drawing.Size(36, 36);
-            this.loadCCDParamBtn.Text = "toolStripButton7";
+            this.loadCCDParamBtn.Text = "toolStripButton1";
+            this.loadCCDParamBtn.Click += new System.EventHandler(this.LoadCCDParam_Click);
             // 
             // SMTDlg
             // 
@@ -198,16 +224,18 @@
         private System.Windows.Forms.ToolStrip toolBar;
         private System.Windows.Forms.ToolStripButton openCCDBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton closeCCDBtn;
+        private System.Windows.Forms.ToolStripButton stopCCDBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton savePicBtn;
+        private System.Windows.Forms.ToolStripButton closeCCDBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripButton saveVideoBtn;
+        private System.Windows.Forms.ToolStripButton savePicBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripButton closeVideoBtn;
+        private System.Windows.Forms.ToolStripButton saveVideoBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripButton saveCCDParamBtn;
+        private System.Windows.Forms.ToolStripButton closeVideoBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripButton saveCCDParamBtn;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripButton loadCCDParamBtn;
     }
 }
