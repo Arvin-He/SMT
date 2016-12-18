@@ -68,6 +68,7 @@ namespace SMT_CSharp
         {
 
         }
+        
         private void UpdateUI()
         {
 
@@ -130,8 +131,9 @@ namespace SMT_CSharp
         private void ShowImage()
         {
             m_Camera.SaveImage();
-            Graphics gc = this.CreateGraphics();
+            //Graphics gc = this.CreateGraphics();
             //gc.DrawImage(m_Camera.GetCurrentBMP(), this.ClientRectangle);
+            Graphics gc = ccdView.CreateGraphics();
             gc.DrawImage(m_Camera.GetCurrentBMP(), ccdView.ClientRectangle);
         }
 #endregion
@@ -142,5 +144,27 @@ namespace SMT_CSharp
         private bool m_bIsSnap = false;
         private bool m_bIsOpen = false;
 #endregion
+        private void SetGain_Scroll(object sender, EventArgs e)
+        {
+            gainUpDown.Value = gainTrackBar.Value;
+        }
+
+        private void SetExposure_Scroll(object sender, EventArgs e)
+        {
+            exposureUpDown.Value = exposureTrackBar.Value;
+        }
+
+        private void SetGainUpDown(object sender, EventArgs e)
+        {
+            gainTrackBar.Value = System.Convert.ToInt32(gainUpDown.Value);
+        }
+
+        private void SetExposureUpDown(object sender, EventArgs e)
+        {
+            exposureTrackBar.Value = System.Convert.ToInt32(exposureUpDown.Value);
+        }
+
+
+
     }
 }

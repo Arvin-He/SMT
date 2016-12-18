@@ -46,14 +46,24 @@
             this.saveCCDParamBtn = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.loadCCDParamBtn = new System.Windows.Forms.ToolStripButton();
+            this.label1 = new System.Windows.Forms.Label();
+            this.gainTrackBar = new System.Windows.Forms.TrackBar();
+            this.label2 = new System.Windows.Forms.Label();
+            this.exposureTrackBar = new System.Windows.Forms.TrackBar();
+            this.gainUpDown = new System.Windows.Forms.NumericUpDown();
+            this.exposureUpDown = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.ccdView)).BeginInit();
             this.toolBar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gainTrackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.exposureTrackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gainUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.exposureUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // ccdView
             // 
             this.ccdView.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ccdView.Location = new System.Drawing.Point(5, 40);
+            this.ccdView.Location = new System.Drawing.Point(5, 89);
             this.ccdView.Name = "ccdView";
             this.ccdView.Size = new System.Drawing.Size(640, 480);
             this.ccdView.TabIndex = 0;
@@ -80,6 +90,7 @@
             this.toolStripSeparator7,
             this.loadCCDParamBtn});
             this.toolBar.Location = new System.Drawing.Point(0, 0);
+            this.toolBar.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.toolBar.Name = "toolBar";
             this.toolBar.Size = new System.Drawing.Size(1008, 39);
             this.toolBar.Stretch = true;
@@ -91,6 +102,7 @@
             this.openCCDBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.openCCDBtn.Image = ((System.Drawing.Image)(resources.GetObject("openCCDBtn.Image")));
             this.openCCDBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.openCCDBtn.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
             this.openCCDBtn.Name = "openCCDBtn";
             this.openCCDBtn.Size = new System.Drawing.Size(36, 36);
             this.openCCDBtn.Text = "toolStripButton1";
@@ -201,11 +213,100 @@
             this.loadCCDParamBtn.Text = "toolStripButton1";
             this.loadCCDParamBtn.Click += new System.EventHandler(this.LoadCCDParam_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 54);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 12);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "增益:";
+            // 
+            // gainTrackBar
+            // 
+            this.gainTrackBar.Location = new System.Drawing.Point(49, 42);
+            this.gainTrackBar.Maximum = 64;
+            this.gainTrackBar.Name = "gainTrackBar";
+            this.gainTrackBar.Size = new System.Drawing.Size(160, 45);
+            this.gainTrackBar.TabIndex = 4;
+            this.gainTrackBar.TickFrequency = 8;
+            this.gainTrackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.gainTrackBar.Value = 9;
+            this.gainTrackBar.Scroll += new System.EventHandler(this.SetGain_Scroll);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(334, 54);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(47, 12);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "曝光度:";
+            // 
+            // exposureTrackBar
+            // 
+            this.exposureTrackBar.Location = new System.Drawing.Point(379, 42);
+            this.exposureTrackBar.Maximum = 1000;
+            this.exposureTrackBar.Name = "exposureTrackBar";
+            this.exposureTrackBar.Size = new System.Drawing.Size(160, 45);
+            this.exposureTrackBar.TabIndex = 4;
+            this.exposureTrackBar.TickFrequency = 100;
+            this.exposureTrackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.exposureTrackBar.Value = 600;
+            this.exposureTrackBar.Scroll += new System.EventHandler(this.SetExposure_Scroll);
+            // 
+            // gainUpDown
+            // 
+            this.gainUpDown.Location = new System.Drawing.Point(209, 52);
+            this.gainUpDown.Maximum = new decimal(new int[] {
+            64,
+            0,
+            0,
+            0});
+            this.gainUpDown.Name = "gainUpDown";
+            this.gainUpDown.Size = new System.Drawing.Size(80, 21);
+            this.gainUpDown.TabIndex = 5;
+            this.gainUpDown.Value = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.gainUpDown.ValueChanged += new System.EventHandler(this.SetGainUpDown);
+            // 
+            // exposureUpDown
+            // 
+            this.exposureUpDown.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.exposureUpDown.Location = new System.Drawing.Point(536, 52);
+            this.exposureUpDown.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.exposureUpDown.Name = "exposureUpDown";
+            this.exposureUpDown.Size = new System.Drawing.Size(80, 21);
+            this.exposureUpDown.TabIndex = 6;
+            this.exposureUpDown.Value = new decimal(new int[] {
+            600,
+            0,
+            0,
+            0});
+            this.exposureUpDown.ValueChanged += new System.EventHandler(this.SetExposureUpDown);
+            // 
             // SMTDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.Controls.Add(this.exposureUpDown);
+            this.Controls.Add(this.gainUpDown);
+            this.Controls.Add(this.exposureTrackBar);
+            this.Controls.Add(this.gainTrackBar);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.toolBar);
             this.Controls.Add(this.ccdView);
             this.Name = "SMTDlg";
@@ -213,6 +314,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.ccdView)).EndInit();
             this.toolBar.ResumeLayout(false);
             this.toolBar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gainTrackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.exposureTrackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gainUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.exposureUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -237,6 +342,12 @@
         private System.Windows.Forms.ToolStripButton saveCCDParamBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripButton loadCCDParamBtn;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TrackBar gainTrackBar;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TrackBar exposureTrackBar;
+        private System.Windows.Forms.NumericUpDown gainUpDown;
+        private System.Windows.Forms.NumericUpDown exposureUpDown;
     }
 }
 

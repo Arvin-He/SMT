@@ -514,14 +514,14 @@ namespace USBDHCamera
         protected const int                     m_kCameraNums   = 1;                                        ///< 相机个数
         protected const HV_RESOLUTION           m_kResolotion   = HV_RESOLUTION.RES_MODE0;                  ///< 分辨率
         protected const HV_SNAP_MODE            m_kSnapMode     = HV_SNAP_MODE.CONTINUATION;                ///< 采集模式
-        protected const int                     m_kGain         = 9;                                        ///< 增益
+        protected int                           m_kGain         = 9;                                        ///< 增益
         protected const int                     m_kADCLevel     = (int)HV_ADC_LEVEL.ADC_LEVEL2;             ///< 增益级别
         protected Rectangle                     m_OutPutWindow  = new Rectangle(0, 0, 640, 480);            ///< 输出窗口
         protected const int                     m_kHBlanking    = 0;                                        ///< 水平消隐
         protected const int                     m_kVBlanking    = 0;                                        ///< 垂直消隐
         protected const HV_SNAP_SPEED           m_kSnapSpeed    = HV_SNAP_SPEED.HIGH_SPEED;                 ///< 采集速度
         protected const int                     m_kUpperET      = 60;                                       ///< 曝光时间分子
-        protected const int                     m_kLowerET      = 1000;                                     ///< 曝光时间分母
+        protected int                           m_kLowerET      = 1000;                                     ///< 曝光时间分母
         protected const double                  m_kZeorInDouble = 0.000000001;                              ///< double类型的0
         protected const HV_BAYER_CONVERT_TYPE   m_kConvertType  = HV_BAYER_CONVERT_TYPE.BAYER2RGB_NEIGHBOUR;///< 转换类型
         protected const HV_BAYER_LAYOUT         m_kBayerType    = HV_BAYER_LAYOUT.BAYER_GR;                 ///< Bayer类型
