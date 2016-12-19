@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using USBCamera;
 using System.Drawing.Imaging;
+using Emgu.CV;
+//using Emgu.CV.Capture;
 
 using USBCameraAPI = USBCamera.API;
 using USBDHCamera;
@@ -50,15 +52,58 @@ namespace SMT_CSharp
         }
         private void SavePic_Click(object sender, EventArgs e)
         {
-
+            SaveFileDialog imageSaveDlg = new SaveFileDialog();
+            imageSaveDlg.InitialDirectory = "./data/images";
+            imageSaveDlg.Filter = "bmp file(*.bmp)|*.bmp|png file(*.png)|*.png|jpg file(*.jpg)|*.jpg";
+            if (imageSaveDlg.ShowDialog() == DialogResult.OK)
+            {
+                Bitmap saveImage = m_Camera.GetCurrentBMP();
+                saveImage.Save(imageSaveDlg.FileName);
+            }
         }
         private void SaveVideo_Click(object sender, EventArgs e)
         {
-
+            SaveFileDialog videoSaveDlg = new SaveFileDialog();
+            videoSaveDlg.InitialDirectory = "./data/videos";
+            videoSaveDlg.Filter = "avi file(*.avi)|*.avi;*.mp4;*.mpg";
+            if (videoSaveDlg.ShowDialog() == DialogResult.OK)
+            {
+                //Bitmap saveImage = m_Camera.GetCurrentBMP();
+                //saveImage.Save(imageSaveDlg.FileName);
+                //保存视频
+                try
+                {
+                    m_capture = null;
+                    m_capture = new Capture(0);
+                    m_capture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FPS, 30);
+                    m_capture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT, 480);
+                    m_capture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH, 640);
+                    //Time_Label.Text = "Time: ";
+                    //Codec_lbl.Text = "Codec: ";
+                    //Frame_lbl.Text = "Frame: ";
+                    //webcam_frm_cnt = 0;
+                    //cam = 1;
+                    //Video_seek.Value = 0;
+                    //Application.Idle += ProcessFrame;
+                    //button1.Text = "Stop";
+                    //comboBox1.Enabled = false;
+                }
+                catch (NullReferenceException excpt)
+                {
+                    MessageBox.Show(excpt.Message);
+                }
+            }
         }
         private void StopSaveVideo_Click(object sender, EventArgs e)
         {
-
+            if (m_capture != null)
+            {
+                if (m_capture.GrabProcessState == System.Threading.ThreadState.Running)
+                {
+                    m_capture.Stop();
+                }
+                m_capture.Dispose();
+            }
         }
         private void SaveCCDParam_Click(object sender, EventArgs e)
         {
@@ -143,6 +188,7 @@ namespace SMT_CSharp
         private HV_SNAP_PROC snapCallback = new HV_SNAP_PROC(SnapCallBack);
         private bool m_bIsSnap = false;
         private bool m_bIsOpen = false;
+        private Capture m_capture;
 #endregion
         private void SetGain_Scroll(object sender, EventArgs e)
         {
