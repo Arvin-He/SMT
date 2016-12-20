@@ -14,18 +14,18 @@ namespace USBDHCamera
 {
     public interface ICamera
     {
-        void BeginDevice();     ///< 打开设备
-        void GetCameraType();   ///< 获取摄像机类型
-        void SetResolution();   ///< 设置分辨率
-        void SetSnapMode();     ///< 设置采集模式
-        void SetGain();         ///< 设置增益
-        void SetADC();          ///< 设置数字增益
-        void SetOutPutWindow(); ///< 设置输出窗口
-        void SetBlanking();     ///< 设置消隐控制
-        void SetSnapSpeed();    ///< 设置采集速度
-        void SetExposureTime(); ///< 设置曝光时间
-        void EndDevice();       ///< 关闭设备
-        void SaveImage();       ///< 显示图像
+        void BeginDevice();                         ///< 打开设备
+        void GetCameraType();                       ///< 获取摄像机类型
+        void SetResolution();                       ///< 设置分辨率
+        void SetSnapMode();                         ///< 设置采集模式
+        void SetGain(int gainValue);                ///< 设置增益
+        void SetADC();                              ///< 设置数字增益
+        void SetOutPutWindow();                     ///< 设置输出窗口
+        void SetBlanking();                         ///< 设置消隐控制
+        void SetSnapSpeed();                        ///< 设置采集速度
+        void SetExposureTime(int exposureTime);     ///< 设置曝光时间
+        void EndDevice();                           ///< 关闭设备
+        void SaveImage();                           ///< 显示图像
     }
 
     public class USBDHCamera : ICamera
@@ -92,12 +92,11 @@ namespace USBDHCamera
             USBCameraAPI.HV_VERIFY(status);
         }
 
-        public void SetGain()
+        public void SetGain(int gainValue)
         {
+            m_kGain = gainValue;
             System.Diagnostics.Debug.Assert(m_pHandle != IntPtr.Zero);
-
             HVSTATUS status = HVSTATUS.STATUS_OK;
-
             for (int i = 0; i < 4; i++)
             {
                 status = USBCameraAPI.HVAGCControl(m_pHandle, (byte)(HV_CHANNEL.RED_CHANNEL + i), m_kGain);
@@ -152,8 +151,9 @@ namespace USBDHCamera
             USBCameraAPI.HV_VERIFY(status);
         }
 
-        public void SetExposureTime()
+        public void SetExposureTime(int exposureTime)
         {
+            m_kLowerET = exposureTime;
             System.Diagnostics.Debug.Assert(m_pHandle != IntPtr.Zero);
             HVSTATUS status = SetExposureTime(m_OutPutWindow.Width, m_kUpperET, m_kLowerET, 
                                                 m_kHBlanking, m_kSnapSpeed, m_kResolotion);
@@ -462,12 +462,12 @@ namespace USBDHCamera
                 GetCameraType();
                 SetResolution();
                 SetSnapMode();
-                SetGain();
+                SetGain(m_kGain);
                 SetADC();
                 SetOutPutWindow();
                 SetBlanking();
                 SetSnapSpeed();
-                SetExposureTime();
+                SetExposureTime(m_kLowerET);
             }
             else
             {
