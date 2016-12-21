@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using USBCamera;
 using System.Drawing.Imaging;
+using System.Threading;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
@@ -26,12 +27,8 @@ namespace SMT_CSharp
         {
             InitializeComponent();
             m_Camera.Initialize();
-//             m_capture = null;
-//             m_capture = new Capture(0);
-//             m_capture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FPS, 15);
-//             m_capture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT, 480);
-//             m_capture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH, 640);
         }
+
         ~SMTDlg()
         {
             CloseSnap();
@@ -40,37 +37,25 @@ namespace SMT_CSharp
 #endregion
 
 #region private method
-//         private void ProcessFrame(object sender, EventArgs arg)
-//         {
-//             //capture to a Image variable so we can use it for writing to the VideoWriter
-//             Image<Bgr, Byte> frame = m_capture.RetrieveBgrFrame(); 
-//             //if we wanted to compresse the image to a smaller size to save space on our video we could use
-//             //frame.Resize(100,100, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR)
-//             //But the VideoWriter must be set up with the correct size
-//             if (m_videoWriter.Ptr != IntPtr.Zero)
-//             {
-//                 m_videoWriter.WriteFrame(frame); //If we are recording and videowriter is avaliable add the image to the videowriter 
-//                 //Update frame number
-//                 m_frameCount++;
-//             }
-//         }
-
         private void OpenCCDBtn_Click(object sender, EventArgs e)
         {
             OpenSnap();
             StartSnap();
             UpdateUI();
         }
+
         private void StopCCD_Click(object sender, EventArgs e)
         {
             StopSnap();
             UpdateUI();
         }
+
         private void CloseCCD_Click(object sender, EventArgs e)
         {
             CloseSnap();
             UpdateUI();
         }
+
         private void SavePic_Click(object sender, EventArgs e)
         {
             SaveFileDialog imageSaveDlg = new SaveFileDialog();
@@ -82,52 +67,64 @@ namespace SMT_CSharp
                 saveImage.Save(imageSaveDlg.FileName);
             }
         }
+
         private void SaveVideo_Click(object sender, EventArgs e)
         {
-//             SaveFileDialog videoSaveDlg = new SaveFileDialog();
-//             videoSaveDlg.InitialDirectory = "./data/videos";
-//             videoSaveDlg.Filter = "avi file(*.avi)|*.avi;*.mp4;*.mpg";
-//             if (videoSaveDlg.ShowDialog() == DialogResult.OK)
-//             {
-//                 if (m_capture != null)
-//                 {
-//                     if (m_capture.GrabProcessState == System.Threading.ThreadState.Running)
-//                     {
-//                         m_capture.Stop(); //Stop urrent capture if running 
-//                     }
-//                     m_capture.Dispose();//dispose of current capture
-//                 }
-//                 //保存视频
-//                 try
-//                 {
-//                     m_capture.ImageGrabbed += ProcessFrame; //attach event call to process frames
-//                     int frameWidth = (int)m_capture.GetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH);
-//                     int frameHeight = (int)m_capture.GetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT);
-//                     int frameRate = (int)m_capture.GetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FPS);
-//                     m_videoWriter = new VideoWriter(@videoSaveDlg.FileName, -1, (int)frameRate, frameWidth, frameHeight, true);
-//                     m_capture.Start();
-//                 }
-//                 catch (NullReferenceException excpt)
-//                 {
-//                     MessageBox.Show(excpt.Message);
-//                 }
-//             }
+            ThreadStart myThreadStart = new ThreadStart(SaveVideo);
+            Thread SaveVideoThread = new Thread(myThreadStart);
+            SaveVideoThread.Start();
         }
+
+        private void SaveVideo()
+        {
+            SaveFileDialog videoSaveDlg = new SaveFileDialog();
+            videoSaveDlg.InitialDirectory = "./data/videos";
+            videoSaveDlg.Filter = "AVI(*.avi)|*.avi";
+            videoSaveDlg.AddExtension = true;
+            int frameWidth = (int)CvInvoke.cvGetCaptureProperty(m_capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH);
+            int frameHeight = (int)CvInvoke.cvGetCaptureProperty(m_capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT);
+            if (videoSaveDlg.ShowDialog() == DialogResult.OK)
+            {
+                m_capture = new Capture();
+                m_videoWriter = new VideoWriter(videoSaveDlg.FileName,
+                    CvInvoke.CV_FOURCC('M', 'J', 'P', 'G'), 15, frameWidth, frameHeight, true);
+                m_capture.ImageGrabbed += ProcessFrame;
+                m_capture.Start();
+            }
+        }
+
+        private void ProcessFrame(object sender, EventArgs arg)
+        {
+            //capture to a Image variable so we can use it for writing to the VideoWriter
+            Image<Bgr, Byte> frame = m_capture.RetrieveBgrFrame();
+            //if we wanted to compresse the image to a smaller size to save space on our video we could use
+            //frame.Resize(100,100, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR)
+            //But the VideoWriter must be set up with the correct size
+            if (m_videoWriter.Ptr != IntPtr.Zero)
+            {   
+                //If we are recording and videowriter is avaliable add the image to the videowriter 
+                m_videoWriter.WriteFrame(frame); 
+            }
+        }
+
         private void StopSaveVideo_Click(object sender, EventArgs e)
         {
-//             if (m_capture != null)
-//             {
-//                 if (m_capture.GrabProcessState == System.Threading.ThreadState.Running)
-//                 {
-//                     m_capture.Stop();
-//                 }
-//                 m_capture.Dispose();
-//             }
+            if (m_capture != null)
+            {
+                if (m_capture.GrabProcessState == System.Threading.ThreadState.Running)
+                {
+                    m_capture.Stop();
+                }
+                m_capture.Dispose();
+                m_videoWriter.Dispose();
+            }
         }
+
         private void SaveCCDParam_Click(object sender, EventArgs e)
         {
 
         }
+
         private void LoadCCDParam_Click(object sender, EventArgs e)
         {
 
@@ -137,6 +134,7 @@ namespace SMT_CSharp
         {
 
         }
+
         private void OpenSnap()
         {
             System.Diagnostics.Debug.Assert(m_Camera.GetHandle() != IntPtr.Zero);
@@ -147,6 +145,7 @@ namespace SMT_CSharp
                 m_bIsOpen = true;
             }
         }
+
         private void StartSnap()
         {
             System.Diagnostics.Debug.Assert(m_Camera.GetHandle() != IntPtr.Zero);
@@ -159,6 +158,7 @@ namespace SMT_CSharp
                 m_bIsSnap = true;
             }
         }
+
         private void StopSnap()
         {
             System.Diagnostics.Debug.Assert(m_Camera.GetHandle() != IntPtr.Zero);
@@ -172,6 +172,7 @@ namespace SMT_CSharp
                 }
             }
         }
+
         private void CloseSnap()
         {
             System.Diagnostics.Debug.Assert(m_Camera.GetHandle() != IntPtr.Zero);
@@ -183,6 +184,7 @@ namespace SMT_CSharp
                 m_bIsOpen = false;
             }
         }
+
         private static bool SnapCallBack(ref HV_SNAP_INFO pInfo)
         {
             SMTDlg dlg = (SMTDlg)(Form.FromHandle(pInfo.pParam));
@@ -192,6 +194,7 @@ namespace SMT_CSharp
             }
             return true;
         }
+
         private void ShowImage()
         {
             m_Camera.SaveImage();
@@ -205,9 +208,8 @@ namespace SMT_CSharp
         private HV_SNAP_PROC snapCallback = new HV_SNAP_PROC(SnapCallBack);
         private bool m_bIsSnap = false;
         private bool m_bIsOpen = false;
-        //private Capture m_capture;
-        //private VideoWriter m_videoWriter;
-        //private int m_frameCount = 0;
+        private Capture m_capture;
+        private VideoWriter m_videoWriter;
 #endregion
         private void SetGain_Scroll(object sender, EventArgs e)
         {
@@ -232,8 +234,5 @@ namespace SMT_CSharp
             exposureTrackBar.Value = System.Convert.ToInt32(exposureUpDown.Value);
             m_Camera.SetExposureTime(exposureTrackBar.Value);
         }
-
-
-
     }
 }
