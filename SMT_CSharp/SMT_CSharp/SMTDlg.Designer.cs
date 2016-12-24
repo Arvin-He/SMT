@@ -57,34 +57,34 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
+            this.stageYRange = new System.Windows.Forms.Label();
+            this.myLabel3 = new System.Windows.Forms.Label();
+            this.myLabel8 = new System.Windows.Forms.Label();
+            this.myLabel7 = new System.Windows.Forms.Label();
+            this.myLabel6 = new System.Windows.Forms.Label();
+            this.myLabel2 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
+            this.myLabel4 = new System.Windows.Forms.Label();
+            this.myLabel1 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.CCDZDis = new System.Windows.Forms.TextBox();
+            this.CCDXDis = new System.Windows.Forms.TextBox();
+            this.stageYDis = new System.Windows.Forms.TextBox();
+            this.stageXDis = new System.Windows.Forms.TextBox();
+            this.CCDZPulseCount = new System.Windows.Forms.TextBox();
+            this.CCDXPulseCount = new System.Windows.Forms.TextBox();
+            this.stageYPulseCount = new System.Windows.Forms.TextBox();
+            this.stageXPulseCount = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.stopStageXAxisBtn = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.setZeroCCDZBtn = new System.Windows.Forms.Button();
+            this.setZeroCCDXBtn = new System.Windows.Forms.Button();
+            this.setZeroStageYBtn = new System.Windows.Forms.Button();
             this.setZeroStageXBtn = new System.Windows.Forms.Button();
             this.label20 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
@@ -118,14 +118,14 @@
             this.autoCtrlPage = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.imageAssistPage = new System.Windows.Forms.TabPage();
+            this.button22 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
+            this.button21 = new System.Windows.Forms.Button();
+            this.button20 = new System.Windows.Forms.Button();
+            this.button19 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
             this.motionParamPage = new System.Windows.Forms.TabPage();
             this.softlimitPage = new System.Windows.Forms.TabPage();
-            this.button19 = new System.Windows.Forms.Button();
-            this.button20 = new System.Windows.Forms.Button();
-            this.button21 = new System.Windows.Forms.Button();
-            this.button22 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ccdView)).BeginInit();
             this.toolBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gainTrackBar)).BeginInit();
@@ -384,34 +384,34 @@
             this.axisStateGroupBox.Controls.Add(this.label7);
             this.axisStateGroupBox.Controls.Add(this.label23);
             this.axisStateGroupBox.Controls.Add(this.label19);
-            this.axisStateGroupBox.Controls.Add(this.label15);
-            this.axisStateGroupBox.Controls.Add(this.label11);
-            this.axisStateGroupBox.Controls.Add(this.label22);
-            this.axisStateGroupBox.Controls.Add(this.label18);
-            this.axisStateGroupBox.Controls.Add(this.label14);
-            this.axisStateGroupBox.Controls.Add(this.label10);
+            this.axisStateGroupBox.Controls.Add(this.stageYRange);
+            this.axisStateGroupBox.Controls.Add(this.myLabel3);
+            this.axisStateGroupBox.Controls.Add(this.myLabel8);
+            this.axisStateGroupBox.Controls.Add(this.myLabel7);
+            this.axisStateGroupBox.Controls.Add(this.myLabel6);
+            this.axisStateGroupBox.Controls.Add(this.myLabel2);
             this.axisStateGroupBox.Controls.Add(this.label21);
             this.axisStateGroupBox.Controls.Add(this.label17);
-            this.axisStateGroupBox.Controls.Add(this.label13);
-            this.axisStateGroupBox.Controls.Add(this.label8);
+            this.axisStateGroupBox.Controls.Add(this.myLabel4);
+            this.axisStateGroupBox.Controls.Add(this.myLabel1);
             this.axisStateGroupBox.Controls.Add(this.label6);
             this.axisStateGroupBox.Controls.Add(this.label5);
             this.axisStateGroupBox.Controls.Add(this.label4);
-            this.axisStateGroupBox.Controls.Add(this.textBox8);
-            this.axisStateGroupBox.Controls.Add(this.textBox6);
-            this.axisStateGroupBox.Controls.Add(this.textBox4);
-            this.axisStateGroupBox.Controls.Add(this.textBox2);
-            this.axisStateGroupBox.Controls.Add(this.textBox7);
-            this.axisStateGroupBox.Controls.Add(this.textBox5);
-            this.axisStateGroupBox.Controls.Add(this.textBox3);
-            this.axisStateGroupBox.Controls.Add(this.textBox1);
+            this.axisStateGroupBox.Controls.Add(this.CCDZDis);
+            this.axisStateGroupBox.Controls.Add(this.CCDXDis);
+            this.axisStateGroupBox.Controls.Add(this.stageYDis);
+            this.axisStateGroupBox.Controls.Add(this.stageXDis);
+            this.axisStateGroupBox.Controls.Add(this.CCDZPulseCount);
+            this.axisStateGroupBox.Controls.Add(this.CCDXPulseCount);
+            this.axisStateGroupBox.Controls.Add(this.stageYPulseCount);
+            this.axisStateGroupBox.Controls.Add(this.stageXPulseCount);
             this.axisStateGroupBox.Controls.Add(this.button6);
             this.axisStateGroupBox.Controls.Add(this.button4);
             this.axisStateGroupBox.Controls.Add(this.button2);
             this.axisStateGroupBox.Controls.Add(this.stopStageXAxisBtn);
-            this.axisStateGroupBox.Controls.Add(this.button5);
-            this.axisStateGroupBox.Controls.Add(this.button3);
-            this.axisStateGroupBox.Controls.Add(this.button1);
+            this.axisStateGroupBox.Controls.Add(this.setZeroCCDZBtn);
+            this.axisStateGroupBox.Controls.Add(this.setZeroCCDXBtn);
+            this.axisStateGroupBox.Controls.Add(this.setZeroStageYBtn);
             this.axisStateGroupBox.Controls.Add(this.setZeroStageXBtn);
             this.axisStateGroupBox.Controls.Add(this.label20);
             this.axisStateGroupBox.Controls.Add(this.label16);
@@ -460,59 +460,59 @@
             this.label19.TabIndex = 5;
             this.label19.Text = "icon";
             // 
-            // label15
+            // stageYRange
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(531, 90);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(29, 12);
-            this.label15.TabIndex = 5;
-            this.label15.Text = "icon";
+            this.stageYRange.AutoSize = true;
+            this.stageYRange.Location = new System.Drawing.Point(531, 90);
+            this.stageYRange.Name = "stageYRange";
+            this.stageYRange.Size = new System.Drawing.Size(29, 12);
+            this.stageYRange.TabIndex = 5;
+            this.stageYRange.Text = "icon";
             // 
-            // label11
+            // myLabel3
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(531, 52);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(29, 12);
-            this.label11.TabIndex = 5;
-            this.label11.Text = "icon";
+            this.myLabel3.AutoSize = true;
+            this.myLabel3.Location = new System.Drawing.Point(531, 52);
+            this.myLabel3.Name = "myLabel3";
+            this.myLabel3.Size = new System.Drawing.Size(29, 12);
+            this.myLabel3.TabIndex = 5;
+            this.myLabel3.Text = "icon";
             // 
-            // label22
+            // myLabel8
             // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(460, 169);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(29, 12);
-            this.label22.TabIndex = 5;
-            this.label22.Text = "icon";
+            this.myLabel8.AutoSize = true;
+            this.myLabel8.Location = new System.Drawing.Point(460, 169);
+            this.myLabel8.Name = "myLabel8";
+            this.myLabel8.Size = new System.Drawing.Size(29, 12);
+            this.myLabel8.TabIndex = 5;
+            this.myLabel8.Text = "icon";
             // 
-            // label18
+            // myLabel7
             // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(460, 129);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(29, 12);
-            this.label18.TabIndex = 5;
-            this.label18.Text = "icon";
+            this.myLabel7.AutoSize = true;
+            this.myLabel7.Location = new System.Drawing.Point(460, 129);
+            this.myLabel7.Name = "myLabel7";
+            this.myLabel7.Size = new System.Drawing.Size(29, 12);
+            this.myLabel7.TabIndex = 5;
+            this.myLabel7.Text = "icon";
             // 
-            // label14
+            // myLabel6
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(460, 90);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(29, 12);
-            this.label14.TabIndex = 5;
-            this.label14.Text = "icon";
+            this.myLabel6.AutoSize = true;
+            this.myLabel6.Location = new System.Drawing.Point(460, 90);
+            this.myLabel6.Name = "myLabel6";
+            this.myLabel6.Size = new System.Drawing.Size(29, 12);
+            this.myLabel6.TabIndex = 5;
+            this.myLabel6.Text = "icon";
             // 
-            // label10
+            // myLabel2
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(460, 52);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(29, 12);
-            this.label10.TabIndex = 5;
-            this.label10.Text = "icon";
+            this.myLabel2.AutoSize = true;
+            this.myLabel2.Location = new System.Drawing.Point(460, 52);
+            this.myLabel2.Name = "myLabel2";
+            this.myLabel2.Size = new System.Drawing.Size(29, 12);
+            this.myLabel2.TabIndex = 5;
+            this.myLabel2.Text = "icon";
             // 
             // label21
             // 
@@ -532,23 +532,23 @@
             this.label17.TabIndex = 5;
             this.label17.Text = "icon";
             // 
-            // label13
+            // myLabel4
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(394, 90);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(29, 12);
-            this.label13.TabIndex = 5;
-            this.label13.Text = "icon";
+            this.myLabel4.AutoSize = true;
+            this.myLabel4.Location = new System.Drawing.Point(394, 90);
+            this.myLabel4.Name = "myLabel4";
+            this.myLabel4.Size = new System.Drawing.Size(29, 12);
+            this.myLabel4.TabIndex = 5;
+            this.myLabel4.Text = "icon";
             // 
-            // label8
+            // myLabel1
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(394, 52);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(29, 12);
-            this.label8.TabIndex = 5;
-            this.label8.Text = "icon";
+            this.myLabel1.AutoSize = true;
+            this.myLabel1.Location = new System.Drawing.Point(394, 52);
+            this.myLabel1.Name = "myLabel1";
+            this.myLabel1.Size = new System.Drawing.Size(29, 12);
+            this.myLabel1.TabIndex = 5;
+            this.myLabel1.Text = "icon";
             // 
             // label6
             // 
@@ -577,61 +577,61 @@
             this.label4.TabIndex = 4;
             this.label4.Text = "脉冲数(个)";
             // 
-            // textBox8
+            // CCDZDis
             // 
-            this.textBox8.Location = new System.Drawing.Point(275, 166);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(75, 21);
-            this.textBox8.TabIndex = 3;
+            this.CCDZDis.Location = new System.Drawing.Point(275, 166);
+            this.CCDZDis.Name = "CCDZDis";
+            this.CCDZDis.Size = new System.Drawing.Size(75, 21);
+            this.CCDZDis.TabIndex = 3;
             // 
-            // textBox6
+            // CCDXDis
             // 
-            this.textBox6.Location = new System.Drawing.Point(275, 126);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(75, 21);
-            this.textBox6.TabIndex = 3;
+            this.CCDXDis.Location = new System.Drawing.Point(275, 126);
+            this.CCDXDis.Name = "CCDXDis";
+            this.CCDXDis.Size = new System.Drawing.Size(75, 21);
+            this.CCDXDis.TabIndex = 3;
             // 
-            // textBox4
+            // stageYDis
             // 
-            this.textBox4.Location = new System.Drawing.Point(275, 87);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(75, 21);
-            this.textBox4.TabIndex = 3;
+            this.stageYDis.Location = new System.Drawing.Point(275, 87);
+            this.stageYDis.Name = "stageYDis";
+            this.stageYDis.Size = new System.Drawing.Size(75, 21);
+            this.stageYDis.TabIndex = 3;
             // 
-            // textBox2
+            // stageXDis
             // 
-            this.textBox2.Location = new System.Drawing.Point(275, 49);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(75, 21);
-            this.textBox2.TabIndex = 3;
+            this.stageXDis.Location = new System.Drawing.Point(275, 49);
+            this.stageXDis.Name = "stageXDis";
+            this.stageXDis.Size = new System.Drawing.Size(75, 21);
+            this.stageXDis.TabIndex = 3;
             // 
-            // textBox7
+            // CCDZPulseCount
             // 
-            this.textBox7.Location = new System.Drawing.Point(180, 165);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(76, 21);
-            this.textBox7.TabIndex = 2;
+            this.CCDZPulseCount.Location = new System.Drawing.Point(180, 165);
+            this.CCDZPulseCount.Name = "CCDZPulseCount";
+            this.CCDZPulseCount.Size = new System.Drawing.Size(76, 21);
+            this.CCDZPulseCount.TabIndex = 2;
             // 
-            // textBox5
+            // CCDXPulseCount
             // 
-            this.textBox5.Location = new System.Drawing.Point(180, 125);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(76, 21);
-            this.textBox5.TabIndex = 2;
+            this.CCDXPulseCount.Location = new System.Drawing.Point(180, 125);
+            this.CCDXPulseCount.Name = "CCDXPulseCount";
+            this.CCDXPulseCount.Size = new System.Drawing.Size(76, 21);
+            this.CCDXPulseCount.TabIndex = 2;
             // 
-            // textBox3
+            // stageYPulseCount
             // 
-            this.textBox3.Location = new System.Drawing.Point(180, 86);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(76, 21);
-            this.textBox3.TabIndex = 2;
+            this.stageYPulseCount.Location = new System.Drawing.Point(180, 86);
+            this.stageYPulseCount.Name = "stageYPulseCount";
+            this.stageYPulseCount.Size = new System.Drawing.Size(76, 21);
+            this.stageYPulseCount.TabIndex = 2;
             // 
-            // textBox1
+            // stageXPulseCount
             // 
-            this.textBox1.Location = new System.Drawing.Point(180, 48);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(76, 21);
-            this.textBox1.TabIndex = 2;
+            this.stageXPulseCount.Location = new System.Drawing.Point(180, 48);
+            this.stageXPulseCount.Name = "stageXPulseCount";
+            this.stageXPulseCount.Size = new System.Drawing.Size(76, 21);
+            this.stageXPulseCount.TabIndex = 2;
             // 
             // button6
             // 
@@ -669,32 +669,32 @@
             this.stopStageXAxisBtn.Text = "单轴停止";
             this.stopStageXAxisBtn.UseVisualStyleBackColor = true;
             // 
-            // button5
+            // setZeroCCDZBtn
             // 
-            this.button5.Location = new System.Drawing.Point(88, 163);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(74, 25);
-            this.button5.TabIndex = 1;
-            this.button5.Text = "设置零点";
-            this.button5.UseVisualStyleBackColor = true;
+            this.setZeroCCDZBtn.Location = new System.Drawing.Point(88, 163);
+            this.setZeroCCDZBtn.Name = "setZeroCCDZBtn";
+            this.setZeroCCDZBtn.Size = new System.Drawing.Size(74, 25);
+            this.setZeroCCDZBtn.TabIndex = 1;
+            this.setZeroCCDZBtn.Text = "设置零点";
+            this.setZeroCCDZBtn.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // setZeroCCDXBtn
             // 
-            this.button3.Location = new System.Drawing.Point(88, 123);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(74, 25);
-            this.button3.TabIndex = 1;
-            this.button3.Text = "设置零点";
-            this.button3.UseVisualStyleBackColor = true;
+            this.setZeroCCDXBtn.Location = new System.Drawing.Point(88, 123);
+            this.setZeroCCDXBtn.Name = "setZeroCCDXBtn";
+            this.setZeroCCDXBtn.Size = new System.Drawing.Size(74, 25);
+            this.setZeroCCDXBtn.TabIndex = 1;
+            this.setZeroCCDXBtn.Text = "设置零点";
+            this.setZeroCCDXBtn.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // setZeroStageYBtn
             // 
-            this.button1.Location = new System.Drawing.Point(88, 84);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(74, 25);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "设置零点";
-            this.button1.UseVisualStyleBackColor = true;
+            this.setZeroStageYBtn.Location = new System.Drawing.Point(88, 84);
+            this.setZeroStageYBtn.Name = "setZeroStageYBtn";
+            this.setZeroStageYBtn.Size = new System.Drawing.Size(74, 25);
+            this.setZeroStageYBtn.TabIndex = 1;
+            this.setZeroStageYBtn.Text = "设置零点";
+            this.setZeroStageYBtn.UseVisualStyleBackColor = true;
             // 
             // setZeroStageXBtn
             // 
@@ -1024,6 +1024,15 @@
             this.imageAssistPage.TabIndex = 0;
             this.imageAssistPage.Text = "图像辅助";
             // 
+            // button22
+            // 
+            this.button22.Location = new System.Drawing.Point(356, 40);
+            this.button22.Name = "button22";
+            this.button22.Size = new System.Drawing.Size(105, 43);
+            this.button22.TabIndex = 0;
+            this.button22.Text = "测量两点距离";
+            this.button22.UseVisualStyleBackColor = true;
+            // 
             // button16
             // 
             this.button16.Location = new System.Drawing.Point(182, 40);
@@ -1032,6 +1041,33 @@
             this.button16.TabIndex = 0;
             this.button16.Text = "图像比例尺";
             this.button16.UseVisualStyleBackColor = true;
+            // 
+            // button21
+            // 
+            this.button21.Location = new System.Drawing.Point(356, 127);
+            this.button21.Name = "button21";
+            this.button21.Size = new System.Drawing.Size(105, 43);
+            this.button21.TabIndex = 0;
+            this.button21.Text = "画圆";
+            this.button21.UseVisualStyleBackColor = true;
+            // 
+            // button20
+            // 
+            this.button20.Location = new System.Drawing.Point(182, 127);
+            this.button20.Name = "button20";
+            this.button20.Size = new System.Drawing.Size(105, 43);
+            this.button20.TabIndex = 0;
+            this.button20.Text = "画矩形";
+            this.button20.UseVisualStyleBackColor = true;
+            // 
+            // button19
+            // 
+            this.button19.Location = new System.Drawing.Point(21, 127);
+            this.button19.Name = "button19";
+            this.button19.Size = new System.Drawing.Size(105, 43);
+            this.button19.TabIndex = 0;
+            this.button19.Text = "画直线";
+            this.button19.UseVisualStyleBackColor = true;
             // 
             // button15
             // 
@@ -1061,42 +1097,6 @@
             this.softlimitPage.Size = new System.Drawing.Size(629, 300);
             this.softlimitPage.TabIndex = 2;
             this.softlimitPage.Text = "软限位设置";
-            // 
-            // button19
-            // 
-            this.button19.Location = new System.Drawing.Point(21, 127);
-            this.button19.Name = "button19";
-            this.button19.Size = new System.Drawing.Size(105, 43);
-            this.button19.TabIndex = 0;
-            this.button19.Text = "画直线";
-            this.button19.UseVisualStyleBackColor = true;
-            // 
-            // button20
-            // 
-            this.button20.Location = new System.Drawing.Point(182, 127);
-            this.button20.Name = "button20";
-            this.button20.Size = new System.Drawing.Size(105, 43);
-            this.button20.TabIndex = 0;
-            this.button20.Text = "画矩形";
-            this.button20.UseVisualStyleBackColor = true;
-            // 
-            // button21
-            // 
-            this.button21.Location = new System.Drawing.Point(356, 127);
-            this.button21.Name = "button21";
-            this.button21.Size = new System.Drawing.Size(105, 43);
-            this.button21.TabIndex = 0;
-            this.button21.Text = "画圆";
-            this.button21.UseVisualStyleBackColor = true;
-            // 
-            // button22
-            // 
-            this.button22.Location = new System.Drawing.Point(356, 40);
-            this.button22.Name = "button22";
-            this.button22.Size = new System.Drawing.Size(105, 43);
-            this.button22.TabIndex = 0;
-            this.button22.Text = "测量两点距离";
-            this.button22.UseVisualStyleBackColor = true;
             // 
             // SMTDlg
             // 
@@ -1167,38 +1167,38 @@
         private System.Windows.Forms.GroupBox axisStateGroupBox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox stageXDis;
+        private System.Windows.Forms.TextBox stageXPulseCount;
         private System.Windows.Forms.Button setZeroStageXBtn;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label stageYRange;
+        private System.Windows.Forms.Label myLabel3;
+        private System.Windows.Forms.Label myLabel8;
+        private System.Windows.Forms.Label myLabel7;
+        private System.Windows.Forms.Label myLabel6;
+        private System.Windows.Forms.Label myLabel2;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label myLabel4;
+        private System.Windows.Forms.Label myLabel1;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox8;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox CCDZDis;
+        private System.Windows.Forms.TextBox CCDXDis;
+        private System.Windows.Forms.TextBox stageYDis;
+        private System.Windows.Forms.TextBox CCDZPulseCount;
+        private System.Windows.Forms.TextBox CCDXPulseCount;
+        private System.Windows.Forms.TextBox stageYPulseCount;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button stopStageXAxisBtn;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button setZeroCCDZBtn;
+        private System.Windows.Forms.Button setZeroCCDXBtn;
+        private System.Windows.Forms.Button setZeroStageYBtn;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label12;
