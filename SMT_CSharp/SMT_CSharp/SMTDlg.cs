@@ -21,6 +21,18 @@ namespace SMT_CSharp
 {
     public partial class SMTDlg : Form
     {
+#region variable
+        USBDHCamera.USBDHCamera m_Camera = new USBDHCamera.USBDHCamera();
+        private HV_SNAP_PROC snapCallback = new HV_SNAP_PROC(SnapCallBack);
+        private bool m_bIsSnap = false;
+        private bool m_bIsOpen = false;
+        private Capture m_capture = null;
+        private VideoWriter m_videoWriter = null;
+        private bool m_IsCapture = false;
+        private String m_videoPath = null;
+        private Image<Bgr, Byte> frame = null;
+        public Image<Bgr, Byte> m_src = null;
+#endregion
 #region public method
 
         public SMTDlg()
@@ -63,61 +75,65 @@ namespace SMT_CSharp
             imageSaveDlg.Filter = "bmp file(*.bmp)|*.bmp|png file(*.png)|*.png|jpg file(*.jpg)|*.jpg";
             if (imageSaveDlg.ShowDialog() == DialogResult.OK)
             {
-                Bitmap saveImage = m_Camera.GetCurrentBMP();
+                Bitmap saveImage = new Bitmap(640, 480);
+                saveImage = m_Camera.GetCurrentBMP().Clone() as Bitmap;
                 saveImage.Save(imageSaveDlg.FileName);
             }
         }
 
         private void SaveVideo_Click(object sender, EventArgs e)
         {
-            ThreadStart myThreadStart = new ThreadStart(SaveVideo);
-            Thread SaveVideoThread = new Thread(myThreadStart);
-            SaveVideoThread.Start();
-        }
-
-        private void SaveVideo()
-        {
             SaveFileDialog videoSaveDlg = new SaveFileDialog();
             videoSaveDlg.InitialDirectory = "./data/videos";
             videoSaveDlg.Filter = "AVI(*.avi)|*.avi";
             videoSaveDlg.AddExtension = true;
-            int frameWidth = (int)CvInvoke.cvGetCaptureProperty(m_capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH);
-            int frameHeight = (int)CvInvoke.cvGetCaptureProperty(m_capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT);
             if (videoSaveDlg.ShowDialog() == DialogResult.OK)
             {
-                m_capture = new Capture();
-                m_videoWriter = new VideoWriter(videoSaveDlg.FileName,
-                    CvInvoke.CV_FOURCC('M', 'J', 'P', 'G'), 15, frameWidth, frameHeight, true);
-                m_capture.ImageGrabbed += ProcessFrame;
-                m_capture.Start();
+                Thread SaveVideoThread = new Thread(new ThreadStart(SaveVideoThreadFunc));
+                SaveVideoThread.Start();
+                m_videoPath = videoSaveDlg.FileName;                
             }
+        }
+
+        private void SaveVideoThreadFunc()
+        {
+            m_IsCapture = true;
+            m_videoWriter = new VideoWriter(m_videoPath,
+                        CvInvoke.CV_FOURCC('M', 'J', 'P', 'G'), 15, 640, 480, true);
+            while (m_IsCapture)
+            {
+                //Bitmap bmp = m_Camera.GetCurrentBMP().Clone() as Bitmap;
+                //Image<Bgr, Byte> frame1 = new Image<Bgr, Byte>(bmp);
+                m_videoWriter.WriteFrame(m_src);
+                CvInvoke.cvWaitKey(27);
+                if (!m_IsCapture) break;
+            }            
         }
 
         private void ProcessFrame(object sender, EventArgs arg)
         {
-            //capture to a Image variable so we can use it for writing to the VideoWriter
-            Image<Bgr, Byte> frame = m_capture.RetrieveBgrFrame();
-            //if we wanted to compresse the image to a smaller size to save space on our video we could use
-            //frame.Resize(100,100, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR)
-            //But the VideoWriter must be set up with the correct size
-            if (m_videoWriter.Ptr != IntPtr.Zero)
-            {   
-                //If we are recording and videowriter is avaliable add the image to the videowriter 
-                m_videoWriter.WriteFrame(frame); 
-            }
+            while (m_IsCapture)
+            {
+                if (!m_IsCapture)
+                {
+                    break;
+                }
+                Bitmap saveImage = new Bitmap(640, 480);
+                saveImage = m_Camera.GetCurrentBMP().Clone() as Bitmap;
+                saveImage.Save("D:/123.bmp");
+                frame = new Image<Bgr, Byte>(m_Camera.GetCurrentBMP().Clone() as Bitmap);
+                if (m_videoWriter.Ptr != IntPtr.Zero)
+                {
+                    m_videoWriter.WriteFrame(frame);
+                }                
+            }            
         }
 
         private void StopSaveVideo_Click(object sender, EventArgs e)
         {
-            if (m_capture != null)
-            {
-                if (m_capture.GrabProcessState == System.Threading.ThreadState.Running)
-                {
-                    m_capture.Stop();
-                }
-                m_capture.Dispose();
-                m_videoWriter.Dispose();
-            }
+            m_IsCapture = false;
+            Application.Idle -= ProcessFrame;
+            m_videoWriter.Dispose();
         }
 
         private void SaveCCDParam_Click(object sender, EventArgs e)
@@ -200,17 +216,12 @@ namespace SMT_CSharp
             m_Camera.SaveImage();
             Graphics gc = ccdView.CreateGraphics();
             gc.DrawImage(m_Camera.GetCurrentBMP(), ccdView.ClientRectangle);
+            m_src = new Image<Bgr, Byte>(m_Camera.GetCurrentBMP());
         }
+
 #endregion
 
-#region variable
-        USBDHCamera.USBDHCamera m_Camera = new USBDHCamera.USBDHCamera();
-        private HV_SNAP_PROC snapCallback = new HV_SNAP_PROC(SnapCallBack);
-        private bool m_bIsSnap = false;
-        private bool m_bIsOpen = false;
-        private Capture m_capture;
-        private VideoWriter m_videoWriter;
-#endregion
+
         private void SetGain_Scroll(object sender, EventArgs e)
         {
             gainUpDown.Value = gainTrackBar.Value;
