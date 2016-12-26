@@ -59,25 +59,25 @@
             this.label19 = new System.Windows.Forms.Label();
             this.stageYRange = new System.Windows.Forms.Label();
             this.myLabel3 = new System.Windows.Forms.Label();
-            this.myLabel8 = new System.Windows.Forms.Label();
-            this.myLabel7 = new System.Windows.Forms.Label();
-            this.myLabel6 = new System.Windows.Forms.Label();
-            this.myLabel2 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.myLabel4 = new System.Windows.Forms.Label();
-            this.myLabel1 = new System.Windows.Forms.Label();
+            this.el8 = new System.Windows.Forms.Label();
+            this.el7 = new System.Windows.Forms.Label();
+            this.el6 = new System.Windows.Forms.Label();
+            this.el5 = new System.Windows.Forms.Label();
+            this.el4 = new System.Windows.Forms.Label();
+            this.el3 = new System.Windows.Forms.Label();
+            this.el2 = new System.Windows.Forms.Label();
+            this.el1 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.CCDZDis = new System.Windows.Forms.TextBox();
-            this.CCDXDis = new System.Windows.Forms.TextBox();
-            this.stageYDis = new System.Windows.Forms.TextBox();
-            this.stageXDis = new System.Windows.Forms.TextBox();
-            this.CCDZPulseCount = new System.Windows.Forms.TextBox();
-            this.CCDXPulseCount = new System.Windows.Forms.TextBox();
-            this.stageYPulseCount = new System.Windows.Forms.TextBox();
-            this.stageXPulseCount = new System.Windows.Forms.TextBox();
+            this.CCDZDisEdit = new System.Windows.Forms.TextBox();
+            this.CCDXDisEdit = new System.Windows.Forms.TextBox();
+            this.stageYDisEdit = new System.Windows.Forms.TextBox();
+            this.stageXDisEdit = new System.Windows.Forms.TextBox();
+            this.CCDZPulseEdit = new System.Windows.Forms.TextBox();
+            this.CCDXPulseEdit = new System.Windows.Forms.TextBox();
+            this.stageYPulseEdit = new System.Windows.Forms.TextBox();
+            this.stageXPulseEdit = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -93,37 +93,37 @@
             this.ctrlTab = new System.Windows.Forms.TabControl();
             this.handCtrlPage = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button17 = new System.Windows.Forms.Button();
-            this.button18 = new System.Windows.Forms.Button();
+            this.inhaleCloseBtn = new System.Windows.Forms.Button();
+            this.inhaleOpenBtn = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label28 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
-            this.button11 = new System.Windows.Forms.Button();
-            this.button12 = new System.Windows.Forms.Button();
-            this.button13 = new System.Windows.Forms.Button();
-            this.button14 = new System.Windows.Forms.Button();
-            this.textBox10 = new System.Windows.Forms.TextBox();
+            this.CCDZUpBtn = new System.Windows.Forms.Button();
+            this.CCDZDownBtn = new System.Windows.Forms.Button();
+            this.CCDXUpBtn = new System.Windows.Forms.Button();
+            this.CCDXDownBtn = new System.Windows.Forms.Button();
+            this.CCDStepEdit = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label27 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.stageYUpBtn = new System.Windows.Forms.Button();
+            this.stageYDownBtn = new System.Windows.Forms.Button();
+            this.stageXUpBtn = new System.Windows.Forms.Button();
+            this.stageXDownBtn = new System.Windows.Forms.Button();
+            this.stageStepEdit = new System.Windows.Forms.TextBox();
             this.autoCtrlPage = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.imageAssistPage = new System.Windows.Forms.TabPage();
-            this.button22 = new System.Windows.Forms.Button();
-            this.button16 = new System.Windows.Forms.Button();
-            this.button21 = new System.Windows.Forms.Button();
-            this.button20 = new System.Windows.Forms.Button();
-            this.button19 = new System.Windows.Forms.Button();
-            this.button15 = new System.Windows.Forms.Button();
+            this.measureDisBtn = new System.Windows.Forms.Button();
+            this.showImageScaleBtn = new System.Windows.Forms.Button();
+            this.drawCircleBtn = new System.Windows.Forms.Button();
+            this.drawRectBtn = new System.Windows.Forms.Button();
+            this.drawLineBtn = new System.Windows.Forms.Button();
+            this.showCrossBtn = new System.Windows.Forms.Button();
             this.motionParamPage = new System.Windows.Forms.TabPage();
             this.softlimitPage = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.ccdView)).BeginInit();
@@ -386,25 +386,25 @@
             this.axisStateGroupBox.Controls.Add(this.label19);
             this.axisStateGroupBox.Controls.Add(this.stageYRange);
             this.axisStateGroupBox.Controls.Add(this.myLabel3);
-            this.axisStateGroupBox.Controls.Add(this.myLabel8);
-            this.axisStateGroupBox.Controls.Add(this.myLabel7);
-            this.axisStateGroupBox.Controls.Add(this.myLabel6);
-            this.axisStateGroupBox.Controls.Add(this.myLabel2);
-            this.axisStateGroupBox.Controls.Add(this.label21);
-            this.axisStateGroupBox.Controls.Add(this.label17);
-            this.axisStateGroupBox.Controls.Add(this.myLabel4);
-            this.axisStateGroupBox.Controls.Add(this.myLabel1);
+            this.axisStateGroupBox.Controls.Add(this.el8);
+            this.axisStateGroupBox.Controls.Add(this.el7);
+            this.axisStateGroupBox.Controls.Add(this.el6);
+            this.axisStateGroupBox.Controls.Add(this.el5);
+            this.axisStateGroupBox.Controls.Add(this.el4);
+            this.axisStateGroupBox.Controls.Add(this.el3);
+            this.axisStateGroupBox.Controls.Add(this.el2);
+            this.axisStateGroupBox.Controls.Add(this.el1);
             this.axisStateGroupBox.Controls.Add(this.label6);
             this.axisStateGroupBox.Controls.Add(this.label5);
             this.axisStateGroupBox.Controls.Add(this.label4);
-            this.axisStateGroupBox.Controls.Add(this.CCDZDis);
-            this.axisStateGroupBox.Controls.Add(this.CCDXDis);
-            this.axisStateGroupBox.Controls.Add(this.stageYDis);
-            this.axisStateGroupBox.Controls.Add(this.stageXDis);
-            this.axisStateGroupBox.Controls.Add(this.CCDZPulseCount);
-            this.axisStateGroupBox.Controls.Add(this.CCDXPulseCount);
-            this.axisStateGroupBox.Controls.Add(this.stageYPulseCount);
-            this.axisStateGroupBox.Controls.Add(this.stageXPulseCount);
+            this.axisStateGroupBox.Controls.Add(this.CCDZDisEdit);
+            this.axisStateGroupBox.Controls.Add(this.CCDXDisEdit);
+            this.axisStateGroupBox.Controls.Add(this.stageYDisEdit);
+            this.axisStateGroupBox.Controls.Add(this.stageXDisEdit);
+            this.axisStateGroupBox.Controls.Add(this.CCDZPulseEdit);
+            this.axisStateGroupBox.Controls.Add(this.CCDXPulseEdit);
+            this.axisStateGroupBox.Controls.Add(this.stageYPulseEdit);
+            this.axisStateGroupBox.Controls.Add(this.stageXPulseEdit);
             this.axisStateGroupBox.Controls.Add(this.button6);
             this.axisStateGroupBox.Controls.Add(this.button4);
             this.axisStateGroupBox.Controls.Add(this.button2);
@@ -445,115 +445,108 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(531, 169);
+            this.label23.Location = new System.Drawing.Point(509, 169);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(29, 12);
+            this.label23.Size = new System.Drawing.Size(89, 12);
             this.label23.TabIndex = 5;
-            this.label23.Text = "icon";
+            this.label23.Text = "(0 - 51.096)mm";
             // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(531, 129);
+            this.label19.Location = new System.Drawing.Point(509, 129);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(29, 12);
+            this.label19.Size = new System.Drawing.Size(89, 12);
             this.label19.TabIndex = 5;
-            this.label19.Text = "icon";
+            this.label19.Text = "(0 - 51.188)mm";
             // 
             // stageYRange
             // 
             this.stageYRange.AutoSize = true;
-            this.stageYRange.Location = new System.Drawing.Point(531, 90);
+            this.stageYRange.Location = new System.Drawing.Point(509, 90);
             this.stageYRange.Name = "stageYRange";
-            this.stageYRange.Size = new System.Drawing.Size(29, 12);
+            this.stageYRange.Size = new System.Drawing.Size(95, 12);
             this.stageYRange.TabIndex = 5;
-            this.stageYRange.Text = "icon";
+            this.stageYRange.Text = "(0 - 101.425)mm";
             // 
             // myLabel3
             // 
             this.myLabel3.AutoSize = true;
-            this.myLabel3.Location = new System.Drawing.Point(531, 52);
+            this.myLabel3.Location = new System.Drawing.Point(509, 52);
             this.myLabel3.Name = "myLabel3";
-            this.myLabel3.Size = new System.Drawing.Size(29, 12);
+            this.myLabel3.Size = new System.Drawing.Size(89, 12);
             this.myLabel3.TabIndex = 5;
-            this.myLabel3.Text = "icon";
+            this.myLabel3.Text = "(0 - 97.052)mm";
             // 
-            // myLabel8
+            // el8
             // 
-            this.myLabel8.AutoSize = true;
-            this.myLabel8.Location = new System.Drawing.Point(460, 169);
-            this.myLabel8.Name = "myLabel8";
-            this.myLabel8.Size = new System.Drawing.Size(29, 12);
-            this.myLabel8.TabIndex = 5;
-            this.myLabel8.Text = "icon";
+            this.el8.Image = global::SMT_CSharp.Properties.Resources.red;
+            this.el8.Location = new System.Drawing.Point(460, 160);
+            this.el8.Name = "el8";
+            this.el8.Size = new System.Drawing.Size(30, 30);
+            this.el8.TabIndex = 5;
             // 
-            // myLabel7
+            // el7
             // 
-            this.myLabel7.AutoSize = true;
-            this.myLabel7.Location = new System.Drawing.Point(460, 129);
-            this.myLabel7.Name = "myLabel7";
-            this.myLabel7.Size = new System.Drawing.Size(29, 12);
-            this.myLabel7.TabIndex = 5;
-            this.myLabel7.Text = "icon";
+            this.el7.Image = global::SMT_CSharp.Properties.Resources.red;
+            this.el7.Location = new System.Drawing.Point(460, 119);
+            this.el7.Name = "el7";
+            this.el7.Size = new System.Drawing.Size(30, 30);
+            this.el7.TabIndex = 5;
             // 
-            // myLabel6
+            // el6
             // 
-            this.myLabel6.AutoSize = true;
-            this.myLabel6.Location = new System.Drawing.Point(460, 90);
-            this.myLabel6.Name = "myLabel6";
-            this.myLabel6.Size = new System.Drawing.Size(29, 12);
-            this.myLabel6.TabIndex = 5;
-            this.myLabel6.Text = "icon";
+            this.el6.Image = global::SMT_CSharp.Properties.Resources.red;
+            this.el6.Location = new System.Drawing.Point(460, 79);
+            this.el6.Name = "el6";
+            this.el6.Size = new System.Drawing.Size(30, 30);
+            this.el6.TabIndex = 5;
             // 
-            // myLabel2
+            // el5
             // 
-            this.myLabel2.AutoSize = true;
-            this.myLabel2.Location = new System.Drawing.Point(460, 52);
-            this.myLabel2.Name = "myLabel2";
-            this.myLabel2.Size = new System.Drawing.Size(29, 12);
-            this.myLabel2.TabIndex = 5;
-            this.myLabel2.Text = "icon";
+            this.el5.Image = global::SMT_CSharp.Properties.Resources.red;
+            this.el5.Location = new System.Drawing.Point(460, 43);
+            this.el5.Name = "el5";
+            this.el5.Size = new System.Drawing.Size(30, 30);
+            this.el5.TabIndex = 5;
             // 
-            // label21
+            // el4
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(394, 169);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(29, 12);
-            this.label21.TabIndex = 5;
-            this.label21.Text = "icon";
+            this.el4.Image = global::SMT_CSharp.Properties.Resources.red;
+            this.el4.Location = new System.Drawing.Point(390, 160);
+            this.el4.Name = "el4";
+            this.el4.Size = new System.Drawing.Size(30, 30);
+            this.el4.TabIndex = 5;
             // 
-            // label17
+            // el3
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(394, 129);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(29, 12);
-            this.label17.TabIndex = 5;
-            this.label17.Text = "icon";
+            this.el3.Image = global::SMT_CSharp.Properties.Resources.red;
+            this.el3.Location = new System.Drawing.Point(390, 118);
+            this.el3.Name = "el3";
+            this.el3.Size = new System.Drawing.Size(30, 30);
+            this.el3.TabIndex = 5;
             // 
-            // myLabel4
+            // el2
             // 
-            this.myLabel4.AutoSize = true;
-            this.myLabel4.Location = new System.Drawing.Point(394, 90);
-            this.myLabel4.Name = "myLabel4";
-            this.myLabel4.Size = new System.Drawing.Size(29, 12);
-            this.myLabel4.TabIndex = 5;
-            this.myLabel4.Text = "icon";
+            this.el2.Image = global::SMT_CSharp.Properties.Resources.red;
+            this.el2.Location = new System.Drawing.Point(390, 79);
+            this.el2.Name = "el2";
+            this.el2.Size = new System.Drawing.Size(30, 30);
+            this.el2.TabIndex = 5;
             // 
-            // myLabel1
+            // el1
             // 
-            this.myLabel1.AutoSize = true;
-            this.myLabel1.Location = new System.Drawing.Point(394, 52);
-            this.myLabel1.Name = "myLabel1";
-            this.myLabel1.Size = new System.Drawing.Size(29, 12);
-            this.myLabel1.TabIndex = 5;
-            this.myLabel1.Text = "icon";
+            this.el1.Image = global::SMT_CSharp.Properties.Resources.red;
+            this.el1.Location = new System.Drawing.Point(390, 44);
+            this.el1.Name = "el1";
+            this.el1.Size = new System.Drawing.Size(30, 30);
+            this.el1.TabIndex = 5;
+            this.el1.Text = "      ";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(373, 22);
+            this.label6.Location = new System.Drawing.Point(369, 22);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(65, 12);
             this.label6.TabIndex = 5;
@@ -577,65 +570,73 @@
             this.label4.TabIndex = 4;
             this.label4.Text = "脉冲数(个)";
             // 
-            // CCDZDis
+            // CCDZDisEdit
             // 
-            this.CCDZDis.Location = new System.Drawing.Point(275, 166);
-            this.CCDZDis.Name = "CCDZDis";
-            this.CCDZDis.Size = new System.Drawing.Size(75, 21);
-            this.CCDZDis.TabIndex = 3;
+            this.CCDZDisEdit.Location = new System.Drawing.Point(275, 166);
+            this.CCDZDisEdit.Name = "CCDZDisEdit";
+            this.CCDZDisEdit.ReadOnly = true;
+            this.CCDZDisEdit.Size = new System.Drawing.Size(75, 21);
+            this.CCDZDisEdit.TabIndex = 3;
             // 
-            // CCDXDis
+            // CCDXDisEdit
             // 
-            this.CCDXDis.Location = new System.Drawing.Point(275, 126);
-            this.CCDXDis.Name = "CCDXDis";
-            this.CCDXDis.Size = new System.Drawing.Size(75, 21);
-            this.CCDXDis.TabIndex = 3;
+            this.CCDXDisEdit.Location = new System.Drawing.Point(275, 126);
+            this.CCDXDisEdit.Name = "CCDXDisEdit";
+            this.CCDXDisEdit.ReadOnly = true;
+            this.CCDXDisEdit.Size = new System.Drawing.Size(75, 21);
+            this.CCDXDisEdit.TabIndex = 3;
             // 
-            // stageYDis
+            // stageYDisEdit
             // 
-            this.stageYDis.Location = new System.Drawing.Point(275, 87);
-            this.stageYDis.Name = "stageYDis";
-            this.stageYDis.Size = new System.Drawing.Size(75, 21);
-            this.stageYDis.TabIndex = 3;
+            this.stageYDisEdit.Location = new System.Drawing.Point(275, 87);
+            this.stageYDisEdit.Name = "stageYDisEdit";
+            this.stageYDisEdit.ReadOnly = true;
+            this.stageYDisEdit.Size = new System.Drawing.Size(75, 21);
+            this.stageYDisEdit.TabIndex = 3;
             // 
-            // stageXDis
+            // stageXDisEdit
             // 
-            this.stageXDis.Location = new System.Drawing.Point(275, 49);
-            this.stageXDis.Name = "stageXDis";
-            this.stageXDis.Size = new System.Drawing.Size(75, 21);
-            this.stageXDis.TabIndex = 3;
+            this.stageXDisEdit.Location = new System.Drawing.Point(275, 49);
+            this.stageXDisEdit.Name = "stageXDisEdit";
+            this.stageXDisEdit.ReadOnly = true;
+            this.stageXDisEdit.Size = new System.Drawing.Size(75, 21);
+            this.stageXDisEdit.TabIndex = 3;
             // 
-            // CCDZPulseCount
+            // CCDZPulseEdit
             // 
-            this.CCDZPulseCount.Location = new System.Drawing.Point(180, 165);
-            this.CCDZPulseCount.Name = "CCDZPulseCount";
-            this.CCDZPulseCount.Size = new System.Drawing.Size(76, 21);
-            this.CCDZPulseCount.TabIndex = 2;
+            this.CCDZPulseEdit.Location = new System.Drawing.Point(180, 165);
+            this.CCDZPulseEdit.Name = "CCDZPulseEdit";
+            this.CCDZPulseEdit.ReadOnly = true;
+            this.CCDZPulseEdit.Size = new System.Drawing.Size(76, 21);
+            this.CCDZPulseEdit.TabIndex = 2;
             // 
-            // CCDXPulseCount
+            // CCDXPulseEdit
             // 
-            this.CCDXPulseCount.Location = new System.Drawing.Point(180, 125);
-            this.CCDXPulseCount.Name = "CCDXPulseCount";
-            this.CCDXPulseCount.Size = new System.Drawing.Size(76, 21);
-            this.CCDXPulseCount.TabIndex = 2;
+            this.CCDXPulseEdit.Location = new System.Drawing.Point(180, 125);
+            this.CCDXPulseEdit.Name = "CCDXPulseEdit";
+            this.CCDXPulseEdit.ReadOnly = true;
+            this.CCDXPulseEdit.Size = new System.Drawing.Size(76, 21);
+            this.CCDXPulseEdit.TabIndex = 2;
             // 
-            // stageYPulseCount
+            // stageYPulseEdit
             // 
-            this.stageYPulseCount.Location = new System.Drawing.Point(180, 86);
-            this.stageYPulseCount.Name = "stageYPulseCount";
-            this.stageYPulseCount.Size = new System.Drawing.Size(76, 21);
-            this.stageYPulseCount.TabIndex = 2;
+            this.stageYPulseEdit.Location = new System.Drawing.Point(180, 86);
+            this.stageYPulseEdit.Name = "stageYPulseEdit";
+            this.stageYPulseEdit.ReadOnly = true;
+            this.stageYPulseEdit.Size = new System.Drawing.Size(76, 21);
+            this.stageYPulseEdit.TabIndex = 2;
             // 
-            // stageXPulseCount
+            // stageXPulseEdit
             // 
-            this.stageXPulseCount.Location = new System.Drawing.Point(180, 48);
-            this.stageXPulseCount.Name = "stageXPulseCount";
-            this.stageXPulseCount.Size = new System.Drawing.Size(76, 21);
-            this.stageXPulseCount.TabIndex = 2;
+            this.stageXPulseEdit.Location = new System.Drawing.Point(180, 48);
+            this.stageXPulseEdit.Name = "stageXPulseEdit";
+            this.stageXPulseEdit.ReadOnly = true;
+            this.stageXPulseEdit.Size = new System.Drawing.Size(76, 21);
+            this.stageXPulseEdit.TabIndex = 2;
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(588, 162);
+            this.button6.Location = new System.Drawing.Point(608, 162);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(74, 25);
             this.button6.TabIndex = 1;
@@ -644,7 +645,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(588, 122);
+            this.button4.Location = new System.Drawing.Point(608, 122);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(74, 25);
             this.button4.TabIndex = 1;
@@ -653,7 +654,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(588, 83);
+            this.button2.Location = new System.Drawing.Point(608, 83);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(74, 25);
             this.button2.TabIndex = 1;
@@ -662,7 +663,7 @@
             // 
             // stopStageXAxisBtn
             // 
-            this.stopStageXAxisBtn.Location = new System.Drawing.Point(588, 45);
+            this.stopStageXAxisBtn.Location = new System.Drawing.Point(608, 45);
             this.stopStageXAxisBtn.Name = "stopStageXAxisBtn";
             this.stopStageXAxisBtn.Size = new System.Drawing.Size(74, 25);
             this.stopStageXAxisBtn.TabIndex = 1;
@@ -766,8 +767,8 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.button17);
-            this.groupBox3.Controls.Add(this.button18);
+            this.groupBox3.Controls.Add(this.inhaleCloseBtn);
+            this.groupBox3.Controls.Add(this.inhaleOpenBtn);
             this.groupBox3.Location = new System.Drawing.Point(475, 27);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(179, 204);
@@ -775,23 +776,23 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "气动IO口运动控制:";
             // 
-            // button17
+            // inhaleCloseBtn
             // 
-            this.button17.Location = new System.Drawing.Point(97, 35);
-            this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(60, 50);
-            this.button17.TabIndex = 0;
-            this.button17.Text = "吸气关";
-            this.button17.UseVisualStyleBackColor = true;
+            this.inhaleCloseBtn.Location = new System.Drawing.Point(97, 35);
+            this.inhaleCloseBtn.Name = "inhaleCloseBtn";
+            this.inhaleCloseBtn.Size = new System.Drawing.Size(60, 50);
+            this.inhaleCloseBtn.TabIndex = 0;
+            this.inhaleCloseBtn.Text = "吸气关";
+            this.inhaleCloseBtn.UseVisualStyleBackColor = true;
             // 
-            // button18
+            // inhaleOpenBtn
             // 
-            this.button18.Location = new System.Drawing.Point(17, 35);
-            this.button18.Name = "button18";
-            this.button18.Size = new System.Drawing.Size(60, 50);
-            this.button18.TabIndex = 0;
-            this.button18.Text = "吸气开";
-            this.button18.UseVisualStyleBackColor = true;
+            this.inhaleOpenBtn.Location = new System.Drawing.Point(17, 35);
+            this.inhaleOpenBtn.Name = "inhaleOpenBtn";
+            this.inhaleOpenBtn.Size = new System.Drawing.Size(60, 50);
+            this.inhaleOpenBtn.TabIndex = 0;
+            this.inhaleOpenBtn.Text = "吸气开";
+            this.inhaleOpenBtn.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -799,11 +800,11 @@
             this.groupBox2.Controls.Add(this.label29);
             this.groupBox2.Controls.Add(this.label30);
             this.groupBox2.Controls.Add(this.label31);
-            this.groupBox2.Controls.Add(this.button11);
-            this.groupBox2.Controls.Add(this.button12);
-            this.groupBox2.Controls.Add(this.button13);
-            this.groupBox2.Controls.Add(this.button14);
-            this.groupBox2.Controls.Add(this.textBox10);
+            this.groupBox2.Controls.Add(this.CCDZUpBtn);
+            this.groupBox2.Controls.Add(this.CCDZDownBtn);
+            this.groupBox2.Controls.Add(this.CCDXUpBtn);
+            this.groupBox2.Controls.Add(this.CCDXDownBtn);
+            this.groupBox2.Controls.Add(this.CCDStepEdit);
             this.groupBox2.Location = new System.Drawing.Point(245, 24);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(216, 204);
@@ -847,48 +848,48 @@
             this.label31.TabIndex = 1;
             this.label31.Text = "X方向:";
             // 
-            // button11
+            // CCDZUpBtn
             // 
-            this.button11.Location = new System.Drawing.Point(142, 98);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(60, 50);
-            this.button11.TabIndex = 0;
-            this.button11.Text = "Z+";
-            this.button11.UseVisualStyleBackColor = true;
+            this.CCDZUpBtn.Location = new System.Drawing.Point(142, 98);
+            this.CCDZUpBtn.Name = "CCDZUpBtn";
+            this.CCDZUpBtn.Size = new System.Drawing.Size(60, 50);
+            this.CCDZUpBtn.TabIndex = 0;
+            this.CCDZUpBtn.Text = "Z+";
+            this.CCDZUpBtn.UseVisualStyleBackColor = true;
             // 
-            // button12
+            // CCDZDownBtn
             // 
-            this.button12.Location = new System.Drawing.Point(62, 98);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(60, 50);
-            this.button12.TabIndex = 0;
-            this.button12.Text = "Z-";
-            this.button12.UseVisualStyleBackColor = true;
+            this.CCDZDownBtn.Location = new System.Drawing.Point(62, 98);
+            this.CCDZDownBtn.Name = "CCDZDownBtn";
+            this.CCDZDownBtn.Size = new System.Drawing.Size(60, 50);
+            this.CCDZDownBtn.TabIndex = 0;
+            this.CCDZDownBtn.Text = "Z-";
+            this.CCDZDownBtn.UseVisualStyleBackColor = true;
             // 
-            // button13
+            // CCDXUpBtn
             // 
-            this.button13.Location = new System.Drawing.Point(142, 35);
-            this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(60, 50);
-            this.button13.TabIndex = 0;
-            this.button13.Text = "X+";
-            this.button13.UseVisualStyleBackColor = true;
+            this.CCDXUpBtn.Location = new System.Drawing.Point(142, 35);
+            this.CCDXUpBtn.Name = "CCDXUpBtn";
+            this.CCDXUpBtn.Size = new System.Drawing.Size(60, 50);
+            this.CCDXUpBtn.TabIndex = 0;
+            this.CCDXUpBtn.Text = "X+";
+            this.CCDXUpBtn.UseVisualStyleBackColor = true;
             // 
-            // button14
+            // CCDXDownBtn
             // 
-            this.button14.Location = new System.Drawing.Point(62, 35);
-            this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(60, 50);
-            this.button14.TabIndex = 0;
-            this.button14.Text = "X-";
-            this.button14.UseVisualStyleBackColor = true;
+            this.CCDXDownBtn.Location = new System.Drawing.Point(62, 35);
+            this.CCDXDownBtn.Name = "CCDXDownBtn";
+            this.CCDXDownBtn.Size = new System.Drawing.Size(60, 50);
+            this.CCDXDownBtn.TabIndex = 0;
+            this.CCDXDownBtn.Text = "X-";
+            this.CCDXDownBtn.UseVisualStyleBackColor = true;
             // 
-            // textBox10
+            // CCDStepEdit
             // 
-            this.textBox10.Location = new System.Drawing.Point(62, 171);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(75, 21);
-            this.textBox10.TabIndex = 3;
+            this.CCDStepEdit.Location = new System.Drawing.Point(62, 171);
+            this.CCDStepEdit.Name = "CCDStepEdit";
+            this.CCDStepEdit.Size = new System.Drawing.Size(75, 21);
+            this.CCDStepEdit.TabIndex = 3;
             // 
             // groupBox1
             // 
@@ -896,11 +897,11 @@
             this.groupBox1.Controls.Add(this.label26);
             this.groupBox1.Controls.Add(this.label25);
             this.groupBox1.Controls.Add(this.label24);
-            this.groupBox1.Controls.Add(this.button10);
-            this.groupBox1.Controls.Add(this.button9);
-            this.groupBox1.Controls.Add(this.button8);
-            this.groupBox1.Controls.Add(this.button7);
-            this.groupBox1.Controls.Add(this.textBox9);
+            this.groupBox1.Controls.Add(this.stageYUpBtn);
+            this.groupBox1.Controls.Add(this.stageYDownBtn);
+            this.groupBox1.Controls.Add(this.stageXUpBtn);
+            this.groupBox1.Controls.Add(this.stageXDownBtn);
+            this.groupBox1.Controls.Add(this.stageStepEdit);
             this.groupBox1.Location = new System.Drawing.Point(15, 27);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(216, 204);
@@ -944,48 +945,48 @@
             this.label24.TabIndex = 1;
             this.label24.Text = "X方向:";
             // 
-            // button10
+            // stageYUpBtn
             // 
-            this.button10.Location = new System.Drawing.Point(142, 98);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(60, 50);
-            this.button10.TabIndex = 0;
-            this.button10.Text = "Y+";
-            this.button10.UseVisualStyleBackColor = true;
+            this.stageYUpBtn.Location = new System.Drawing.Point(142, 98);
+            this.stageYUpBtn.Name = "stageYUpBtn";
+            this.stageYUpBtn.Size = new System.Drawing.Size(60, 50);
+            this.stageYUpBtn.TabIndex = 0;
+            this.stageYUpBtn.Text = "Y+";
+            this.stageYUpBtn.UseVisualStyleBackColor = true;
             // 
-            // button9
+            // stageYDownBtn
             // 
-            this.button9.Location = new System.Drawing.Point(62, 98);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(60, 50);
-            this.button9.TabIndex = 0;
-            this.button9.Text = "Y-";
-            this.button9.UseVisualStyleBackColor = true;
+            this.stageYDownBtn.Location = new System.Drawing.Point(62, 98);
+            this.stageYDownBtn.Name = "stageYDownBtn";
+            this.stageYDownBtn.Size = new System.Drawing.Size(60, 50);
+            this.stageYDownBtn.TabIndex = 0;
+            this.stageYDownBtn.Text = "Y-";
+            this.stageYDownBtn.UseVisualStyleBackColor = true;
             // 
-            // button8
+            // stageXUpBtn
             // 
-            this.button8.Location = new System.Drawing.Point(142, 35);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(60, 50);
-            this.button8.TabIndex = 0;
-            this.button8.Text = "X+";
-            this.button8.UseVisualStyleBackColor = true;
+            this.stageXUpBtn.Location = new System.Drawing.Point(142, 35);
+            this.stageXUpBtn.Name = "stageXUpBtn";
+            this.stageXUpBtn.Size = new System.Drawing.Size(60, 50);
+            this.stageXUpBtn.TabIndex = 0;
+            this.stageXUpBtn.Text = "X+";
+            this.stageXUpBtn.UseVisualStyleBackColor = true;
             // 
-            // button7
+            // stageXDownBtn
             // 
-            this.button7.Location = new System.Drawing.Point(62, 35);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(60, 50);
-            this.button7.TabIndex = 0;
-            this.button7.Text = "X-";
-            this.button7.UseVisualStyleBackColor = true;
+            this.stageXDownBtn.Location = new System.Drawing.Point(62, 35);
+            this.stageXDownBtn.Name = "stageXDownBtn";
+            this.stageXDownBtn.Size = new System.Drawing.Size(60, 50);
+            this.stageXDownBtn.TabIndex = 0;
+            this.stageXDownBtn.Text = "X-";
+            this.stageXDownBtn.UseVisualStyleBackColor = true;
             // 
-            // textBox9
+            // stageStepEdit
             // 
-            this.textBox9.Location = new System.Drawing.Point(62, 171);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(75, 21);
-            this.textBox9.TabIndex = 3;
+            this.stageStepEdit.Location = new System.Drawing.Point(62, 171);
+            this.stageStepEdit.Name = "stageStepEdit";
+            this.stageStepEdit.Size = new System.Drawing.Size(75, 21);
+            this.stageStepEdit.TabIndex = 3;
             // 
             // autoCtrlPage
             // 
@@ -1011,12 +1012,12 @@
             // imageAssistPage
             // 
             this.imageAssistPage.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.imageAssistPage.Controls.Add(this.button22);
-            this.imageAssistPage.Controls.Add(this.button16);
-            this.imageAssistPage.Controls.Add(this.button21);
-            this.imageAssistPage.Controls.Add(this.button20);
-            this.imageAssistPage.Controls.Add(this.button19);
-            this.imageAssistPage.Controls.Add(this.button15);
+            this.imageAssistPage.Controls.Add(this.measureDisBtn);
+            this.imageAssistPage.Controls.Add(this.showImageScaleBtn);
+            this.imageAssistPage.Controls.Add(this.drawCircleBtn);
+            this.imageAssistPage.Controls.Add(this.drawRectBtn);
+            this.imageAssistPage.Controls.Add(this.drawLineBtn);
+            this.imageAssistPage.Controls.Add(this.showCrossBtn);
             this.imageAssistPage.Location = new System.Drawing.Point(4, 22);
             this.imageAssistPage.Name = "imageAssistPage";
             this.imageAssistPage.Padding = new System.Windows.Forms.Padding(3);
@@ -1024,59 +1025,59 @@
             this.imageAssistPage.TabIndex = 0;
             this.imageAssistPage.Text = "图像辅助";
             // 
-            // button22
+            // measureDisBtn
             // 
-            this.button22.Location = new System.Drawing.Point(356, 40);
-            this.button22.Name = "button22";
-            this.button22.Size = new System.Drawing.Size(105, 43);
-            this.button22.TabIndex = 0;
-            this.button22.Text = "测量两点距离";
-            this.button22.UseVisualStyleBackColor = true;
+            this.measureDisBtn.Location = new System.Drawing.Point(356, 40);
+            this.measureDisBtn.Name = "measureDisBtn";
+            this.measureDisBtn.Size = new System.Drawing.Size(105, 43);
+            this.measureDisBtn.TabIndex = 0;
+            this.measureDisBtn.Text = "测量两点距离";
+            this.measureDisBtn.UseVisualStyleBackColor = true;
             // 
-            // button16
+            // showImageScaleBtn
             // 
-            this.button16.Location = new System.Drawing.Point(182, 40);
-            this.button16.Name = "button16";
-            this.button16.Size = new System.Drawing.Size(105, 43);
-            this.button16.TabIndex = 0;
-            this.button16.Text = "图像比例尺";
-            this.button16.UseVisualStyleBackColor = true;
+            this.showImageScaleBtn.Location = new System.Drawing.Point(182, 40);
+            this.showImageScaleBtn.Name = "showImageScaleBtn";
+            this.showImageScaleBtn.Size = new System.Drawing.Size(105, 43);
+            this.showImageScaleBtn.TabIndex = 0;
+            this.showImageScaleBtn.Text = "图像比例尺";
+            this.showImageScaleBtn.UseVisualStyleBackColor = true;
             // 
-            // button21
+            // drawCircleBtn
             // 
-            this.button21.Location = new System.Drawing.Point(356, 127);
-            this.button21.Name = "button21";
-            this.button21.Size = new System.Drawing.Size(105, 43);
-            this.button21.TabIndex = 0;
-            this.button21.Text = "画圆";
-            this.button21.UseVisualStyleBackColor = true;
+            this.drawCircleBtn.Location = new System.Drawing.Point(356, 127);
+            this.drawCircleBtn.Name = "drawCircleBtn";
+            this.drawCircleBtn.Size = new System.Drawing.Size(105, 43);
+            this.drawCircleBtn.TabIndex = 0;
+            this.drawCircleBtn.Text = "画圆";
+            this.drawCircleBtn.UseVisualStyleBackColor = true;
             // 
-            // button20
+            // drawRectBtn
             // 
-            this.button20.Location = new System.Drawing.Point(182, 127);
-            this.button20.Name = "button20";
-            this.button20.Size = new System.Drawing.Size(105, 43);
-            this.button20.TabIndex = 0;
-            this.button20.Text = "画矩形";
-            this.button20.UseVisualStyleBackColor = true;
+            this.drawRectBtn.Location = new System.Drawing.Point(182, 127);
+            this.drawRectBtn.Name = "drawRectBtn";
+            this.drawRectBtn.Size = new System.Drawing.Size(105, 43);
+            this.drawRectBtn.TabIndex = 0;
+            this.drawRectBtn.Text = "画矩形";
+            this.drawRectBtn.UseVisualStyleBackColor = true;
             // 
-            // button19
+            // drawLineBtn
             // 
-            this.button19.Location = new System.Drawing.Point(21, 127);
-            this.button19.Name = "button19";
-            this.button19.Size = new System.Drawing.Size(105, 43);
-            this.button19.TabIndex = 0;
-            this.button19.Text = "画直线";
-            this.button19.UseVisualStyleBackColor = true;
+            this.drawLineBtn.Location = new System.Drawing.Point(21, 127);
+            this.drawLineBtn.Name = "drawLineBtn";
+            this.drawLineBtn.Size = new System.Drawing.Size(105, 43);
+            this.drawLineBtn.TabIndex = 0;
+            this.drawLineBtn.Text = "画直线";
+            this.drawLineBtn.UseVisualStyleBackColor = true;
             // 
-            // button15
+            // showCrossBtn
             // 
-            this.button15.Location = new System.Drawing.Point(21, 40);
-            this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(105, 43);
-            this.button15.TabIndex = 0;
-            this.button15.Text = "十字标记";
-            this.button15.UseVisualStyleBackColor = true;
+            this.showCrossBtn.Location = new System.Drawing.Point(21, 40);
+            this.showCrossBtn.Name = "showCrossBtn";
+            this.showCrossBtn.Size = new System.Drawing.Size(105, 43);
+            this.showCrossBtn.TabIndex = 0;
+            this.showCrossBtn.Text = "十字标记";
+            this.showCrossBtn.UseVisualStyleBackColor = true;
             // 
             // motionParamPage
             // 
@@ -1167,8 +1168,8 @@
         private System.Windows.Forms.GroupBox axisStateGroupBox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox stageXDis;
-        private System.Windows.Forms.TextBox stageXPulseCount;
+        private System.Windows.Forms.TextBox stageXDisEdit;
+        private System.Windows.Forms.TextBox stageXPulseEdit;
         private System.Windows.Forms.Button setZeroStageXBtn;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label9;
@@ -1177,21 +1178,21 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label stageYRange;
         private System.Windows.Forms.Label myLabel3;
-        private System.Windows.Forms.Label myLabel8;
-        private System.Windows.Forms.Label myLabel7;
-        private System.Windows.Forms.Label myLabel6;
-        private System.Windows.Forms.Label myLabel2;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label myLabel4;
-        private System.Windows.Forms.Label myLabel1;
+        private System.Windows.Forms.Label el8;
+        private System.Windows.Forms.Label el7;
+        private System.Windows.Forms.Label el6;
+        private System.Windows.Forms.Label el5;
+        private System.Windows.Forms.Label el4;
+        private System.Windows.Forms.Label el3;
+        private System.Windows.Forms.Label el2;
+        private System.Windows.Forms.Label el1;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox CCDZDis;
-        private System.Windows.Forms.TextBox CCDXDis;
-        private System.Windows.Forms.TextBox stageYDis;
-        private System.Windows.Forms.TextBox CCDZPulseCount;
-        private System.Windows.Forms.TextBox CCDXPulseCount;
-        private System.Windows.Forms.TextBox stageYPulseCount;
+        private System.Windows.Forms.TextBox CCDZDisEdit;
+        private System.Windows.Forms.TextBox CCDXDisEdit;
+        private System.Windows.Forms.TextBox stageYDisEdit;
+        private System.Windows.Forms.TextBox CCDZPulseEdit;
+        private System.Windows.Forms.TextBox CCDXPulseEdit;
+        private System.Windows.Forms.TextBox stageYPulseEdit;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button2;
@@ -1205,39 +1206,39 @@
         private System.Windows.Forms.TabControl ctrlTab;
         private System.Windows.Forms.TabPage handCtrlPage;
         private System.Windows.Forms.TabPage autoCtrlPage;
-        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button stageXDownBtn;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.Button stageYUpBtn;
+        private System.Windows.Forms.Button stageYDownBtn;
+        private System.Windows.Forms.Button stageXUpBtn;
+        private System.Windows.Forms.TextBox stageStepEdit;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button button17;
-        private System.Windows.Forms.Button button18;
+        private System.Windows.Forms.Button inhaleCloseBtn;
+        private System.Windows.Forms.Button inhaleOpenBtn;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.Button button12;
-        private System.Windows.Forms.Button button13;
-        private System.Windows.Forms.Button button14;
-        private System.Windows.Forms.TextBox textBox10;
+        private System.Windows.Forms.Button CCDZUpBtn;
+        private System.Windows.Forms.Button CCDZDownBtn;
+        private System.Windows.Forms.Button CCDXUpBtn;
+        private System.Windows.Forms.Button CCDXDownBtn;
+        private System.Windows.Forms.TextBox CCDStepEdit;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage imageAssistPage;
-        private System.Windows.Forms.Button button16;
-        private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.Button showImageScaleBtn;
+        private System.Windows.Forms.Button showCrossBtn;
         private System.Windows.Forms.TabPage motionParamPage;
         private System.Windows.Forms.TabPage softlimitPage;
-        private System.Windows.Forms.Button button22;
-        private System.Windows.Forms.Button button21;
-        private System.Windows.Forms.Button button20;
-        private System.Windows.Forms.Button button19;
+        private System.Windows.Forms.Button measureDisBtn;
+        private System.Windows.Forms.Button drawCircleBtn;
+        private System.Windows.Forms.Button drawRectBtn;
+        private System.Windows.Forms.Button drawLineBtn;
     }
 }
 
