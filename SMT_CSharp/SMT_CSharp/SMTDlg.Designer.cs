@@ -784,6 +784,7 @@
             this.inhaleCloseBtn.TabIndex = 0;
             this.inhaleCloseBtn.Text = "吸气关";
             this.inhaleCloseBtn.UseVisualStyleBackColor = true;
+            this.inhaleCloseBtn.Click += new System.EventHandler(this.inhaleCloseBtn_Click);
             // 
             // inhaleOpenBtn
             // 
@@ -793,6 +794,7 @@
             this.inhaleOpenBtn.TabIndex = 0;
             this.inhaleOpenBtn.Text = "吸气开";
             this.inhaleOpenBtn.UseVisualStyleBackColor = true;
+            this.inhaleOpenBtn.Click += new System.EventHandler(this.inhaleOpenBtn_Click);
             // 
             // groupBox2
             // 
@@ -856,6 +858,7 @@
             this.CCDZUpBtn.TabIndex = 0;
             this.CCDZUpBtn.Text = "Z+";
             this.CCDZUpBtn.UseVisualStyleBackColor = true;
+            this.CCDZUpBtn.Click += new System.EventHandler(this.CCDZUpBtn_Click);
             // 
             // CCDZDownBtn
             // 
@@ -865,6 +868,7 @@
             this.CCDZDownBtn.TabIndex = 0;
             this.CCDZDownBtn.Text = "Z-";
             this.CCDZDownBtn.UseVisualStyleBackColor = true;
+            this.CCDZDownBtn.Click += new System.EventHandler(this.CCDZDownBtn_Click);
             // 
             // CCDXUpBtn
             // 
@@ -874,6 +878,7 @@
             this.CCDXUpBtn.TabIndex = 0;
             this.CCDXUpBtn.Text = "X+";
             this.CCDXUpBtn.UseVisualStyleBackColor = true;
+            this.CCDXUpBtn.Click += new System.EventHandler(this.CCDXUpBtn_Click);
             // 
             // CCDXDownBtn
             // 
@@ -883,6 +888,7 @@
             this.CCDXDownBtn.TabIndex = 0;
             this.CCDXDownBtn.Text = "X-";
             this.CCDXDownBtn.UseVisualStyleBackColor = true;
+            this.CCDXDownBtn.Click += new System.EventHandler(this.CCDXDownBtn_Click);
             // 
             // CCDStepEdit
             // 
@@ -953,6 +959,7 @@
             this.stageYUpBtn.TabIndex = 0;
             this.stageYUpBtn.Text = "Y+";
             this.stageYUpBtn.UseVisualStyleBackColor = true;
+            this.stageYUpBtn.Click += new System.EventHandler(this.stageYUpBtn_Click);
             // 
             // stageYDownBtn
             // 
@@ -962,6 +969,7 @@
             this.stageYDownBtn.TabIndex = 0;
             this.stageYDownBtn.Text = "Y-";
             this.stageYDownBtn.UseVisualStyleBackColor = true;
+            this.stageYDownBtn.Click += new System.EventHandler(this.stageYDownBtn_Click);
             // 
             // stageXUpBtn
             // 
@@ -971,6 +979,7 @@
             this.stageXUpBtn.TabIndex = 0;
             this.stageXUpBtn.Text = "X+";
             this.stageXUpBtn.UseVisualStyleBackColor = true;
+            this.stageXUpBtn.Click += new System.EventHandler(this.stageXUpBtn_Click);
             // 
             // stageXDownBtn
             // 
@@ -980,6 +989,7 @@
             this.stageXDownBtn.TabIndex = 0;
             this.stageXDownBtn.Text = "X-";
             this.stageXDownBtn.UseVisualStyleBackColor = true;
+            this.stageXDownBtn.Click += new System.EventHandler(this.stageXDownBtn_Click);
             // 
             // stageStepEdit
             // 
@@ -1033,6 +1043,7 @@
             this.measureDisBtn.TabIndex = 0;
             this.measureDisBtn.Text = "测量两点距离";
             this.measureDisBtn.UseVisualStyleBackColor = true;
+            this.measureDisBtn.Click += new System.EventHandler(this.measureDisBtn_Click);
             // 
             // showImageScaleBtn
             // 
@@ -1042,6 +1053,7 @@
             this.showImageScaleBtn.TabIndex = 0;
             this.showImageScaleBtn.Text = "图像比例尺";
             this.showImageScaleBtn.UseVisualStyleBackColor = true;
+            this.showImageScaleBtn.Click += new System.EventHandler(this.showImageScaleBtn_Click);
             // 
             // drawCircleBtn
             // 
@@ -1051,6 +1063,7 @@
             this.drawCircleBtn.TabIndex = 0;
             this.drawCircleBtn.Text = "画圆";
             this.drawCircleBtn.UseVisualStyleBackColor = true;
+            this.drawCircleBtn.Click += new System.EventHandler(this.drawCircleBtn_Click);
             // 
             // drawRectBtn
             // 
@@ -1060,6 +1073,7 @@
             this.drawRectBtn.TabIndex = 0;
             this.drawRectBtn.Text = "画矩形";
             this.drawRectBtn.UseVisualStyleBackColor = true;
+            this.drawRectBtn.Click += new System.EventHandler(this.drawRectBtn_Click);
             // 
             // drawLineBtn
             // 
@@ -1069,6 +1083,7 @@
             this.drawLineBtn.TabIndex = 0;
             this.drawLineBtn.Text = "画直线";
             this.drawLineBtn.UseVisualStyleBackColor = true;
+            this.drawLineBtn.Click += new System.EventHandler(this.drawLineBtn_Click);
             // 
             // showCrossBtn
             // 
@@ -1078,6 +1093,7 @@
             this.showCrossBtn.TabIndex = 0;
             this.showCrossBtn.Text = "十字标记";
             this.showCrossBtn.UseVisualStyleBackColor = true;
+            this.showCrossBtn.Click += new System.EventHandler(this.showCrossBtn_Click);
             // 
             // motionParamPage
             // 

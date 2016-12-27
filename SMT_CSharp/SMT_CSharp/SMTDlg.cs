@@ -83,7 +83,7 @@ namespace SMT_CSharp
 
         private void SaveVideo_Click(object sender, EventArgs e)
         {
-            SaveFileDialog videoSaveDlg = new SaveFileDialog();
+            /*SaveFileDialog videoSaveDlg = new SaveFileDialog();
             videoSaveDlg.InitialDirectory = "./data/videos";
             videoSaveDlg.Filter = "AVI(*.avi)|*.avi";
             videoSaveDlg.AddExtension = true;
@@ -92,12 +92,12 @@ namespace SMT_CSharp
                 Thread SaveVideoThread = new Thread(new ThreadStart(SaveVideoThreadFunc));
                 SaveVideoThread.Start();
                 m_videoPath = videoSaveDlg.FileName;                
-            }
+            }*/
         }
 
         private void SaveVideoThreadFunc()
         {
-            m_IsCapture = true;
+            /*m_IsCapture = true;
             m_videoWriter = new VideoWriter(m_videoPath,
                         CvInvoke.CV_FOURCC('M', 'J', 'P', 'G'), 15, 640, 480, true);
             while (m_IsCapture)
@@ -107,12 +107,12 @@ namespace SMT_CSharp
                 m_videoWriter.WriteFrame(m_src);
                 CvInvoke.cvWaitKey(27);
                 if (!m_IsCapture) break;
-            }            
+            } */           
         }
 
         private void ProcessFrame(object sender, EventArgs arg)
         {
-            while (m_IsCapture)
+            /*while (m_IsCapture)
             {
                 if (!m_IsCapture)
                 {
@@ -126,14 +126,14 @@ namespace SMT_CSharp
                 {
                     m_videoWriter.WriteFrame(frame);
                 }                
-            }            
+            } */           
         }
 
         private void StopSaveVideo_Click(object sender, EventArgs e)
         {
-            m_IsCapture = false;
+            /*m_IsCapture = false;
             Application.Idle -= ProcessFrame;
-            m_videoWriter.Dispose();
+            m_videoWriter.Dispose();*/
         }
 
         private void SaveCCDParam_Click(object sender, EventArgs e)
@@ -244,6 +244,86 @@ namespace SMT_CSharp
         {
             exposureTrackBar.Value = System.Convert.ToInt32(exposureUpDown.Value);
             m_Camera.SetExposureTime(exposureTrackBar.Value);
+        }
+
+        private void stageXDownBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void stageXUpBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void stageYDownBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void stageYUpBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CCDXDownBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CCDXUpBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CCDZDownBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CCDZUpBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void inhaleOpenBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void inhaleCloseBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void showCrossBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void showImageScaleBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void measureDisBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void drawLineBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void drawRectBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void drawCircleBtn_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
