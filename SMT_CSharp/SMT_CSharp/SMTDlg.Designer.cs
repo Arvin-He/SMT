@@ -896,6 +896,8 @@
             this.CCDStepEdit.Name = "CCDStepEdit";
             this.CCDStepEdit.Size = new System.Drawing.Size(75, 21);
             this.CCDStepEdit.TabIndex = 3;
+            this.CCDStepEdit.Text = "1000";
+            this.CCDStepEdit.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.CCDStepEdit_KeyPress);
             // 
             // groupBox1
             // 
@@ -997,6 +999,8 @@
             this.stageStepEdit.Name = "stageStepEdit";
             this.stageStepEdit.Size = new System.Drawing.Size(75, 21);
             this.stageStepEdit.TabIndex = 3;
+            this.stageStepEdit.Text = "1000";
+            this.stageStepEdit.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.stageStepEdit_KeyPress);
             // 
             // autoCtrlPage
             // 

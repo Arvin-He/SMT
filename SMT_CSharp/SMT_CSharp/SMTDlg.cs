@@ -13,9 +13,12 @@ using System.Threading;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
+using csLTDMC;
+using DMC3400A;
 
 using USBCameraAPI = USBCamera.API;
 using USBDHCamera;
+using SMT_CSharp;
 
 namespace SMT_CSharp
 {
@@ -32,6 +35,7 @@ namespace SMT_CSharp
         private String m_videoPath = null;
         private Image<Bgr, Byte> frame = null;
         public Image<Bgr, Byte> m_src = null;
+        public DMC3400A m_dmc3400ACard = null;
 #endregion
 #region public method
 
@@ -39,6 +43,8 @@ namespace SMT_CSharp
         {
             InitializeComponent();
             m_Camera.Initialize();
+            m_dmc3400ACard = new DMC3400A();
+            m_dmc3400ACard.InitDMC3400ACard();
         }
 
         ~SMTDlg()
@@ -138,7 +144,7 @@ namespace SMT_CSharp
 
         private void SaveCCDParam_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void LoadCCDParam_Click(object sender, EventArgs e)
@@ -248,7 +254,9 @@ namespace SMT_CSharp
 
         private void stageXDownBtn_Click(object sender, EventArgs e)
         {
-
+            int stepSize = 1000;
+            m_dmc3400ACard.SetMotionParam(0, m_dmc3400ACard.m_stageXAxisParam);
+            m_dmc3400ACard.DMC3400_Move(m_dmc3400ACard.m_cardNo, 0, m_dmc3400ACard.TransDistanceToPulse(0, stepSize), 1, 0);
         }
 
         private void stageXUpBtn_Click(object sender, EventArgs e)
@@ -323,7 +331,41 @@ namespace SMT_CSharp
 
         private void drawCircleBtn_Click(object sender, EventArgs e)
         {
+            
+        }
 
+        private void stageStepEdit_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 0x20) e.KeyChar = (char)0;  //禁止空格键  
+            if ((e.KeyChar == 0x2D) && (((TextBox)sender).Text.Length == 0)) return;   //处理负数  
+            if (e.KeyChar > 0x20)
+            {
+                try
+                {
+                    double.Parse(((TextBox)sender).Text + e.KeyChar.ToString());
+                }
+                catch
+                {
+                    e.KeyChar = (char)0;   //处理非法字符  
+                }
+            }  
+        }
+
+        private void CCDStepEdit_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 0x20) e.KeyChar = (char)0;  //禁止空格键  
+            if ((e.KeyChar == 0x2D) && (((TextBox)sender).Text.Length == 0)) return;   //处理负数  
+            if (e.KeyChar > 0x20)
+            {
+                try
+                {
+                    double.Parse(((TextBox)sender).Text + e.KeyChar.ToString());
+                }
+                catch
+                {
+                    e.KeyChar = (char)0;   //处理非法字符  
+                }
+            }  
         }
     }
 }
