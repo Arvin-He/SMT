@@ -9,8 +9,7 @@ using System.Runtime.InteropServices;
 using USBCameraAPI = USBCamera.API;
 using System.Diagnostics;
 
-
-namespace USBDHCamera
+namespace DH3151UC
 {
     public interface ICamera
     {
@@ -86,11 +85,9 @@ namespace USBDHCamera
         public void GetCameraType()
         {
             System.Diagnostics.Debug.Assert(m_pHandle != IntPtr.Zero);
-
             IntPtr buffer = new IntPtr();
             int size = sizeof(HVTYPE);
             StringBuilder str = new StringBuilder();
-
             buffer = Marshal.AllocHGlobal(size);
             HVSTATUS status = USBCameraAPI.HVGetDeviceInfo(m_pHandle, HV_DEVICE_INFO.DESC_DEVICE_TYPE, buffer, ref size);
             USBCameraAPI.HV_VERIFY(status);
@@ -100,9 +97,7 @@ namespace USBDHCamera
             {
                 str.Append(((HVTYPE)type[i]).ToString().Substring(0, 8));
             }
-
             m_strCameraType = str.ToString();
-
             str.Remove(0, str.Length);
             Marshal.FreeHGlobal(buffer);
         }
@@ -146,17 +141,14 @@ namespace USBDHCamera
         public void SetOutPutWindow()
         {
             System.Diagnostics.Debug.Assert(m_pHandle != IntPtr.Zero);
-
             IntPtr buffer = new IntPtr();
             int size = 0;
             HVSTATUS status = USBCameraAPI.HVGetDeviceInfo(m_pHandle, HV_DEVICE_INFO.DESC_RESOLUTION, buffer, ref size);
-
             buffer = Marshal.AllocHGlobal(size);
             status = USBCameraAPI.HVGetDeviceInfo(m_pHandle, HV_DEVICE_INFO.DESC_RESOLUTION, buffer, ref size);
             USBCameraAPI.HV_VERIFY(status);
             int[] type = new int[64];
-            Marshal.Copy(buffer, type, 0, 64);
-            
+            Marshal.Copy(buffer, type, 0, 64);           
             Marshal.FreeHGlobal(buffer);
 
             m_OutPutWindow.Width = type[(int)m_kResolotion*2];
@@ -169,7 +161,6 @@ namespace USBDHCamera
         public void SetBlanking()
         {
             System.Diagnostics.Debug.Assert(m_pHandle != IntPtr.Zero);
-
             HVSTATUS status = USBCameraAPI.HVSetBlanking(m_pHandle, m_kHBlanking, m_kVBlanking);
             USBCameraAPI.HV_VERIFY(status);
         }
@@ -177,7 +168,6 @@ namespace USBDHCamera
         public void SetSnapSpeed()
         {
             System.Diagnostics.Debug.Assert(m_pHandle != IntPtr.Zero);
-
             HVSTATUS status = USBCameraAPI.HVSetSnapSpeed(m_pHandle, m_kSnapSpeed);
             USBCameraAPI.HV_VERIFY(status);
         }
@@ -213,71 +203,14 @@ namespace USBDHCamera
             m_bmpCurrent.UnlockBits(bmpData);
         }
 
-        public bool IsHV130()
-        {
-            if ((m_strCameraType == "HV1300UCTYPE") || (m_strCameraType == "HV1300UMTYPE") ||
-                (m_strCameraType == "HV1301UCTYPE") || (m_strCameraType == "HV1302UMTYPE") ||
-                (m_strCameraType == "HV1302UCTYPE") || (m_strCameraType == "HV1303UMTYPE") ||
-                (m_strCameraType == "HV1303UCTYPE") || (m_strCameraType == "HV1350UMTYPE") ||
-                (m_strCameraType == "HV1350UCTYPE") || (m_strCameraType == "HV1351UMTYPE") ||
-                (m_strCameraType == "HV1351UCTYPE"))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool IsHV200()
-        {
-            if ((m_strCameraType == "HV2000UCTYPE") || (m_strCameraType == "HV2001UCTYPE") ||
-                (m_strCameraType == "HV2002UCTYPE") || (m_strCameraType == "HV2003UCTYPE") ||
-                (m_strCameraType == "HV2050UCTYPE") || (m_strCameraType == "HV2051UCTYPE"))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         public bool IsHV300()
         {
             if ((m_strCameraType == "HV3000UCTYPE") || (m_strCameraType == "HV3102UCTYPE") ||
                 (m_strCameraType == "HV3103UCTYPE") || (m_strCameraType == "HV3150UCTYPE") ||
-                (m_strCameraType == "HV3151UCTYPE"))
+                (m_strCameraType == "HV3151UCTYPE")) 
             {
                 return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool IsGV400()
-        {
-            if ((m_strCameraType == "GV400UCTYPE") || (m_strCameraType == "GV400UMTYPE"))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool IsHV5051()
-        {
-            if ((m_strCameraType == "HV5051UCTYPE") || (m_strCameraType == "HV5051UMTYPE"))
-            {
-                return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }        
@@ -299,18 +232,6 @@ namespace USBDHCamera
 #endregion
 
 #region protected method
-        //----------------------------------------------------------------------------------
-        /**
-            设置曝光时间
-            \param      int                 [in] 窗口宽度           
-            \param      int                 [in] 分子
-            \param      int                 [in] 分母
-            \param      int                 [in] 消隐控制
-            \param      HV_SNAP_SPEED       [in] 采集速度
-            \param      HV_RESOLUTION       [in] 分辨率
-            \return		HVSTATUS            [out]状态
-        */
-        //----------------------------------------------------------------------------------
         protected HVSTATUS SetExposureTime(int nWindWidth, int nUpper, int nLower, int nHBlanking,
                                             HV_SNAP_SPEED SnapSpeed, HV_RESOLUTION Resolution)
         {
@@ -322,174 +243,35 @@ namespace USBDHCamera
             double temp = (double)nUpper / (double)nLower;
             double tInt = (temp > m_kZeorInDouble) ? temp : m_kZeorInDouble;
 
-            if (IsGV400())
-            {
-                tB += 0x5e;
-                clockFreq = (SnapSpeed == HV_SNAP_SPEED.HIGH_SPEED) ? 26600000.0 : 13300000.0;
-                int rate = 0;
-
-                switch (Resolution)
-                {
-                    case HV_RESOLUTION.RES_MODE0:
-                        rate = 1;
-                        break;
-                    case HV_RESOLUTION.RES_MODE1:
-                        rate = 2;
-                        break;
-
-                    default:
-                        return HVSTATUS.STATUS_PARAMETER_OUT_OF_BOUND;
-                }
-
-                outPut = outPut * rate;
-
-                if ((tInt * clockFreq) <= (outPut + tB - 255))
-                {
-                    exposure = 1;
-                }
-                else
-                {
-                    Debug.Assert((outPut + tB) != 0);
-                    exposure = ((tInt * clockFreq) - (outPut + tB - 255)) / (outPut + tB);
-                }
-
-                if (exposure < 3)
-                {
-                    exposure = 3;
-                }
-                else if (exposure > 32766)
-                {
-                    exposure = 32766;
-                }
-            }
-            else if (IsHV300())
-            {
-                clockFreq = (SnapSpeed == HV_SNAP_SPEED.HIGH_SPEED) ? 24000000 : 12000000;
-                tB += 142;
-                if (tB < 21)
-                {
-                    tB = 21;
-                }
-                int param1 = 331;
-                int param2 = 38;
-                int param3 = 316;
-                if (Resolution == HV_RESOLUTION.RES_MODE1)
-                {
-                    param1 = 673;
-                    param2 = 22;
-                    param3 = 316 * 2;
-                }
-                int AQ = outPut + param1 + param2 + tB;
-                int tmp = param1 + param3;
-                int trow = (AQ > tmp) ? AQ : tmp;
-
-                Debug.Assert(trow != 0);
-                exposure = ((tInt * clockFreq) + param1 - 132.0) / trow;
-
-                if ((exposure - (int)exposure) > 0.5)
-                {
-                    exposure += 1.0;
-                }
-                if (exposure <= 0)
-                {
-                    exposure = 1;
-                }
-                else if (exposure > 1048575)
-                {
-                    exposure = 1048575;
-                }
-            }
-            else if (IsHV200())
-            {
-                clockFreq = (SnapSpeed == HV_SNAP_SPEED.HIGH_SPEED) ? 24000000 : 12000000;
-                tB += 53;
-                if (tB < 19)
-                {
-                    tB = 19;
-                }
-                int AQ = outPut + 305 + tB;
-                int trow = (617 > AQ) ? 617 : AQ;
-                Debug.Assert((trow + 1) != 0);
-                exposure = (tInt * clockFreq + 180.0) / trow + 1;
-
-                if ((exposure - (int)exposure) > 0.5)
-                {
-                    exposure += 1.0;
-                }
-                if (exposure <= 0)
-                {
-                    exposure = 1;
-                }
-                else if (exposure > 16383)
-                {
-                    exposure = 16383;
-                }
-            }
-            else if (IsHV5051())
-            {
-                SHUTTER_UNIT_VALUE unit = SHUTTER_UNIT_VALUE.SHUTTER_MS;
-
-                if (nLower == 1000000)
-                {
-                    unit = SHUTTER_UNIT_VALUE.SHUTTER_US;
-                }
-
-                //设置曝光时间单位
-                HVSTATUS status = USBCameraAPI.HVAECControl(m_pHandle, (byte)HV_AEC_CONTROL.AEC_SHUTTER_UNIT, (int)unit);
-                if (!USBCameraAPI.HV_SUCCESS(status))
-                {
-                    return status;
-                }
-
-                //设置曝光时间
-                return USBCameraAPI.HVAECControl(m_pHandle, (byte)HV_AEC_CONTROL.AEC_SHUTTER_SPEED, nUpper);
-            }
-            else
+            if (IsHV300())
             {
                 clockFreq = (SnapSpeed == HV_SNAP_SPEED.HIGH_SPEED) ? 24000000 : 12000000;
                 tB += 9;
                 tB -= 19;
-                if (tB <= 0)
-                {
+                if (tB <= 0) {
                     tB = 0;
                 }
-                if ((outPut + 244.0 + tB) > 552)
-                {
+
+                if ((outPut + 244.0 + tB) > 552) {
                     exposure = (tInt * clockFreq + 180.0) / ((double)outPut + 244.0 + tB);
-                }
-                else
-                {
+                } else {
                     exposure = ((tInt * clockFreq) + 180.0) / 552;
                 }
 
-                if ((exposure - (int)exposure) > 0.5)
-                {
+                if ((exposure - (int)exposure) > 0.5) {
                     exposure += 1.0;
                 }
-                if (exposure <= 0)
-                {
-                    exposure = 1;
-                }
-                else if (exposure > 16383)
-                {
-                    exposure = 16383;
-                }
-            }
 
+                if (exposure <= 0) { exposure = 1;} 
+                else if (exposure > 16383) { exposure = 16383;}
+            }
             return USBCameraAPI.HVAECControl(m_pHandle, (byte)HV_AEC_CONTROL.AEC_EXPOSURE_TIME, (int)exposure);
         }
 
-        //----------------------------------------------------------------------------------
-        /**
-            初始化摄像机
-            \return		    无
-        */
-        //----------------------------------------------------------------------------------
         protected void InitializeCamera()
         {
             BeginDevice();
-            if (m_pHandle != IntPtr.Zero)
-            {
+            if (m_pHandle != IntPtr.Zero) {
                 GetCameraType();
                 SetResolution();
                 SetSnapMode();
@@ -499,50 +281,30 @@ namespace USBDHCamera
                 SetBlanking();
                 SetSnapSpeed();
                 SetExposureTime(m_kLowerET);
-            }
-            else
-            {
+            } else {
                 return;
             }
         }
 
-        //----------------------------------------------------------------------------------
-        /**
-            初始化数据
-            \return		    无
-        */
-        //----------------------------------------------------------------------------------
         protected void InitializeData()
         {
             m_RawBuffer = new byte[m_OutPutWindow.Width * m_OutPutWindow.Height];
             m_ImageBuffer = new byte[m_OutPutWindow.Width * m_OutPutWindow.Height * 3];
-
             for (int i = 0; i < 256; i++)
             {
                 m_LutR[i] = (byte)i;
                 m_LutG[i] = (byte)i;
                 m_LutB[i] = (byte)i;
             }
-
             m_bmpCurrent = new Bitmap(m_OutPutWindow.Width, m_OutPutWindow.Height, m_kBMPFormat);
-
             m_pRawBuffer = Marshal.AllocHGlobal(m_OutPutWindow.Width * m_OutPutWindow.Height);
         }
 
-        //----------------------------------------------------------------------------------
-        /**
-            释放数据
-            \return		无
-        */
-        //----------------------------------------------------------------------------------
         private void ReleaseData()
         {
             Marshal.FreeHGlobal(m_pRawBuffer);
         }
 #endregion
-
-
-
 
     }
 }

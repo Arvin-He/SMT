@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using csLTDMC;
 
-namespace SMT_CSharp
+namespace DMC3400A
 {
-    class DMC3400A
+    class DMC3400ACard
     {
         public ushort m_cardNo = 0;
         public const ushort m_axisCount = 4;
@@ -50,12 +50,12 @@ namespace SMT_CSharp
             }
         }
 
-        public DMC3400A()
+        public DMC3400ACard()
         {
             
         }
 
-        ~DMC3400A()
+        ~DMC3400ACard()
         {
 
         }
