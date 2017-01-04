@@ -78,9 +78,9 @@
             this.CCDXPulseEdit = new System.Windows.Forms.TextBox();
             this.stageYPulseEdit = new System.Windows.Forms.TextBox();
             this.stageXPulseEdit = new System.Windows.Forms.TextBox();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.stopCCDZAxisBtn = new System.Windows.Forms.Button();
+            this.stopCCDXAxisBtn = new System.Windows.Forms.Button();
+            this.stopStageYAxisBtn = new System.Windows.Forms.Button();
             this.stopStageXAxisBtn = new System.Windows.Forms.Button();
             this.setZeroCCDZBtn = new System.Windows.Forms.Button();
             this.setZeroCCDXBtn = new System.Windows.Forms.Button();
@@ -405,9 +405,9 @@
             this.axisStateGroupBox.Controls.Add(this.CCDXPulseEdit);
             this.axisStateGroupBox.Controls.Add(this.stageYPulseEdit);
             this.axisStateGroupBox.Controls.Add(this.stageXPulseEdit);
-            this.axisStateGroupBox.Controls.Add(this.button6);
-            this.axisStateGroupBox.Controls.Add(this.button4);
-            this.axisStateGroupBox.Controls.Add(this.button2);
+            this.axisStateGroupBox.Controls.Add(this.stopCCDZAxisBtn);
+            this.axisStateGroupBox.Controls.Add(this.stopCCDXAxisBtn);
+            this.axisStateGroupBox.Controls.Add(this.stopStageYAxisBtn);
             this.axisStateGroupBox.Controls.Add(this.stopStageXAxisBtn);
             this.axisStateGroupBox.Controls.Add(this.setZeroCCDZBtn);
             this.axisStateGroupBox.Controls.Add(this.setZeroCCDXBtn);
@@ -634,32 +634,35 @@
             this.stageXPulseEdit.Size = new System.Drawing.Size(76, 21);
             this.stageXPulseEdit.TabIndex = 2;
             // 
-            // button6
+            // stopCCDZAxisBtn
             // 
-            this.button6.Location = new System.Drawing.Point(608, 162);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(74, 25);
-            this.button6.TabIndex = 1;
-            this.button6.Text = "单轴停止";
-            this.button6.UseVisualStyleBackColor = true;
+            this.stopCCDZAxisBtn.Location = new System.Drawing.Point(608, 162);
+            this.stopCCDZAxisBtn.Name = "stopCCDZAxisBtn";
+            this.stopCCDZAxisBtn.Size = new System.Drawing.Size(74, 25);
+            this.stopCCDZAxisBtn.TabIndex = 1;
+            this.stopCCDZAxisBtn.Text = "单轴停止";
+            this.stopCCDZAxisBtn.UseVisualStyleBackColor = true;
+            this.stopCCDZAxisBtn.Click += new System.EventHandler(this.stopCCDZAxisBtn_Click);
             // 
-            // button4
+            // stopCCDXAxisBtn
             // 
-            this.button4.Location = new System.Drawing.Point(608, 122);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(74, 25);
-            this.button4.TabIndex = 1;
-            this.button4.Text = "单轴停止";
-            this.button4.UseVisualStyleBackColor = true;
+            this.stopCCDXAxisBtn.Location = new System.Drawing.Point(608, 122);
+            this.stopCCDXAxisBtn.Name = "stopCCDXAxisBtn";
+            this.stopCCDXAxisBtn.Size = new System.Drawing.Size(74, 25);
+            this.stopCCDXAxisBtn.TabIndex = 1;
+            this.stopCCDXAxisBtn.Text = "单轴停止";
+            this.stopCCDXAxisBtn.UseVisualStyleBackColor = true;
+            this.stopCCDXAxisBtn.Click += new System.EventHandler(this.stopCCDXAxisBtn_Click);
             // 
-            // button2
+            // stopStageYAxisBtn
             // 
-            this.button2.Location = new System.Drawing.Point(608, 83);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(74, 25);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "单轴停止";
-            this.button2.UseVisualStyleBackColor = true;
+            this.stopStageYAxisBtn.Location = new System.Drawing.Point(608, 83);
+            this.stopStageYAxisBtn.Name = "stopStageYAxisBtn";
+            this.stopStageYAxisBtn.Size = new System.Drawing.Size(74, 25);
+            this.stopStageYAxisBtn.TabIndex = 1;
+            this.stopStageYAxisBtn.Text = "单轴停止";
+            this.stopStageYAxisBtn.UseVisualStyleBackColor = true;
+            this.stopStageYAxisBtn.Click += new System.EventHandler(this.stopStageYAxisBtn_Click);
             // 
             // stopStageXAxisBtn
             // 
@@ -669,6 +672,7 @@
             this.stopStageXAxisBtn.TabIndex = 1;
             this.stopStageXAxisBtn.Text = "单轴停止";
             this.stopStageXAxisBtn.UseVisualStyleBackColor = true;
+            this.stopStageXAxisBtn.Click += new System.EventHandler(this.stopStageXAxisBtn_Click);
             // 
             // setZeroCCDZBtn
             // 
@@ -678,6 +682,7 @@
             this.setZeroCCDZBtn.TabIndex = 1;
             this.setZeroCCDZBtn.Text = "设置零点";
             this.setZeroCCDZBtn.UseVisualStyleBackColor = true;
+            this.setZeroCCDZBtn.Click += new System.EventHandler(this.setZeroCCDZBtn_Click);
             // 
             // setZeroCCDXBtn
             // 
@@ -687,6 +692,7 @@
             this.setZeroCCDXBtn.TabIndex = 1;
             this.setZeroCCDXBtn.Text = "设置零点";
             this.setZeroCCDXBtn.UseVisualStyleBackColor = true;
+            this.setZeroCCDXBtn.Click += new System.EventHandler(this.setZeroCCDXBtn_Click);
             // 
             // setZeroStageYBtn
             // 
@@ -696,6 +702,7 @@
             this.setZeroStageYBtn.TabIndex = 1;
             this.setZeroStageYBtn.Text = "设置零点";
             this.setZeroStageYBtn.UseVisualStyleBackColor = true;
+            this.setZeroStageYBtn.Click += new System.EventHandler(this.setZeroStageYBtn_Click);
             // 
             // setZeroStageXBtn
             // 
@@ -705,6 +712,7 @@
             this.setZeroStageXBtn.TabIndex = 1;
             this.setZeroStageXBtn.Text = "设置零点";
             this.setZeroStageXBtn.UseVisualStyleBackColor = true;
+            this.setZeroStageXBtn.Click += new System.EventHandler(this.setZeroStageXBtn_Click);
             // 
             // label20
             // 
@@ -1137,6 +1145,7 @@
             this.Controls.Add(this.ccdView);
             this.Name = "SMTDlg";
             this.Text = "贴片机操作软件";
+            this.Load += new System.EventHandler(this.SMTDlg_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ccdView)).EndInit();
             this.toolBar.ResumeLayout(false);
             this.toolBar.PerformLayout();
@@ -1213,9 +1222,9 @@
         private System.Windows.Forms.TextBox CCDZPulseEdit;
         private System.Windows.Forms.TextBox CCDXPulseEdit;
         private System.Windows.Forms.TextBox stageYPulseEdit;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button stopCCDZAxisBtn;
+        private System.Windows.Forms.Button stopCCDXAxisBtn;
+        private System.Windows.Forms.Button stopStageYAxisBtn;
         private System.Windows.Forms.Button stopStageXAxisBtn;
         private System.Windows.Forms.Button setZeroCCDZBtn;
         private System.Windows.Forms.Button setZeroCCDXBtn;

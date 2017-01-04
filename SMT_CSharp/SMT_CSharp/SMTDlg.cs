@@ -19,6 +19,7 @@ using DMC3400A;
 using csLTDMC;
 
 using SMT_CSharp;
+using SMT_CSharp.Properties;
 
 namespace SMT_CSharp
 {
@@ -36,6 +37,9 @@ namespace SMT_CSharp
 //         private Image<Bgr, Byte> frame = null;
         public Image<Bgr, Byte> m_src = null;
         DMC3400A.DMC3400ACard m_dmc3400ACard = new DMC3400A.DMC3400ACard();
+        System.Timers.Timer timer = new System.Timers.Timer();
+        Image m_greenImg = Image.FromFile(@"../../Properties/res/bmp/green.bmp");  // 相对于exe的路径
+        Image m_redImg = Image.FromFile(@"../../Properties/res/bmp/red.bmp");
 #endregion
 #region public method
 
@@ -50,6 +54,7 @@ namespace SMT_CSharp
         {
             CloseSnap();
             m_Camera.Release();
+            timer.Stop();
         }
 #endregion
 
@@ -353,12 +358,10 @@ namespace SMT_CSharp
             if ((e.KeyChar == 0x2D) && (((TextBox)sender).Text.Length == 0)) return;   //处理负数  
             if (e.KeyChar > 0x20)
             {
-                try
-                {
+                try {
                     double.Parse(((TextBox)sender).Text + e.KeyChar.ToString());
                 }
-                catch
-                {
+                catch {
                     e.KeyChar = (char)0;   //处理非法字符  
                 }
             }  
@@ -370,15 +373,130 @@ namespace SMT_CSharp
             if ((e.KeyChar == 0x2D) && (((TextBox)sender).Text.Length == 0)) return;   //处理负数  
             if (e.KeyChar > 0x20)
             {
-                try
-                {
+                try {
                     double.Parse(((TextBox)sender).Text + e.KeyChar.ToString());
-                }
-                catch
-                {
+                } 
+                catch {
                     e.KeyChar = (char)0;   //处理非法字符  
                 }
             }  
+        }
+
+        private void setZeroStageXBtn_Click(object sender, EventArgs e)
+        {
+            LTDMC.dmc_set_position(m_dmc3400ACard.m_cardNo, 0, 0);
+        }
+
+        private void setZeroStageYBtn_Click(object sender, EventArgs e)
+        {
+            LTDMC.dmc_set_position(m_dmc3400ACard.m_cardNo, 1, 0);
+        }
+
+        private void setZeroCCDXBtn_Click(object sender, EventArgs e)
+        {
+            LTDMC.dmc_set_position(m_dmc3400ACard.m_cardNo, 2, 0);
+        }
+
+        private void setZeroCCDZBtn_Click(object sender, EventArgs e)
+        {
+            LTDMC.dmc_set_position(m_dmc3400ACard.m_cardNo, 3, 0);
+        }
+
+        private void stopStageXAxisBtn_Click(object sender, EventArgs e)
+        {
+            LTDMC.dmc_stop(m_dmc3400ACard.m_cardNo, 0, 0);
+        }
+
+        private void stopStageYAxisBtn_Click(object sender, EventArgs e)
+        {
+            LTDMC.dmc_stop(m_dmc3400ACard.m_cardNo, 1, 0);
+        }
+
+        private void stopCCDXAxisBtn_Click(object sender, EventArgs e)
+        {
+            LTDMC.dmc_stop(m_dmc3400ACard.m_cardNo, 2, 0);
+        }
+
+        private void stopCCDZAxisBtn_Click(object sender, EventArgs e)
+        {
+            LTDMC.dmc_stop(m_dmc3400ACard.m_cardNo, 3, 0);
+        }
+
+        private void SMTDlg_Load(object sender, EventArgs e)
+        {
+             InitTimer();
+             timer.Start();
+        }
+
+        private void InitTimer()
+        {
+            // 调用本方法开始用计算器  
+            timer.Interval = 1000;//设置时钟周期为1秒（1000毫秒）  
+            timer.Enabled = true;
+            timer.AutoReset = true;
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);       
+        }
+
+        private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            UpdateDMC3400Status();
+            UpdateDMC3400Pulse();
+            UpdateDMC3400Distance();
+        }
+
+        // 更新状态位
+        private void UpdateDMC3400Status()
+        {
+            if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 0) & 0x02))
+            { el1.Image = m_greenImg.Clone() as Image; }
+            else
+            { el1.Image = m_redImg.Clone() as Image; }
+            if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 1) & 0x02))
+            { el2.Image = m_greenImg.Clone() as Image; }
+            else
+            { el2.Image = m_redImg.Clone() as Image; }
+            if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 2) & 0x02))
+            { el3.Image = m_greenImg.Clone() as Image; }
+            else
+            { el3.Image = m_redImg.Clone() as Image; }
+            if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 3) & 0x02))
+            { el4.Image = m_greenImg.Clone() as Image; }
+            else
+            { el4.Image = m_redImg.Clone() as Image; }
+
+            if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 0) & 0x04))
+            { el5.Image = m_greenImg.Clone() as Image; }
+            else
+            { el5.Image = m_redImg.Clone() as Image; }
+            if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 1) & 0x04))
+            { el6.Image = m_greenImg.Clone() as Image; }
+            else
+            { el6.Image = m_redImg.Clone() as Image; }
+            if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 2) & 0x04))
+            { el7.Image = m_greenImg.Clone() as Image; }
+            else
+            { el7.Image = m_redImg.Clone() as Image; }
+            if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 3) & 0x04))
+            { el8.Image = m_greenImg.Clone() as Image; }
+            else
+            { el8.Image = m_redImg.Clone() as Image; }  
+        }
+
+        // 更新脉冲数
+        private void UpdateDMC3400Pulse()
+        {
+            stageXPulseEdit.Text = Convert.ToString(LTDMC.dmc_get_position(m_dmc3400ACard.m_cardNo, 0));
+            stageYPulseEdit.Text = Convert.ToString(LTDMC.dmc_get_position(m_dmc3400ACard.m_cardNo, 1));
+            CCDXPulseEdit.Text = Convert.ToString(LTDMC.dmc_get_position(m_dmc3400ACard.m_cardNo, 2));
+            CCDZPulseEdit.Text = Convert.ToString(LTDMC.dmc_get_position(m_dmc3400ACard.m_cardNo, 3));
+        }
+        // 更新距离
+        private void UpdateDMC3400Distance()
+        {
+            stageXDisEdit.Text = Convert.ToString(m_dmc3400ACard.TransPulseToDistance(0, LTDMC.dmc_get_position(m_dmc3400ACard.m_cardNo, 0)));
+            stageYDisEdit.Text = Convert.ToString(m_dmc3400ACard.TransPulseToDistance(1, LTDMC.dmc_get_position(m_dmc3400ACard.m_cardNo, 1)));
+            CCDXDisEdit.Text = Convert.ToString(m_dmc3400ACard.TransPulseToDistance(2, LTDMC.dmc_get_position(m_dmc3400ACard.m_cardNo, 2)));
+            CCDZDisEdit.Text = Convert.ToString(m_dmc3400ACard.TransPulseToDistance(3, LTDMC.dmc_get_position(m_dmc3400ACard.m_cardNo, 3)));
         }
     }
 }
