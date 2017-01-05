@@ -48,6 +48,7 @@ namespace SMT_CSharp
             InitializeComponent();
             m_Camera.Initialize();
             m_dmc3400ACard.InitDMC3400ACard();
+            
         }
 
         ~SMTDlg()
@@ -322,35 +323,7 @@ namespace SMT_CSharp
             LTDMC.dmc_write_outbit(m_dmc3400ACard.m_cardNo, 0, 0);
         }
 
-        private void showCrossBtn_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void showImageScaleBtn_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void measureDisBtn_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void drawLineBtn_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void drawRectBtn_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void drawCircleBtn_Click(object sender, EventArgs e)
-        {
-            
-        }
+       
 
         private void stageStepEdit_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -498,5 +471,103 @@ namespace SMT_CSharp
             CCDXDisEdit.Text = Convert.ToString(m_dmc3400ACard.TransPulseToDistance(2, LTDMC.dmc_get_position(m_dmc3400ACard.m_cardNo, 2)));
             CCDZDisEdit.Text = Convert.ToString(m_dmc3400ACard.TransPulseToDistance(3, LTDMC.dmc_get_position(m_dmc3400ACard.m_cardNo, 3)));
         }
+
+        private void ccdView_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                m_startPt = new Point(e.X, e.Y);
+                m_endPt = new Point(e.X, e.Y);
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                Graphics g = ccdView.CreateGraphics(); 
+                g.Clear(Color.DarkGray);
+            }
+            
+        }
+
+        private void ccdView_MouseMove(object sender, MouseEventArgs e)
+        {
+            
+            if (e.Button == MouseButtons.Left)
+            {
+                if (m_bDrawLine || m_bDrawRect || m_bDrawCircle)
+                {
+                    m_endPt.X = e.X;
+                    m_endPt.Y = e.Y;
+                    ccdView.Refresh();
+                }
+            }
+        }
+
+        private void ccdView_MouseUp(object sender, MouseEventArgs e)
+        {
+            m_bDrawLine = false;
+            m_bDrawRect = false;
+            m_bDrawCircle = false;
+        }
+
+        private void ccdView_Paint(object sender, PaintEventArgs e)
+        {
+            if (m_startPt.Equals(m_endPt)) return;
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;//消除锯齿
+            if (m_bDrawLine)
+            {
+                e.Graphics.DrawLine(System.Drawing.Pens.Blue, m_startPt, m_endPt);
+            }
+            else if (m_bDrawRect)
+            {
+                if (m_endPt.X - m_startPt.X < 0 || m_endPt.Y - m_startPt.Y < 0) return;
+                e.Graphics.DrawRectangle(System.Drawing.Pens.Blue, m_startPt.X, m_startPt.Y, m_endPt.X - m_startPt.X, m_endPt.Y - m_startPt.Y);
+            }
+            else if (m_bDrawCircle)
+            {
+                Point diff = new Point(m_endPt.X - m_startPt.X, m_endPt.Y - m_endPt.Y);
+                int radius = (int)Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y);
+                e.Graphics.DrawEllipse(System.Drawing.Pens.Blue, m_startPt.X, m_startPt.Y, radius, radius);
+            }
+            
+        }
+
+        private void showCrossBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void showImageScaleBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void measureDisBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void drawLineBtn_Click(object sender, EventArgs e)
+        {
+            m_bDrawLine = true;
+        }
+
+        private void drawRectBtn_Click(object sender, EventArgs e)
+        {
+            m_bDrawRect = true;
+        }
+
+        private void drawCircleBtn_Click(object sender, EventArgs e)
+        {
+            m_bDrawCircle = true;
+        }
+
+        #region variable
+        private bool m_bDrawLine = false;
+        private bool m_bDrawRect = false;
+        private bool m_bDrawCircle = false;
+        private Point m_startPt;
+        private Point m_endPt;
+        #endregion
+
+        
     }
 }

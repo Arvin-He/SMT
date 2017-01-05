@@ -144,12 +144,16 @@
             // 
             // ccdView
             // 
-            this.ccdView.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.ccdView.BackColor = System.Drawing.Color.DarkGray;
             this.ccdView.Location = new System.Drawing.Point(5, 89);
             this.ccdView.Name = "ccdView";
             this.ccdView.Size = new System.Drawing.Size(640, 480);
             this.ccdView.TabIndex = 0;
             this.ccdView.TabStop = false;
+            this.ccdView.Paint += new System.Windows.Forms.PaintEventHandler(this.ccdView_Paint);
+            this.ccdView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ccdView_MouseDown);
+            this.ccdView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ccdView_MouseMove);
+            this.ccdView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ccdView_MouseUp);
             // 
             // toolBar
             // 
