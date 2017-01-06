@@ -512,9 +512,19 @@ namespace SMT_CSharp
         {
             if (m_startPt.Equals(m_endPt)) return;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;//消除锯齿
-            if (m_bDrawLine)
+            if (m_bDrawLine && (!m_bMeasureDis))
             {
                 e.Graphics.DrawLine(System.Drawing.Pens.Blue, m_startPt, m_endPt);
+            }
+            else if (m_bDrawLine && m_bMeasureDis)
+            {
+                Point diff = new Point(m_endPt.X - m_startPt.X, m_endPt.Y - m_endPt.Y);
+                double dis = Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y);
+                String str = string.Format("两点距离:{0:f}", dis);
+                Font font = new Font("宋体", 8);
+                SolidBrush sbrush = new SolidBrush(Color.Green);
+                e.Graphics.DrawString(str, font, sbrush, m_endPt);
+                e.Graphics.DrawLine(System.Drawing.Pens.Green, m_startPt, m_endPt);
             }
             else if (m_bDrawRect)
             {
@@ -532,17 +542,53 @@ namespace SMT_CSharp
 
         private void showCrossBtn_Click(object sender, EventArgs e)
         {
-
+            Graphics g = ccdView.CreateGraphics();
+            Point pt1 = new Point(ccdView.Size.Width/2-10, ccdView.Size.Height/2);
+            Point pt2 = new Point(ccdView.Size.Width/2+10, ccdView.Size.Height/2);
+            Point pt3 = new Point(ccdView.Size.Width/2, ccdView.Size.Height/2-10);
+            Point pt4 = new Point(ccdView.Size.Width/2, ccdView.Size.Height/2+10);
+            if (m_bDrawCross)
+            {
+                g.DrawLine(System.Drawing.Pens.Blue, pt1, pt2);
+                g.DrawLine(System.Drawing.Pens.Blue, pt3, pt4);
+                m_bDrawCross = false;
+            } 
+            else
+            {
+                g.Clear(Color.DarkGray);
+                m_bDrawCross = true;
+            }
         }
 
         private void showImageScaleBtn_Click(object sender, EventArgs e)
         {
-
+            Graphics g = ccdView.CreateGraphics();
+            if (m_bDrawScale)
+            {
+                String str = "比例尺";
+                Font font = new Font("宋体", 8);
+                SolidBrush sbrush = new SolidBrush(Color.Green);
+                g.DrawString(str, font, sbrush, new Point(ccdView.Size.Width - 65, ccdView.Size.Height-22));
+                g.FillRectangle(new SolidBrush(Color.Green), ccdView.Size.Width - 70, ccdView.Size.Height-10, 50, 5);
+                m_bDrawScale = false;
+            } 
+            else
+            {
+                g.Clear(Color.DarkGray);
+                m_bDrawScale = true;
+            }
         }
 
         private void measureDisBtn_Click(object sender, EventArgs e)
         {
-
+            if (m_bMeasureDis)
+            {
+                m_bMeasureDis = false;
+            } 
+            else
+            {
+                m_bMeasureDis = true;
+            }
         }
 
         private void drawLineBtn_Click(object sender, EventArgs e)
@@ -561,6 +607,9 @@ namespace SMT_CSharp
         }
 
         #region variable
+        private bool m_bDrawCross = true;
+        private bool m_bDrawScale = true;
+        private bool m_bMeasureDis = true;
         private bool m_bDrawLine = false;
         private bool m_bDrawRect = false;
         private bool m_bDrawCircle = false;
