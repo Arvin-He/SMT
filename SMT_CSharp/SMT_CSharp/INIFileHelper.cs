@@ -70,7 +70,6 @@ namespace INIConfig
         public string  GetIniString(string section, string key, string strDefault, StringBuilder retVal, int size)
         {
             long liRet = GetPrivateProfileString(section, key, strDefault, retVal, size, strIniFilePath);
-            //return (liRet >= 1);
             StringBuilder temp = new StringBuilder(1024);
             INIFileHelper.GetPrivateProfileString(section, key, strDefault, temp, 1024, strIniFilePath);
             return temp.ToString();

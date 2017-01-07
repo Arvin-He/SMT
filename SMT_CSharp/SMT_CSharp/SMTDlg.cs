@@ -42,8 +42,8 @@ namespace SMT_CSharp
         Image m_greenImg = Image.FromFile(@"../../Properties/res/bmp/green.bmp");  // 相对于exe的路径
         Image m_redImg = Image.FromFile(@"../../Properties/res/bmp/red.bmp");
 #endregion
-#region public method
 
+#region public method
         public SMTDlg()
         {
             InitializeComponent();
@@ -159,8 +159,7 @@ namespace SMT_CSharp
             //继续获取上级的上级的上级的目录。
             string pathto = topDir.Parent.FullName;
             string configFilePath = Path.Combine(pathto, @"config\ccdConfig.ini");
-            INIFileHelper inifile = new INIFileHelper(configFilePath);
-            
+            INIFileHelper inifile = new INIFileHelper(configFilePath);         
             inifile.WriteIniString("section1", "CCD增益", Convert.ToString(gainUpDown.Value));
             inifile.WriteIniString("section2", "CCD曝光度", Convert.ToString(exposureUpDown.Value));
         }
@@ -168,7 +167,6 @@ namespace SMT_CSharp
         private void LoadCCDParam_Click(object sender, EventArgs e)
         {
             System.IO.DirectoryInfo topDir = System.IO.Directory.GetParent(System.Environment.CurrentDirectory);
-            //继续获取上级的上级的上级的目录。
             string pathto = topDir.Parent.FullName;
             string configFilePath = Path.Combine(pathto, @"config\ccdConfig.ini");
             StringBuilder strCCDGain = new StringBuilder(32);
@@ -186,7 +184,22 @@ namespace SMT_CSharp
         
         private void UpdateUI()
         {
-
+            if (m_bIsOpen)
+            {
+                stopCCDBtn.Enabled = true;
+                closeCCDBtn.Enabled = true;
+                savePicBtn.Enabled = true;
+                saveVideoBtn.Enabled = true;
+                closeVideoBtn.Enabled = true;
+            } 
+            else
+            {
+                stopCCDBtn.Enabled = false;
+                closeCCDBtn.Enabled = false;
+                savePicBtn.Enabled = false;
+                saveVideoBtn.Enabled = false;
+                closeVideoBtn.Enabled = false;
+            }
         }
 
         private void OpenSnap()
@@ -354,12 +367,8 @@ namespace SMT_CSharp
             if ((e.KeyChar == 0x2D) && (((TextBox)sender).Text.Length == 0)) return;   //处理负数  
             if (e.KeyChar > 0x20)
             {
-                try {
-                    double.Parse(((TextBox)sender).Text + e.KeyChar.ToString());
-                }
-                catch {
-                    e.KeyChar = (char)0;   //处理非法字符  
-                }
+                try { double.Parse(((TextBox)sender).Text + e.KeyChar.ToString()); }
+                catch { e.KeyChar = (char)0; }  //处理非法字符  
             }  
         }
 
@@ -369,12 +378,8 @@ namespace SMT_CSharp
             if ((e.KeyChar == 0x2D) && (((TextBox)sender).Text.Length == 0)) return;   //处理负数  
             if (e.KeyChar > 0x20)
             {
-                try {
-                    double.Parse(((TextBox)sender).Text + e.KeyChar.ToString());
-                } 
-                catch {
-                    e.KeyChar = (char)0;   //处理非法字符  
-                }
+                try { double.Parse(((TextBox)sender).Text + e.KeyChar.ToString()); }
+                catch { e.KeyChar = (char)0; }  //处理非法字符  
             }  
         }
 
