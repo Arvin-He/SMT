@@ -46,9 +46,6 @@ namespace SMT_CSharp
         public SMTDlg()
         {
             InitializeComponent();
-            m_Camera.Initialize();
-            m_dmc3400ACard.InitDMC3400ACard();
-            
         }
 
         ~SMTDlg()
@@ -60,6 +57,14 @@ namespace SMT_CSharp
 #endregion
 
 #region private method
+        private void SMTDlg_Load(object sender, EventArgs e)
+        {
+            m_Camera.Initialize();
+            m_dmc3400ACard.InitDMC3400ACard();
+            InitTimer();
+            timer.Start();
+        }
+
         private void OpenCCDBtn_Click(object sender, EventArgs e)
         {
             OpenSnap();
@@ -231,8 +236,6 @@ namespace SMT_CSharp
         }
 
 #endregion
-
-
         private void SetGain_Scroll(object sender, EventArgs e)
         {
             gainUpDown.Value = gainTrackBar.Value;
@@ -323,8 +326,6 @@ namespace SMT_CSharp
             LTDMC.dmc_write_outbit(m_dmc3400ACard.m_cardNo, 0, 0);
         }
 
-       
-
         private void stageStepEdit_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 0x20) e.KeyChar = (char)0;  //禁止空格键  
@@ -393,12 +394,6 @@ namespace SMT_CSharp
         private void stopCCDZAxisBtn_Click(object sender, EventArgs e)
         {
             LTDMC.dmc_stop(m_dmc3400ACard.m_cardNo, 3, 0);
-        }
-
-        private void SMTDlg_Load(object sender, EventArgs e)
-        {
-             InitTimer();
-             timer.Start();
         }
 
         private void InitTimer()
@@ -484,12 +479,10 @@ namespace SMT_CSharp
                 Graphics g = ccdView.CreateGraphics(); 
                 g.Clear(Color.DarkGray);
             }
-            
         }
 
         private void ccdView_MouseMove(object sender, MouseEventArgs e)
         {
-            
             if (e.Button == MouseButtons.Left)
             {
                 if (m_bDrawLine || m_bDrawRect || m_bDrawCircle)
@@ -537,7 +530,6 @@ namespace SMT_CSharp
                 int radius = (int)Math.Sqrt(diff.X * diff.X + diff.Y * diff.Y);
                 e.Graphics.DrawEllipse(System.Drawing.Pens.Blue, m_startPt.X, m_startPt.Y, radius, radius);
             }
-            
         }
 
         private void showCrossBtn_Click(object sender, EventArgs e)
@@ -615,8 +607,6 @@ namespace SMT_CSharp
         private bool m_bDrawCircle = false;
         private Point m_startPt;
         private Point m_endPt;
-        #endregion
-
-        
+        #endregion       
     }
 }
