@@ -118,8 +118,8 @@ namespace DH3151UC
 
         public void SetGain(int gainValue)
         {
-            m_kGain = gainValue;
             System.Diagnostics.Debug.Assert(m_pHandle != IntPtr.Zero);
+            m_kGain = gainValue;
             HVSTATUS status = HVSTATUS.STATUS_OK;
             for (int i = 0; i < 4; i++)
             {
@@ -171,8 +171,8 @@ namespace DH3151UC
 
         public void SetExposureTime(int exposureTime)
         {
-            m_kLowerET = exposureTime;
             System.Diagnostics.Debug.Assert(m_pHandle != IntPtr.Zero);
+            m_kLowerET = exposureTime;
             HVSTATUS status = SetExposureTime(m_OutPutWindow.Width, m_kUpperET, m_kLowerET, 
                                                 m_kHBlanking, m_kSnapSpeed, m_kResolotion);
             USBCameraAPI.HV_VERIFY(status);

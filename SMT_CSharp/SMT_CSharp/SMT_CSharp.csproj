@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DMC3400A.cs" />
+    <Compile Include="INIFileHelper.cs" />
     <Compile Include="LTDMC.cs" />
     <Compile Include="SMTDlg.cs">
       <SubType>Form</SubType>

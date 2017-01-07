@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
 using System.Threading;
+using System.IO;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
@@ -17,7 +18,7 @@ using USBCameraAPI = USBCamera.API;
 using DH3151UC;
 using DMC3400A;
 using csLTDMC;
-
+using INIConfig;
 using SMT_CSharp;
 using SMT_CSharp.Properties;
 
@@ -154,12 +155,33 @@ namespace SMT_CSharp
 
         private void SaveCCDParam_Click(object sender, EventArgs e)
         {
+            System.IO.DirectoryInfo topDir = System.IO.Directory.GetParent(System.Environment.CurrentDirectory);
+            //继续获取上级的上级的上级的目录。
+            string pathto = topDir.Parent.FullName;
+            string configFilePath = Path.Combine(pathto, @"config\ccdConfig.ini");
+            INIFileHelper inifile = new INIFileHelper(configFilePath);
             
+            inifile.WriteIniString("section1", "CCD增益", Convert.ToString(gainUpDown.Value));
+            inifile.WriteIniString("section2", "CCD曝光度", Convert.ToString(exposureUpDown.Value));
         }
 
         private void LoadCCDParam_Click(object sender, EventArgs e)
         {
-
+            System.IO.DirectoryInfo topDir = System.IO.Directory.GetParent(System.Environment.CurrentDirectory);
+            //继续获取上级的上级的上级的目录。
+            string pathto = topDir.Parent.FullName;
+            string configFilePath = Path.Combine(pathto, @"config\ccdConfig.ini");
+            StringBuilder strCCDGain = new StringBuilder(32);
+            StringBuilder strCCDExposure = new StringBuilder(32);
+            INIFileHelper inifile = new INIFileHelper(configFilePath);
+            inifile.GetIniString("section1", "CCD增益", "", strCCDGain, strCCDGain.Capacity);
+            inifile.GetIniString("section2", "CCD曝光度", "", strCCDExposure, strCCDExposure.Capacity);
+            string gain = strCCDGain.ToString();
+            string exposure = strCCDExposure.ToString();
+            gainUpDown.Value = Convert.ToDecimal(gain);
+            gainTrackBar.Value = Convert.ToInt32(gain);
+            exposureUpDown.Value = Convert.ToDecimal(exposure);
+            exposureTrackBar.Value = Convert.ToInt32(exposure);
         }
         
         private void UpdateUI()
