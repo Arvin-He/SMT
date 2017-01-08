@@ -443,38 +443,38 @@ namespace SMT_CSharp
         private void UpdateDMC3400Status()
         {
             if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 0) & 0x02))
-            { el1.Image = m_greenImg.Clone() as Image; }
-            else
             { el1.Image = m_redImg.Clone() as Image; }
+            else
+            { el1.Image = m_greenImg.Clone() as Image; }
             if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 1) & 0x02))
-            { el2.Image = m_greenImg.Clone() as Image; }
-            else
             { el2.Image = m_redImg.Clone() as Image; }
+            else
+            { el2.Image = m_greenImg.Clone() as Image; }
             if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 2) & 0x02))
-            { el3.Image = m_greenImg.Clone() as Image; }
-            else
             { el3.Image = m_redImg.Clone() as Image; }
-            if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 3) & 0x02))
-            { el4.Image = m_greenImg.Clone() as Image; }
             else
+            { el3.Image = m_greenImg.Clone() as Image; }
+            if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 3) & 0x02))
             { el4.Image = m_redImg.Clone() as Image; }
+            else
+            { el4.Image = m_greenImg.Clone() as Image; }
 
             if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 0) & 0x04))
-            { el5.Image = m_greenImg.Clone() as Image; }
-            else
             { el5.Image = m_redImg.Clone() as Image; }
+            else
+            { el5.Image = m_greenImg.Clone() as Image; }
             if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 1) & 0x04))
-            { el6.Image = m_greenImg.Clone() as Image; }
-            else
             { el6.Image = m_redImg.Clone() as Image; }
+            else
+            { el6.Image = m_greenImg.Clone() as Image; }
             if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 2) & 0x04))
-            { el7.Image = m_greenImg.Clone() as Image; }
-            else
             { el7.Image = m_redImg.Clone() as Image; }
-            if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 3) & 0x04))
-            { el8.Image = m_greenImg.Clone() as Image; }
             else
-            { el8.Image = m_redImg.Clone() as Image; }  
+            { el7.Image = m_greenImg.Clone() as Image; }
+            if (Convert.ToBoolean(LTDMC.dmc_axis_io_status(m_dmc3400ACard.m_cardNo, 3) & 0x04))
+            { el8.Image = m_redImg.Clone() as Image; }
+            else
+            { el8.Image = m_greenImg.Clone() as Image; }  
         }
 
         // 更新脉冲数
