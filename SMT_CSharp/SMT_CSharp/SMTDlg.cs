@@ -267,7 +267,7 @@ namespace SMT_CSharp
             m_Camera.SaveImage();
             Graphics gc = ccdView.CreateGraphics();
             gc.DrawImage(m_Camera.GetCurrentBMP(), ccdView.ClientRectangle);
-            m_src = new Image<Bgr, Byte>(m_Camera.GetCurrentBMP());
+            //m_src = new Image<Bgr, Byte>(m_Camera.GetCurrentBMP());
         }
 
 #endregion

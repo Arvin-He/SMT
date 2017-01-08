@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using csLTDMC;
 
 namespace DMC3400A
@@ -65,8 +66,8 @@ namespace DMC3400A
             short num = LTDMC.dmc_board_init();//获取卡数量
             if (num <= 0 || num > 8)
             {
+                MessageBox.Show("初始卡失败!", "出错");
                 return false;
-                //MessageBox.Show("初始卡失败!", "出错");
             }
             ushort _num = 0;
             ushort[] cardids = new ushort[8];
@@ -74,8 +75,8 @@ namespace DMC3400A
             short res = LTDMC.dmc_get_CardInfList(ref _num, cardtypes, cardids);
             if (res != 0)
             {
+                MessageBox.Show("获取卡信息失败!");
                 return false;
-                //MessageBox.Show("获取卡信息失败!");
             }
             m_cardNo = cardids[0];
 
@@ -84,7 +85,7 @@ namespace DMC3400A
 		        // 设定脉冲模式及逻辑方向	
 		        LTDMC.dmc_set_pulse_outmode(m_cardNo, i, 4);
 		        // 设置 EL 限位信号
-                //LTDMC.dmc_set_el_mode(m_cardNo, i, 1, 1, 0);
+                LTDMC.dmc_set_el_mode(m_cardNo, i, 1, 1, 0);
 		        // 设置编码器的计数方式
                 LTDMC.dmc_set_counter_inmode(m_cardNo, i, 0);
 		        //设置指定轴的 EZ 信号
