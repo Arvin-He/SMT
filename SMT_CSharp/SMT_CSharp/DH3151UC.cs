@@ -40,7 +40,8 @@ namespace DH3151UC
         protected byte[] m_LutB = new byte[256];            ///< 颜色查询表B分量
         protected Bitmap m_bmpCurrent;                      ///< 当前位图
         protected int m_kGain = 9;                                                                          ///< 增益
-        protected int m_kLowerET = 1000;                                                                    ///< 曝光时间分母
+        protected int m_kUpperET = 600;                      ///< 曝光时间分子
+        
         protected Rectangle m_OutPutWindow = new Rectangle(0, 0, 640, 480);                                 ///< 输出窗口
 #endregion
 
@@ -52,7 +53,7 @@ namespace DH3151UC
         protected const int m_kHBlanking = 0;                                                               ///< 水平消隐
         protected const int m_kVBlanking = 0;                                                               ///< 垂直消隐
         protected const HV_SNAP_SPEED m_kSnapSpeed = HV_SNAP_SPEED.NORMAL_SPEED;                            ///< 采集速度
-        protected const int m_kUpperET = 60;                                                                ///< 曝光时间分子
+        protected int m_kLowerET = 1000;                                                                    ///< 曝光时间分母                                                                
         protected const double m_kZeorInDouble = 0.000000001;                                               ///< double类型的0
         protected const HV_BAYER_CONVERT_TYPE m_kConvertType = HV_BAYER_CONVERT_TYPE.BAYER2RGB_NEIGHBOUR;   ///< 转换类型
         protected const HV_BAYER_LAYOUT m_kBayerType = HV_BAYER_LAYOUT.BAYER_GR;                            ///< Bayer类型
@@ -172,8 +173,7 @@ namespace DH3151UC
         public void SetExposureTime(int exposureTime)
         {
             System.Diagnostics.Debug.Assert(m_pHandle != IntPtr.Zero);
-            m_kLowerET = exposureTime;
-            HVSTATUS status = SetExposureTime(m_OutPutWindow.Width, m_kUpperET, m_kLowerET, 
+            HVSTATUS status = SetExposureTime(m_OutPutWindow.Width, exposureTime, m_kLowerET, 
                                                 m_kHBlanking, m_kSnapSpeed, m_kResolotion);
             USBCameraAPI.HV_VERIFY(status);
         }
@@ -200,19 +200,57 @@ namespace DH3151UC
             m_bmpCurrent.UnlockBits(bmpData);
         }
 
+        public bool IsHV200()
+        {
+            if ((m_strCameraType == "HV2000UCTYPE") || (m_strCameraType == "HV2001UCTYPE") ||
+                (m_strCameraType == "HV2002UCTYPE") || (m_strCameraType == "HV2003UCTYPE") ||
+                (m_strCameraType == "HV2050UCTYPE") || (m_strCameraType == "HV2051UCTYPE"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public bool IsHV300()
         {
             if ((m_strCameraType == "HV3000UCTYPE") || (m_strCameraType == "HV3102UCTYPE") ||
                 (m_strCameraType == "HV3103UCTYPE") || (m_strCameraType == "HV3150UCTYPE") ||
-                (m_strCameraType == "HV3151UCTYPE")) 
+                (m_strCameraType == "HV3151UCTYPE"))
             {
                 return true;
-            } 
-            else 
+            }
+            else
             {
                 return false;
             }
-        }        
+        }
+
+        public bool IsGV400()
+        {
+            if ((m_strCameraType == "GV400UCTYPE") || (m_strCameraType == "GV400UMTYPE"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsHV5051()
+        {
+            if ((m_strCameraType == "HV5051UCTYPE") || (m_strCameraType == "HV5051UMTYPE"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public IntPtr GetRawBuffer()
         {
@@ -242,20 +280,98 @@ namespace DH3151UC
             double temp = (double)nUpper / (double)nLower;
             double tInt = (temp > m_kZeorInDouble) ? temp : m_kZeorInDouble;
 
-            if (IsHV300())
+            if (IsGV400())
+            {
+                tB += 0x5e;
+                clockFreq = (SnapSpeed == HV_SNAP_SPEED.HIGH_SPEED) ? 26600000.0 : 13300000.0;
+                int rate = 0;
+                switch (Resolution)
+                {
+                    case HV_RESOLUTION.RES_MODE0:
+                        rate = 1;
+                        break;
+                    case HV_RESOLUTION.RES_MODE1:
+                        rate = 2;
+                        break;
+                    default:
+                        return HVSTATUS.STATUS_PARAMETER_OUT_OF_BOUND;
+                }
+
+                outPut = outPut * rate;
+
+                if ((tInt * clockFreq) <= (outPut + tB - 255))
+                {
+                    exposure = 1;
+                }
+                else
+                {
+                    Debug.Assert((outPut + tB) != 0);
+                    exposure = ((tInt * clockFreq) - (outPut + tB - 255)) / (outPut + tB);
+                }
+
+                if (exposure < 3) { exposure = 3; }
+                else if (exposure > 32766) { exposure = 32766;}
+            }
+            else if (IsHV300())
+            {
+                clockFreq = (SnapSpeed == HV_SNAP_SPEED.HIGH_SPEED) ? 24000000 : 12000000;
+                tB += 142;
+                if (tB < 21) { tB = 21; }
+                int param1 = 331;
+                int param2 = 38;
+                int param3 = 316;
+                if (Resolution == HV_RESOLUTION.RES_MODE1)
+                {
+                    param1 = 673;
+                    param2 = 22;
+                    param3 = 316 * 2;
+                }
+                int AQ = outPut + param1 + param2 + tB;
+                int tmp = param1 + param3;
+                int trow = (AQ > tmp) ? AQ : tmp;
+
+                Debug.Assert(trow != 0);
+                exposure = ((tInt * clockFreq) + param1 - 132.0) / trow;
+
+                if ((exposure - (int)exposure) > 0.5) { exposure += 1.0;}
+                if (exposure <= 0) { exposure = 1; }
+                else if (exposure > 1048575) { exposure = 1048575;}
+            }
+            else if (IsHV200())
+            {
+                clockFreq = (SnapSpeed == HV_SNAP_SPEED.HIGH_SPEED) ? 24000000 : 12000000;
+                tB += 53;
+                if (tB < 19) { tB = 19; }
+                int AQ = outPut + 305 + tB;
+                int trow = (617 > AQ) ? 617 : AQ;
+                Debug.Assert((trow + 1) != 0);
+                exposure = (tInt * clockFreq + 180.0) / trow + 1;
+                if ((exposure - (int)exposure) > 0.5) { exposure += 1.0; }
+                if (exposure <= 0) { exposure = 1; }
+                else if (exposure > 16383) { exposure = 16383; }
+            }
+            else if (IsHV5051())
+            {
+                SHUTTER_UNIT_VALUE unit = SHUTTER_UNIT_VALUE.SHUTTER_MS;
+                if (nLower == 1000000) { unit = SHUTTER_UNIT_VALUE.SHUTTER_US; }
+                //设置曝光时间单位
+                HVSTATUS status = USBCameraAPI.HVAECControl(m_pHandle, (byte)HV_AEC_CONTROL.AEC_SHUTTER_UNIT, (int)unit);
+                if (!USBCameraAPI.HV_SUCCESS(status)) { return status; }
+                //设置曝光时间
+                return USBCameraAPI.HVAECControl(m_pHandle, (byte)HV_AEC_CONTROL.AEC_SHUTTER_SPEED, nUpper);
+            }
+            else
             {
                 clockFreq = (SnapSpeed == HV_SNAP_SPEED.HIGH_SPEED) ? 24000000 : 12000000;
                 tB += 9;
                 tB -= 19;
                 if (tB <= 0) { tB = 0; }
-
-                if ((outPut + 244.0 + tB) > 552) { exposure = (tInt * clockFreq + 180.0) / ((double)outPut + 244.0 + tB);} 
+                if ((outPut + 244.0 + tB) > 552) { exposure = (tInt * clockFreq + 180.0) / ((double)outPut + 244.0 + tB);}
                 else { exposure = ((tInt * clockFreq) + 180.0) / 552; }
 
-                if ((exposure - (int)exposure) > 0.5) { exposure += 1.0;}
-
-                if (exposure <= 0) { exposure = 1;} 
-                else if (exposure > 16383) { exposure = 16383;}
+                if ((exposure - (int)exposure) > 0.5) { exposure += 1.0; }
+                if (exposure <= 0) { exposure = 1; }
+                else if (exposure > 16383) { exposure = 16383; }
             }
             return USBCameraAPI.HVAECControl(m_pHandle, (byte)HV_AEC_CONTROL.AEC_EXPOSURE_TIME, (int)exposure);
         }
@@ -270,10 +386,10 @@ namespace DH3151UC
                 SetSnapMode();
                 SetGain(m_kGain);
                 SetADC();
-                SetOutPutWindow();
                 SetBlanking();
+                SetOutPutWindow();
                 SetSnapSpeed();
-                SetExposureTime(m_kLowerET);
+                SetExposureTime(m_kUpperET);
             }
             else
             {
