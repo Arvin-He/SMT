@@ -425,7 +425,6 @@ namespace SMT_CSharp
 
         private void InitTimer()
         {
-            // 调用本方法开始用计算器  
             timer.Interval = 1000;//设置时钟周期为1秒（1000毫秒）  
             timer.Enabled = true;
             timer.AutoReset = true;

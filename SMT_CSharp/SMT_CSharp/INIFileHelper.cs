@@ -19,10 +19,6 @@ namespace INIConfig
         // 返回取得字符串缓冲区的长度  
         [DllImport("kernel32", CharSet = CharSet.Auto)]
         private static extern long GetPrivateProfileString(string section, string key, string strDefault, StringBuilder retVal, int size, string filePath);
-        /*
-         [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
-         public static extern int GetPrivateProfileInt(string section, string key, int nDefault, string filePath);  
-        */
 
         public INIFileHelper()  
         {
